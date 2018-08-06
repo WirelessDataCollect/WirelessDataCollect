@@ -2,7 +2,7 @@
 #include "led.h"
 #include "delay.h"
 #include "string.h"
-
+#include "userwifi.h" 
 							  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 //CAN初始化                                                                                                             //
@@ -19,7 +19,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CanRxMsg RxMessage;//定义全局变量存储CAN收到的数据，并在main.c中使用
-
+u8 CAN2_Send_EN = 0;
 
 
 
@@ -81,8 +81,8 @@ u8 CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode)
 	  CAN_ITConfig(CAN2,CAN_IT_FMP1,ENABLE);//FIFO0消息挂号中断允许.		    
   
   	NVIC_InitStructure.NVIC_IRQChannel = CAN2_RX1_IRQn;
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;     // 主优先级为1
-  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // 次优先级为0
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;     // 主优先级为2
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;            // 次优先级为1
   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   	NVIC_Init(&NVIC_InitStructure);
 #endif
@@ -99,11 +99,8 @@ void CAN2_RX1_IRQHandler(void)
 	if (CAN_GetITStatus(CAN2,CAN_IT_FMP1)!= RESET)
 	{
 		CAN_Receive(CAN2, 1 ,&RxMessage);
-		//LED2=0;
-		if(RxMessage.StdId==0X0401)
-		 {
-			
-		 } 
+        order_anay(RxMessage.Data); 
+		CAN2_Send_EN = 1; 
 	 }
 		 CAN_ClearITPendingBit(CAN2, CAN_IT_FMP1);
 		 CAN_FIFORelease(CAN2,CAN_FIFO1); //清中断标志

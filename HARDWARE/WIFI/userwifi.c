@@ -1,7 +1,7 @@
 #include "userwifi.h"
 #include  "spi.h"
 #include "rsi_global.h"
-
+#include "led.h"
 #include "rsi_app.h"
 
 extern rsi_app_cb_t rsi_app_cb;
@@ -12,6 +12,7 @@ u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;
 u8 Wifi_Send_EN =0;
+u8 CAN_Send_EN = 0;
 
 //IIC
 Queue adc_queue;	 //adc½ÓÊÕ»º´æ
@@ -49,6 +50,7 @@ void receive_udp_package()
 			{
 				order_anay(data_recv->recvDataBuf);
 				
+				
 			}
 			break;
 		case 0x59:
@@ -69,23 +71,30 @@ u8 wifi_send_package()
 	
 	if(Time_Sync_Flag==1)
 	{
-		queue_addtime(&adc_queue);
+		queue_addtime_addIO(&adc_queue, YYMMDD, SYSTEMTIME, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; 
+		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		Length = queue_length(adc_queue);
-		adc_queue.head = adc_queue.tail;  // why not use   rsi_send_data()
+		adc_queue.head = adc_queue.tail;  // 
+		
+		//  why not use   rsi_send_data()
+		
 		
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, moduleSocket_sync, &bytes_sent);
 	}
-	if(queue_length(adc_queue)>500)
+	if(queue_length(adc_queue) == UDP_SEND_SIZE - 10 )
 	{
-		queue_addtime(&adc_queue); 
+		
+		queue_addtime_addIO(&adc_queue, YYMMDD, SYSTEMTIME, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
+		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		Length = queue_length(adc_queue);
-		adc_queue.head = (adc_queue.tail+500)%QUEUE_SIZE; 
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],508, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, 5002 ,&bytes_sent);
+		adc_queue.head = (adc_queue.tail+UDP_SEND_SIZE)%QUEUE_SIZE; 
+		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],UDP_SEND_SIZE, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, 5002 ,&bytes_sent);
 	}
 	return 1;
 }
+
 
 u8 time_sync(u8 time[])
 {
@@ -96,17 +105,30 @@ u8 time_sync(u8 time[])
 }
 u8 order_anay(u8 arr[])
 {
-	if(arr[0] == 0xa5 )
+	
+	if(arr[0] == 0xa5 ) 
 	{
 		Wifi_Send_EN =1;
 	}
-	else
+	else if(arr[0] == 0xa6)
 	{
 		Wifi_Send_EN =0;
+	}
+	else if(arr[0] == 0xa7)
+	{
+		Channel_model(&arr[1]);
+	}
+	else if(arr[0] == 0xa8)
+	{
+		CAN_Send_EN = 1;
 	}
 	return 1;
 	
 }
+
+
+
+
 
 
 

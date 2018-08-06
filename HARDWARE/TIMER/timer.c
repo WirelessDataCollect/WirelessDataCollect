@@ -28,8 +28,8 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 	TIM_Cmd(TIM3,ENABLE); //使能定时器3
 	
 	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03; //子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x00; //抢占优先级1
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
@@ -45,6 +45,7 @@ void TIM3_IRQHandler(void)
 		{
 			adc_queue.HeadTime = SYSTEMTIME;
 		}
+		
 		LED1=!LED1;//DS1翻转
 		ADS8266_read();
 

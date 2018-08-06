@@ -1,6 +1,5 @@
 #include "queue.h"
 #include <string.h>
-
 void queue_init(volatile Queue * pQueue)
 {
     memset((void *)pQueue, 0, sizeof(Queue));
@@ -23,18 +22,25 @@ void queue_clear(volatile Queue * pQueue)
 	
 	pQueue->head = pQueue->tail;
 }
-void queue_addtime(volatile Queue * pQueue)
+void queue_addtime_addIO(volatile Queue * pQueue, u32 YYYY_MM_DD, u32 HeadTime, u8 IO_input1, u8 IO_input2)
 {
-	pQueue->head = (pQueue->tail-8+QUEUE_SIZE)% QUEUE_SIZE;
-	pQueue->arr[(pQueue->tail+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
-	pQueue->arr[(pQueue->tail+1)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>8);
-	pQueue->arr[(pQueue->tail+2)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>16);
-	pQueue->arr[(pQueue->tail+3)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>24);
-	pQueue->arr[(pQueue->tail+4)% QUEUE_SIZE] = (u8)(pQueue->HeadTime);
-	pQueue->arr[(pQueue->tail+5)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>8);
-	pQueue->arr[(pQueue->tail+6)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>16);
-	pQueue->arr[(pQueue->tail+7)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>24);
-	
+	pQueue->head = (pQueue->head-10+QUEUE_SIZE)% QUEUE_SIZE;
+	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
+	pQueue->arr[(pQueue->head+1)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>8);
+	pQueue->arr[(pQueue->head+2)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>16);
+	pQueue->arr[(pQueue->head+3)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>24);
+	pQueue->arr[(pQueue->head+4)% QUEUE_SIZE] = (u8)(pQueue->HeadTime);
+	pQueue->arr[(pQueue->head+5)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>8);
+	pQueue->arr[(pQueue->head+6)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>16);
+	pQueue->arr[(pQueue->head+7)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>24);
+	pQueue->arr[(pQueue->head+8)% QUEUE_SIZE] = IO_input1;
+	pQueue->arr[(pQueue->head+8)% QUEUE_SIZE] = IO_input2;
+
+}
+
+void queue_oversize(volatile Queue * pQueue,u32 length)
+{
+	memcpy((u8 *)&pQueue->arr[QUEUE_SIZE],(u8 *)&pQueue->arr[0],length);
 }
 int queue_empty(volatile Queue queue)
 {
@@ -50,7 +56,9 @@ u32 queue_length(volatile Queue queue)
 
 int queue_full(volatile Queue queue)
 {
-    if((queue.tail + 16) % QUEUE_SIZE >= queue.head)
+    if((queue.tail + 20) % QUEUE_SIZE >= queue.head)
         return 1;
     return 0;
 }
+
+

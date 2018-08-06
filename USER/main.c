@@ -1,4 +1,5 @@
 #include "sys.h"
+#include "userwifi.h"
 #include "delay.h"  
 #include "usart.h"   
 #include "led.h"
@@ -8,13 +9,41 @@
 #include "can.h"
 #include "can2.h"
 #include "timer.h"
-#define  UDP_SEND_MAX 500
+
+/*
+优先级
+    //TIM 3
+   	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x00; //抢占优先级0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级0
+	
+	//外部中断
+	NVIC_InitStructure.NVIC_IRQChannel=EXTI4_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0;
+	
+	//CAN1
+	NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;     // 主优先级为2
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // 次优先级为0
+	
+	//CAN2
+	NVIC_InitStructure.NVIC_IRQChannel = CAN2_RX1_IRQn;
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;     // 主优先级为2
+  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;            // 次优先级为1
+	
+*/
+extern u8 CAN_Send_EN;
+extern u8 CAN1_Send_EN;
+extern u8 CAN2_Send_EN;
+u8 IO_input[2];
+u8 can_send_package(void);
 void Initialization (void)
 {
 //	uint32_t client_port=0;	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	RCC_Config();	
-	LED_Init();		
+	LED_GPIO_Init();
 	EXTI_Conf();
 	NVIC_Config();
 	uart_init(115200);		
@@ -23,7 +52,7 @@ void Initialization (void)
 	ADS8266_config();
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
-	
+	queue_init(&adc_queue);
 	//SPI_Conf();	
 	//WIFI_BOOT();
 	//WIFI_Conf();
@@ -108,36 +137,44 @@ int main(void)
 	Initialization();
 
 	while(1)
-	{				 
-		delay_ms(1000);
-		Status = ADS8266_config();
-		
+	{
+		wifi_send_package();
+		can_send_package();
 	}
 }
 
 
-//u8 wifi_send_queue()
-//{
-//	u8 head;
-//	if()//时间同步后将队列中数据全部发送
-//	{
-//		
-//		u32 send_length = 8+queue_length(adc_queue);
-//		head = adc_queue.head;
-//		adc_queue.head=adc_queue.tail;   //head = tail
-//		
-//		
-//	}
-//	else if(queue_length(adc_queue)>UDP_SEND_MAX)
-//		{
-//			bytes_sent = 8+queue_length(adc_queue);
-//			head = adc_queue.head;
-//			queue_addtime(&adc_queue);
-//			adc_queue.head =(adc_queue.head+UDP_SEND_MAX)%
-//			
-//			
-//		}
-//}
+u8 can_send_package()
+{ 
+	if(CAN_Send_EN&&CAN1_Send_EN){   
+		
+
+		if(queue_empty(adc_queue)) delay_ms(2);
+		IO_input[0] = DIGITAL_INPUT1;
+	    IO_input[1] = DIGITAL_INPUT2;
+		CAN1_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
+		CAN1_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
+		CAN1_Send_Msg(IO_input,2);
+		CAN_Send_EN = 0;
+		CAN1_Send_EN = 0;
+	}
+	if(CAN_Send_EN && CAN2_Send_EN){
+	
+		if(queue_empty(adc_queue)) delay_ms(2);
+		IO_input[0] = DIGITAL_INPUT1;
+	    IO_input[1] = DIGITAL_INPUT2;
+		CAN2_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
+		CAN2_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
+		CAN2_Send_Msg(IO_input,2);
+	    CAN_Send_EN = 0;
+		CAN2_Send_EN = 0;
+	}
+	return 1;
+}
+
+
+
+
 
 
 

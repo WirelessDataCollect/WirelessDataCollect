@@ -1,6 +1,6 @@
 #include "can.h"
 #include "led.h"
-
+#include "userwifi.h"
 //CAN初始化
 //tsjw:重新同步跳跃时间单元.范围:CAN_SJW_1tq~ CAN_SJW_4tq
 //tbs2:时间段2的时间单元.   范围:CAN_BS2_1tq~CAN_BS2_8tq;
@@ -17,6 +17,9 @@
 //PA12 CAN_RX
 
 //CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);//can1初始化500k波特率
+
+
+u8 CAN1_Send_EN = 0;	
 
 u8 CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode)
 {
@@ -76,14 +79,14 @@ u8 CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode)
 	  CAN_ITConfig(CAN1,CAN_IT_FMP0,ENABLE);//FIFO0消息挂号中断允许.		    
   
   	NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;     // 主优先级为1
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;     // 主优先级为2
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // 次优先级为0
   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   	NVIC_Init(&NVIC_InitStructure);
 #endif
 	return 0;
 }   
-/* 
+
 #if CAN1_RX0_INT_ENABLE	//使能RX0中断
 //中断服务函数			    
 void CAN1_RX0_IRQHandler(void)
@@ -91,10 +94,10 @@ void CAN1_RX0_IRQHandler(void)
   	CanRxMsg RxMessage;
 	int i=0;
     CAN_Receive(CAN1, 0, &RxMessage);
-	for(i=0;i<8;i++)
-	printf("rxbuf[%d]:%d\r\n",i,RxMessage.Data[i]);
+    order_anay(RxMessage.Data);
+	CAN1_Send_EN = 1;
 }
-#endif*/
+#endif
 
 //can发送一组数据(固定格式:ID为0X12,标准帧,数据帧)	
 //len:数据长度(最大为8)				     
@@ -134,11 +137,11 @@ u8 CAN1_Receive_Msg(u8 *buf)
 	CanRxMsg RxMessage;
     if( CAN_MessagePending(CAN1,CAN_FIFO0)==0)return 0;		//没有接收到数据,直接退出 
     CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);//读取数据	
+	
     for(i=0;i<RxMessage.DLC;i++)
     buf[i]=RxMessage.Data[i];  
 	return RxMessage.DLC;	
 }
-
 
 
 

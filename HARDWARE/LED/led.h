@@ -6,7 +6,20 @@
 
 //LED端口定义
 #define LED1 PCout(10)	// DS0
-#define LED2 PDout(2)	// DS1	 
+#define LED2 PDout(2)	// DS1	
 
-void LED_Init(void);//初始化		 				    
+//模拟信号输入模式选择
+#define Channel1 PCout(6)
+#define Channel2 PCout(7)
+#define Channel3 PCout(8)
+#define Channel4 PCout(9)
+
+
+//数字信号电平检测
+#define DIGITAL_INPUT1 GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_14)
+#define DIGITAL_INPUT2 GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15)
+
+
+void LED_GPIO_Init(void);//初始化	
+void Channel_model(u8 modle[]);
 #endif

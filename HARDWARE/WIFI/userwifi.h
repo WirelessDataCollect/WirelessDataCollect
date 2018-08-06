@@ -2,11 +2,13 @@
 #define _USERWIFI_H_
 #include "sys.h"
 #include "queue.h"
+
+#define  UDP_SEND_SIZE 546  // 最好不要超过548    546 = 8 * 67 + 2
 extern u32 SYSTEMTIME;
 extern u32  YYMMDD;
 extern u8 Time_Sync_Flag;
 extern u8 Wifi_Send_EN;
-
+extern u8 CAN_Send_EN;
 
 extern Queue adc_queue;	 //adc接收缓存
 
