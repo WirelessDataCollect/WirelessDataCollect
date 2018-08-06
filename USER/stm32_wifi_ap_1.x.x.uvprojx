@@ -1159,9 +1159,9 @@
               <FilePath>..\host\binary\apis\wlan\ref_apps\src\setregion_countryinfo.c</FilePath>
             </File>
             <File>
-              <FileName>wifi_main.c</FileName>
+              <FileName>wifi_user_mian.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\host\binary\apis\wlan\ref_apps\src\wifi_main.c</FilePath>
+              <FilePath>.\wifi_user_mian.c</FilePath>
             </File>
           </Files>
         </Group>

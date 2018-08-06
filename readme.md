@@ -1,1 +1,3 @@
-## STM32F405无线数据采集系统
+## Wireless Data Collection System
+* Attention : the /host is removed in the repository
+ 
