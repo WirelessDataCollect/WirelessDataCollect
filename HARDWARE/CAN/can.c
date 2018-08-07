@@ -92,7 +92,7 @@ u8 CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode)
 void CAN1_RX0_IRQHandler(void)
 {
   	CanRxMsg RxMessage;
-	int i=0;
+	//int i=0;
     CAN_Receive(CAN1, 0, &RxMessage);
     order_anay(RxMessage.Data);
 	CAN1_Send_EN = 1;

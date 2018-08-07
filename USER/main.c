@@ -10,6 +10,9 @@
 #include "can2.h"
 #include "timer.h"
 
+#include "rsi_global.h"
+#include "rsi_app.h"
+
 /*
 优先级
     //TIM 3
@@ -53,9 +56,11 @@ void Initialization (void)
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	queue_init(&adc_queue);
-	//SPI_Conf();	
-	//WIFI_BOOT();
-	//WIFI_Conf();
+	
+	
+	SPI_Conf();	
+	WIFI_BOOT();
+	WIFI_Conf();
 
 	//第一部分移植原文件 到mcu工程 
 //	while(!RNG_GetFlagStatus(RNG_FLAG_DRDY));
@@ -134,11 +139,14 @@ u8 Status=1;
 
 int main(void)
 {        
-	Initialization();
-
+	Initialization();//初始化系统
+	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
+	//rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉
 	while(1)
 	{
-		wifi_send_package();
+		receive_udp_package();//接收命令，比如时钟同步信号、PC端的命令等
+		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 		can_send_package();
 	}
 }
@@ -147,8 +155,6 @@ int main(void)
 u8 can_send_package()
 { 
 	if(CAN_Send_EN&&CAN1_Send_EN){   
-		
-
 		if(queue_empty(adc_queue)) delay_ms(2);
 		IO_input[0] = DIGITAL_INPUT1;
 	    IO_input[1] = DIGITAL_INPUT2;

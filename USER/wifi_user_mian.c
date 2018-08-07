@@ -20,7 +20,6 @@
  * Include files
  */ 
  #include "SPI.h"
- #include "userwifi.h"
  
 #include "rsi_global.h"
 #include "rsi_config.h"
@@ -276,9 +275,6 @@ volatile static const uint8 oid_type[MAX_OIDS_SUPPORT] = {SNMP_ANS1_COUNTER,
 
 
 
-
-
-
 /* function declarations */
 int wifi_main(int app_mode);
 int16 rsi_wifi_init(void);
@@ -291,7 +287,7 @@ void EXTI4_IRQHandler(void)
 {
 //	uint32_t value=taskENTER_CRITICAL_FROM_ISR();
 	EXTI->PR		|=1<<4;
-	rsi_app_cb.pkt_pending = RSI_TRUE;	// ???????????????????????????should be rsi_app_cb.pkt_pending++
+	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
 //	taskEXIT_CRITICAL_FROM_ISR(value);
 }
 
@@ -302,38 +298,44 @@ int RspCode     =0,retval,tmp=0;
 
 char WIFI_Conf(void)
 {
-	
-	/*opermode配置指令 */
+
+	/*opermode配置指令 */					//this is command
 	retval = rsi_oper_mode((rsi_uOperMode *)rsi_fill_parameters(RSI_REQ_OPERMODE,&rsi_app_cb.send_buffer[0]));
-	RspCode=Read_PKT();//读取响应
+	RspCode=Read_PKT();
 	if(RspCode!=RSI_REQ_OPERMODE||rsi_app_cb.error_code!=0)
 	{
 		return 1;//Hard_reset();
 	}else{
+		
 	}
 
 	/*频段选择*/
-	retval = rsi_band(RSI_BAND); 
-	RspCode=Read_PKT();        //读取响应
+	retval = rsi_band(RSI_BAND); 			//this is command
+	RspCode=Read_PKT();        //读取读取响应
 
 	/*init指令*/
-	retval = rsi_init();    //init基带和RF组件
+	retval = rsi_init();                 	//init基带和RF组件
 	RspCode=Read_PKT();
+	LOGS("MAC:%0.2X.%0.2X.%0.2X.%0.2X.%0.2X.%0.2X\r\n",
+	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[0],
+	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[1],
+	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[2],
+	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[3],
+	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[4],
+	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[5]
+	);//打印mac地址
 
 //	/*选择天线 和增益*/
-	//rsi_select_antenna(uint8 antenna_val,uint8 gain_2g, uint8 gain_5g)
-	//antenna_val:0 for Internal Antenna , 1 for uFL Antenna.
-	//gain_2g、gain_5g分别是2.4G和5G的增益，0-10
-//	retval = rsi_select_antenna(1,8,8);  //init
+//	retval = rsi_select_antenna(1,8,8);                  //init
 //	RspCode=Read_PKT();
 
-	/*查询固件版本*/ 
- 	RspCode=rsi_query_fw_version(); 
+	/*查询固件版本*/
+ 	RspCode=rsi_query_fw_version();          //this is command
 	RspCode=Read_PKT();
-//OLED_ShowStr(0,2,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion,2);	
+	//OLED_ShowStr(0,2,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion,2);	
+	LOGS("FWversion:%s\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion);
 
-
-#if 0										/**MDOE MDOE MDOE MDOE MDOE MDOE MDOEMDOE*///***********************	
+#if 1										/**MDOE MDOE MDOE MDOE MDOE MDOE MDOEMDOE*///***********************	
 //STA 1
 /*WIFI模块为station 模式
 RSI_WIFI_OPER_MODE 0
@@ -341,105 +343,93 @@ RSI_WIFI_OPER_MODE 0
 #define RSI_TCP_IP_FEATURE_BIT_MAP (TCP_IP_FEAT_DHCPV4_CLIENT | TCP_IP_FEAT_DHCPV4_SERVER|TCP_IP_FEAT_HTTP_SERVER)
 
 */ 	
-	/*scan扫描指令*/
+	/*scan扫描指令*/							//this is command
 	RspCode = rsi_scan((rsi_uScan *)rsi_fill_parameters(RSI_REQ_SCAN,&rsi_app_cb.send_buffer[0]));  //??
 	RspCode=Read_PKT();	                //Join  0x14 
 	if(RspCode!=RSI_REQ_SCAN||rsi_app_cb.error_code!=0)
 	{
 		return 1;
 	}else{
+		tmp=0;
+		LOGS("scan num:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]);
+		while(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]--)
+		{
+			
+			LOGS("%d.SSID:%s",tmp,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].ssid);
+			LOGS("  securityMode:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].securityMode);
+			LOGS("  rfChannel:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rfChannel);
+			LOGS("  rssiVal:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rssiVal);
+			LOGS("  uNetworkType:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].uNetworkType);
+			tmp++;
+		}
 		
 	}
-	/*加入命令*/
+	/*加入命令*/								//this is command
 	RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));      //??
 	RspCode=Read_PKT();	                //Join  0x14 
 
-	/*配置IP DHCP*/
+	/*配置IP DHCP*/								//this is command			
 	RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
 	RspCode=Read_PKT();	
 	
 #else
-//AP	0
-/*WIFI模块AP热点,模式 注意下细节
-#define RSI_WIFI_OPER_MODE 6
-#define RSI_IP_CFG_MODE                RSI_STATIC_IP_MODE        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81.
-#define RSI_MODULE_IP_ADDRESS          "192.168.100.1"        //@ IP Address of the WiFi Module
-#define RSI_GATEWAY                    "192.168.100.1"         //@ Default Gateway
-#define RSI_TARGET_IP_ADDRESS          "192.168.100.120"       //@ IP Address we will connect to
-#define RSI_NETMASK                    "255.255.255.0"         //@ Netmask
-#define RSI_TCP_IP_FEATURE_BIT_MAP (TCP_IP_FEAT_DHCPV4_CLIENT | TCP_IP_FEAT_DHCPV4_SERVER|TCP_IP_FEAT_HTTP_SERVER)
-*/
-	/*配置AP IP必须静态*/
-	RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
-	RspCode=Read_PKT();
-	if(RspCode!=RSI_REQ_IPPARAM_CONFIG||rsi_app_cb.error_code!=0)
-	{
+//AP	0//   AP   AP   AP   AP   AP   AP   AP   AP   AP   AP
+///*WIFI模块AP热点,模式 注意下细节*/
+//	/*配置AP IP必须静态*/						//this is command	
+//	RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
+//	RspCode=Read_PKT();
+//	if(RspCode!=RSI_REQ_IPPARAM_CONFIG||rsi_app_cb.error_code!=0)
+//	{
+//	
+//		while(1);
+//	}else{
+//	
+//	}
+
+//	/*配置AP参数*/								//this is command
+//	RspCode = rsi_set_ap_config((rsi_apconfig *)rsi_fill_parameters(RSI_REQ_APCONFIG,&rsi_app_cb.send_buffer[0]));
+//	RspCode=Read_PKT();
+
+//	/*加入AP 并启动*/							//this is command
+//	RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));      //??
+//	RspCode=Read_PKT();
+
+#endif	////end apapapapapapapapapapap	
+
 	
-		while(1);
-	}else{
 	
-	}
-
-	/*配置AP参数*/
-	RspCode = rsi_set_ap_config((rsi_apconfig *)rsi_fill_parameters(RSI_REQ_APCONFIG,&rsi_app_cb.send_buffer[0]));
-	RspCode=Read_PKT();
-
-	/*加入AP 并启动*/
-	RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));
-	RspCode=Read_PKT();
-
-#endif	////end apapapapapapapapapapap		
-
+	
+	
+	
+/*STA模式才使用的指令.才有效*/	
+#if !RSI_WIFI_OPER_MODE
 	/*查询net参数 [成功链接之后]*/
- 	RspCode=rsi_query_net_parms();         
+ 	RspCode=rsi_query_net_parms();         		//this is command
 	RspCode=Read_PKT();
 	
 	/*查询RSSI [成功链接之后]*/
-	RspCode=rsi_query_rssi();          //信号强度指数
+	RspCode=rsi_query_rssi();          			//this is command
 	RspCode=Read_PKT();
-	OpenSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,RSI_SOCKET_LUDP);
-	RspCode=Read_PKT();
-	if(RspCode!=RSI_RSP_SOCKET_CREATE)
-	{
-		return 1;
-	}
-	
-	socketDescriptor_txrx = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.socketFrameRcv.socketDescriptor);
-	
-	OpenSocket(destIp_txrx,destSocket_sync,moduleSocket_sync,RSI_SOCKET_LUDP);
-	RspCode=Read_PKT();
-	if(RspCode!=RSI_RSP_SOCKET_CREATE)
-	{
-		return 1;
-	}
-	 socketDescriptor_sync = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.socketFrameRcv.socketDescriptor);
-	
-//	OpenSocket("192.168.100.2",5002,5001,RSI_SOCKET_LUDP );
-//	while(1)
-//	{
-//		delay_ms(10);
-//		RspCode =Check_PKT();
-//		switch (RspCode)
-//        {
-//        	case 0x00:
-//        		break;
-//        	case 0x59:
-//				rsi_wireless_fwupgrade();
-//				//OLED_ShowStr(0,4,"fwupgrade",2);	
-//				while(1){};
-//        		break;
-//        	default:
-//        		break;
-//        }
-//		RspCode=10;
-//		while(RspCode--)
-//		 rsi_send_ludp_data(1 , txbuf, 54, RSI_PROTOCOL_UDP_V4, destIp, 5002 ,&bytes_sent);
-		
-//	}
+	LOGS("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
 
-	//RspCode=RspCode+1;
+#endif	
+	RspCode=RspCode+1;
+	
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -447,10 +437,8 @@ RSI_WIFI_OPER_MODE 0
 char WIFI_BOOT(void)
 {
 	/*清除Buff数据*/
-	rsi_app_cb.pkt_pending=0;//上电时，认为没有数据缓存
-	
-	//void *memset(void *buffer, int c, int count)
-	memset(&rsi_app_cb, 0, sizeof(rsi_app_cb));	//对rsi_app_cb这个结构体清零
+	rsi_app_cb.pkt_pending=0;
+	memset(&rsi_app_cb, 0, sizeof(rsi_app_cb));	
 	/*检查SPi是否和模块正常通讯*/
 	/*检查SPI  IO 硬件是否正常*/
 	RspCode = rsi_sys_init();
@@ -459,11 +447,11 @@ char WIFI_BOOT(void)
 		return 1;
 	}
 	/*加载BOOT*/
-	do{		//GPIO_Bypass
-		RspCode = rsi_waitfor_boardready();//如果正常，则返回0
+	do{																					//GPIO_Bypass
+		RspCode = rsi_waitfor_boardready();
 		if((RspCode < 0) && (RspCode != -3))
 			return 1;
-	}while(RspCode == -3);//-3说明还没有读取到数据
+	}while(RspCode == -3);
 	/*选择固件*/
 	RspCode = rsi_select_option(RSI_HOST_BOOTUP_OPTION);
 	if(RspCode < 0)
@@ -484,14 +472,12 @@ char WIFI_BOOT(void)
 //	goto WIFI_SET;
 //}
 
-
-
 unsigned int dumm=0;
 
 void OpenSocket(char *destIP,unsigned short destSocket,unsigned short moduleSocket,unsigned short polo )
 {
 	rsi_uSocket rsi_Socket;
-	memset(&rsi_Socket,0,sizeof(rsi_Socket));
+   memset(&rsi_Socket,0,sizeof(rsi_Socket));
 	rsi_uint16_to_2bytes(rsi_Socket.socketFrameSnd.ip_version,IP_VERSION_4);
 	rsi_uint16_to_2bytes(rsi_Socket.socketFrameSnd.moduleSocket,moduleSocket);
 	rsi_uint16_to_2bytes(rsi_Socket.socketFrameSnd.destSocket,destSocket); 
@@ -511,37 +497,37 @@ void OpenSocket(char *destIP,unsigned short destSocket,unsigned short moduleSock
 		rsi_ascii_dot_address_to_4bytes((uint8 *)rsi_Socket.socketFrameSnd.destIpaddr.ipv4_address,(int8 *) destIP);	
 	else
 		parse_ipv6_address(rsi_Socket.socketFrameSnd.destIpaddr.ipv6_address, (uint8 *)RSI_TARGET_IPV6_ADDRESS);	
-
+	
 	rsi_socket(&rsi_Socket);
 }
 
 
- int Read_PKT(void)
+
+int Read_PKT(void)
 {
 	/*防止超时的一个计数器*/
 	dumm=0x8FFFFFFF;
-	while((rsi_app_cb.pkt_pending ==0)&&dumm--);
+   while((rsi_app_cb.pkt_pending ==0)&&dumm--);
 	if(dumm<=0)return -1;
+	
+   rsi_app_cb.pkt_pending -=1;  
+	rsi_frame_read(rsi_app_cb.read_packet_buffer);                     //读取数据帧
+   rsi_app_cb.uCmdRspFrame = rsi_parse_response(rsi_app_cb.read_packet_buffer);    //转换uCmdRspFrame
 
-	rsi_app_cb.pkt_pending -=1; 
-	rsi_frame_read(rsi_app_cb.read_packet_buffer);                     //读取数据帧，放在buffer里面
-	//数据帧：响应类型[2*8bits]   status[2*8bits]  空[算上响应类型和status是长度RSI_FRAME_DESC_LEN*8bits]  数据[...]
-	//1、提取数据；2、存储数据；3、提取响应类型和status；4、存储响应类型和status
-	rsi_app_cb.uCmdRspFrame = rsi_parse_response(rsi_app_cb.read_packet_buffer);    //放在buffer里面的数据帧转换uCmdRspFrame
-
-	rsi_app_cb.error_code = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->status);//2byte转成uint
-	return  rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->rspCode);                 //返回响应类型
+   rsi_app_cb.error_code = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->status);
+   return  rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->rspCode);                 //返回响应类型
 }
 
 
 int Check_PKT(void)
 {
-	//rsi_clear_interrupt(0x80);
-	//   if(rsi_app_cb.pkt_pending == RSI_TRUE)
-	if(rsi_app_cb.pkt_pending >0)//如果有数据
+   //rsi_clear_interrupt(0x80);
+//   if(rsi_app_cb.pkt_pending == RSI_TRUE)
+   if(rsi_app_cb.pkt_pending >0)
+	
 	{
-		rsi_app_cb.pkt_pending -=1;// RSI_FALSE，-1没有数据
-		//		rsi_app_cb.pkt_pending = RSI_FALSE;  
+		rsi_app_cb.pkt_pending -=1;// RSI_FALSE;  
+//		rsi_app_cb.pkt_pending = RSI_FALSE;  
 
 		rsi_frame_read(rsi_app_cb.read_packet_buffer);                     //读取数据帧
 		rsi_app_cb.uCmdRspFrame = rsi_parse_response(rsi_app_cb.read_packet_buffer);    //转换uCmdRspFrame
@@ -551,27 +537,6 @@ int Check_PKT(void)
 	}
 	return -1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 int wifi_main(int app_mode)
@@ -631,7 +596,7 @@ rsi_uCmdRsp *rsi_parse_response(uint8 *rsp)
   uint8                   temp_rspCode;
   uint16                  temp_status;
   uint8                   *descPtr = rsp ;
-  uint8                   *payloadPtr = rsp + RSI_FRAME_DESC_LEN;//payloadPrt中存储数据
+  uint8                   *payloadPtr = rsp + RSI_FRAME_DESC_LEN;
 #ifdef RSI_DEBUG_PRINT
   uint8 i;
 #endif
@@ -904,7 +869,3 @@ int16 rsi_per_cont_wave_mode(rsi_uPerMode *uPerModeFrame, int8 per_cw_mode_state
   retval = rsi_per_mode(uPerModeFrame);
   return retval;
 }
-
-
-
-
