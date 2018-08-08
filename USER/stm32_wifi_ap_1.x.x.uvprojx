@@ -1173,9 +1173,9 @@
           <GroupName>README</GroupName>
           <Files>
             <File>
-              <FileName>README.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\REAMDE\README.txt</FilePath>
+              <FileName>README.md</FileName>
+              <FileType>9</FileType>
+              <FilePath>..\REAMDE\README.md</FilePath>
             </File>
           </Files>
         </Group>

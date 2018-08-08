@@ -183,10 +183,10 @@ u8 ADS8266_read()
 {
 	u8 i;
 	
-	if(queue_full(adc_queue))
-	{
-		return 0;
-	}
+//	if(queue_full(adc_queue))
+//	{
+//		return 0;
+//	}
     
 	IIC_Start();
 	

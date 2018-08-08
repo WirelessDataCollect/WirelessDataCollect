@@ -7,6 +7,9 @@
 #define SPI_CS_L	GPIO_ResetBits(GPIOC,GPIO_Pin_5)
 #define WIFI_RST_H	GPIO_SetBits(GPIOB,GPIO_Pin_0)
 #define WIFI_RST_L	GPIO_ResetBits(GPIOB,GPIO_Pin_0)
+
+#define LOGS(...)	printf(__VA_ARGS__)
+
 u8 SPI1_TxRx(u8 TxData);
 void EXTI_Conf(void) ;
 void SPI_Conf(void);
