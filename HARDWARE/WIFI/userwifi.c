@@ -65,7 +65,7 @@ u8 wifi_send_package()
 
 	if(Time_Sync_Flag==1)
 	{
-		queue_addtime_addIO(&adc_queue,  DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; 
+		queue_addtime_addIO(&adc_queue, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; 
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		Length = queue_length(adc_queue);
@@ -79,7 +79,7 @@ u8 wifi_send_package()
 	if(queue_length(adc_queue) >= UDP_SEND_SIZE - 10 )//我觉得>=比较好，万一没来得及发现==UDP_SEND_SIZE - 10的情况呢
 	{
 		
-		queue_addtime_addIO(&adc_queue, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
+		queue_addtime_addIO(&adc_queue,WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		Length = queue_length(adc_queue);

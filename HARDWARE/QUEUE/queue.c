@@ -22,7 +22,7 @@ void queue_clear(volatile Queue * pQueue)
 	
 	pQueue->head = pQueue->tail;
 }
-void queue_addtime_addIO(volatile Queue * pQueue, u8 IO_input1, u8 IO_input2)
+void queue_addtime_addIO(volatile Queue * pQueue, u8 wifi_client_id, u8 IO_input1, u8 IO_input2)
 {
 	pQueue->head = (pQueue->head-10+QUEUE_SIZE)% QUEUE_SIZE;
 	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
@@ -33,8 +33,8 @@ void queue_addtime_addIO(volatile Queue * pQueue, u8 IO_input1, u8 IO_input2)
 	pQueue->arr[(pQueue->head+5)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>8);
 	pQueue->arr[(pQueue->head+6)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>16);
 	pQueue->arr[(pQueue->head+7)% QUEUE_SIZE] = (u8)(pQueue->HeadTime>>24);
-	pQueue->arr[(pQueue->head+8)% QUEUE_SIZE] = IO_input1;
-	pQueue->arr[(pQueue->head+9)% QUEUE_SIZE] = IO_input2;
+	pQueue->arr[(pQueue->head+8)% QUEUE_SIZE] = wifi_client_id;
+	pQueue->arr[(pQueue->head+9)% QUEUE_SIZE] = IO_input2<<1 | IO_input1;
 
 }
 

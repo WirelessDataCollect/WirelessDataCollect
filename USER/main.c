@@ -39,7 +39,7 @@
 extern u8 CAN_Send_EN;
 extern u8 CAN1_Send_EN;
 extern u8 CAN2_Send_EN;
-u8 IO_input[2];
+u8 IO_input[3];
 u8 can_send_package(void);
 void Initialization (void)
 {
@@ -158,9 +158,10 @@ u8 can_send_package()
 		if(queue_empty(adc_queue)) delay_ms(2);
 		IO_input[0] = DIGITAL_INPUT1;
 	    IO_input[1] = DIGITAL_INPUT2;
+		IO_input[2] = WIFI_CLIENT_ID;
 		CAN1_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
 		CAN1_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
-		CAN1_Send_Msg(IO_input,2);
+		CAN1_Send_Msg(IO_input,3);
 		CAN_Send_EN = 0;
 		CAN1_Send_EN = 0;
 	}
@@ -169,9 +170,10 @@ u8 can_send_package()
 		if(queue_empty(adc_queue)) delay_ms(2);
 		IO_input[0] = DIGITAL_INPUT1;
 	    IO_input[1] = DIGITAL_INPUT2;
+		IO_input[2] = WIFI_CLIENT_ID;
 		CAN2_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
 		CAN2_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
-		CAN2_Send_Msg(IO_input,2);
+		CAN2_Send_Msg(IO_input,3);
 	    CAN_Send_EN = 0;
 		CAN2_Send_EN = 0;
 	}
