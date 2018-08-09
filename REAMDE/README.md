@@ -30,6 +30,22 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 # 2、版本修改内容：
 
+### 2018-8-9
+1、wifi_send_package中的moduleSocket要改为dest
+
+这里指定二楼远程ip和远程的端口。
+
+2end_Sync_Time修改
+
+下标调换，人看起来更加直观
+
+不用改了，因为STM32是小端模式，小位数存在低地址，高位数存在高地址
+
+3、destSocket_sync和moduleSocket_sync改成一样
+
+4、led1和led2=0
+
+
 ### 2018-8-7
 
 1、修改创建LUDP socket函数

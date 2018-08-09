@@ -4,7 +4,7 @@
 // SCL PB6
 // SDA PB7
 
-
+u8 val;
 void IIC_Init(void)
 {			
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -182,6 +182,7 @@ u8 ADS8266_config()
 u8 ADS8266_read()
 {
 	u8 i;
+
 	
 //	if(queue_full(adc_queue))
 //	{
@@ -209,7 +210,8 @@ u8 ADS8266_read()
 	}
 	for(i=0;i<8;i++)
 	{
-		queue_put(&adc_queue, IIC_Read_Byte(1));
+		val = IIC_Read_Byte(1);
+		queue_put(&adc_queue, val);
 			
 	}
 

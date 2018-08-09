@@ -325,9 +325,9 @@ char WIFI_Conf(void)
 	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[5]
 	);//打印mac地址
 
-//	/*选择天线 和增益*/
-//	retval = rsi_select_antenna(1,8,8);                  //init
-//	RspCode=Read_PKT();
+	/*选择天线 和增益*/
+	retval = rsi_select_antenna(0,8,8);                  //init
+	RspCode=Read_PKT();
 
 	/*查询固件版本*/
  	RspCode=rsi_query_fw_version();          //this is command

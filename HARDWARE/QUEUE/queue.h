@@ -3,8 +3,8 @@
 #include <sys.h>
 
  
-#define QUEUE_SIZE 10000
-#define ARR_SIZE  10000+ 600
+#define QUEUE_SIZE 4000
+#define ARR_SIZE  4000+ 600
 
 typedef struct{
     u8 arr[ARR_SIZE];

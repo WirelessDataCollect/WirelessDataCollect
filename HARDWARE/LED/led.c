@@ -39,6 +39,8 @@ void LED_GPIO_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+	LED1 = 0;LED2 = 0;
 }
 
 
