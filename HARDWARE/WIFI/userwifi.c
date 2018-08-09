@@ -18,8 +18,8 @@ u8 CAN_Send_EN = 0;
 Queue adc_queue;	 //adc接收缓存
 
 //wifi_main
-char* destIp_txrx="";    //数据收发
-char* destIp_sync="255,255,255,255";  //同步
+u8 destIp_txrx[4];    //数据收发
+u8 destIp_sync[4]={255,255,255,255};  //同步
 unsigned short destSocket_txrx= 5001;
 unsigned short moduleSocket_txrx=5002;
 unsigned short destSocket_sync= 5003;
@@ -123,7 +123,7 @@ u8 order_anay(u8 arr[])
 	
 }
 
-u8 OpenLudpSocket(char* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
+u8 OpenLudpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
 {
 	int RspCode;
 	OpenSocket(destIp,destSocket,moduleSocket,RSI_SOCKET_LUDP);

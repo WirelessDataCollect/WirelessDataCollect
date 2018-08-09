@@ -24,8 +24,8 @@ extern u8 CAN_Send_EN;
 
 extern Queue adc_queue;	 //adc接收缓存
 
-extern char* destIp_txrx;    //数据收发 IP
-extern char* destIp_sync;  //同步    IP
+extern u8 destIp_txrx[4];    //数据收发 IP
+extern u8 destIp_sync[4];  //同步    IP
 
 extern unsigned short destSocket_txrx;
 extern unsigned short moduleSocket_txrx;
@@ -38,7 +38,7 @@ extern unsigned short socketDescriptor_sync;
 
 void receive_udp_package(void);
 
-u8 OpenLudpSocket(char* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
+u8 OpenLudpSocket(u8* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
 u8 wifi_send_package(void);
 u8 order_anay(u8 arr[]);
 

@@ -50,17 +50,20 @@ void Initialization (void)
 	EXTI_Conf();
 	NVIC_Config();
 	uart_init(115200);		
-	delay_init(168);  
+	delay_init(168); 
+	
+//    SPI_Conf();	
+//	WIFI_BOOT();
+//	WIFI_Conf();
+    queue_init(&adc_queue);
 	TIM3_Int_Init(999,83); //1ms
 	ADS8266_config();
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
-	queue_init(&adc_queue);
 	
 	
-	SPI_Conf();	
-	WIFI_BOOT();
-	WIFI_Conf();
+	
+	  	
 
 	//第一部分移植原文件 到mcu工程 
 //	while(!RNG_GetFlagStatus(RNG_FLAG_DRDY));
@@ -140,15 +143,19 @@ u8 Status=1;
 int main(void)
 {        
 	Initialization();//初始化系统
-	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
-	//rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉
 	while(1)
 	{
-		receive_udp_package();//接收命令，比如时钟同步信号、PC端的命令等
-		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
-		can_send_package();
+		
 	}
+//	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+//	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
+//	//rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉
+//	while(1)
+//	{
+//		receive_udp_package();//接收命令，比如时钟同步信号、PC端的命令等
+//		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+//		can_send_package();
+//	}
 }
 
 

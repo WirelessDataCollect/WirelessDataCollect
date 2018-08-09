@@ -474,7 +474,7 @@ char WIFI_BOOT(void)
 
 unsigned int dumm=0;
 
-void OpenSocket(char *destIP,unsigned short destSocket,unsigned short moduleSocket,unsigned short polo )
+void OpenSocket(uint8 *destIP,unsigned short destSocket,unsigned short moduleSocket,unsigned short polo )
 {
 	rsi_uSocket rsi_Socket;
    memset(&rsi_Socket,0,sizeof(rsi_Socket));
@@ -494,7 +494,8 @@ void OpenSocket(char *destIP,unsigned short destSocket,unsigned short moduleSock
 	rsi_Socket.socketFrameSnd.rx_window_size  = TCP_RX_WINDOW_SIZE; 
 
 	if(RSI_IP_VERSION == IP_VERSION_4) 
-		rsi_ascii_dot_address_to_4bytes((uint8 *)rsi_Socket.socketFrameSnd.destIpaddr.ipv4_address,(int8 *) destIP);	
+		memcpy(rsi_Socket.socketFrameSnd.destIpaddr.ipv4_address,destIP,4);
+		//rsi_ascii_dot_address_to_4bytes((uint8 *)rsi_Socket.socketFrameSnd.destIpaddr.ipv4_address,(int8 *) destIP);	
 	else
 		parse_ipv6_address(rsi_Socket.socketFrameSnd.destIpaddr.ipv6_address, (uint8 *)RSI_TARGET_IPV6_ADDRESS);	
 	

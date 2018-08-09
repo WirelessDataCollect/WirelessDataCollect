@@ -20,7 +20,7 @@ void RCC_Config(void);
 
 char WIFI_Conf(void);
 char WIFI_BOOT(void);
-void OpenSocket(char *destIP,unsigned short destSocket,unsigned short moduleSocket,unsigned short polo );
+void OpenSocket(u8 *destIP,unsigned short destSocket,unsigned short moduleSocket,unsigned short polo );
 int Read_PKT(void);
 int Check_PKT(void);
 

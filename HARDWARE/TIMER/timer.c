@@ -45,6 +45,9 @@ void TIM3_IRQHandler(void)
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
 		SYSTEMTIME++;
+		if(SYSTEMTIME%1000==0)
+		LED1=!LED1;//DS1翻转
+		
 #if IAM_MASTER_CLOCK
 		sync_interval_time++;
 #endif
@@ -53,13 +56,12 @@ void TIM3_IRQHandler(void)
 			adc_queue.HeadTime = SYSTEMTIME;
 		}
 		ADS8266_read();
-		
-		LED1=!LED1;//DS1翻转
+
 #if IAM_MASTER_CLOCK
 		if(sync_interval_time>=SYNC_INTERVAL_TIME)
 		{
 			sync_interval_time = 0;
-			Send_Sync_Time();//时钟同步一下
+			//Send_Sync_Time();//时钟同步一下
 		}
 #endif
 	}
