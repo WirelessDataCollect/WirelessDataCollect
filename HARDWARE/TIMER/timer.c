@@ -38,13 +38,18 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 #if IAM_MASTER_CLOCK
 u16 sync_interval_time = 0;
 #endif
+short int time_inter=0;
+volatile u32 time1 = 0;
+volatile u32 time2 = 0;
+volatile u32 status = 0;
 //定时器3中断服务函数
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
+		time1 = TIM3->CNT;
 		SYSTEMTIME++;
-		if(SYSTEMTIME%4000==0)
+		if(SYSTEMTIME%10==0)
 		{
 			LED1=!LED1;//DS1翻转
 		}
@@ -56,8 +61,13 @@ void TIM3_IRQHandler(void)
 		{
 			adc_queue.HeadTime = SYSTEMTIME;
 		}
+		
 		ADS8266_read();
+		time2 = TIM3->CNT;
+		time_inter = time2-time1;
 	}
+	if(TIM3->CNT>10000)
+		status++;
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
 }
 

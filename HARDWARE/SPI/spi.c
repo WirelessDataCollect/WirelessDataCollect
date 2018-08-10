@@ -97,7 +97,7 @@ void EXTI_Conf(void)
 
 u8 SPI1_TxRx(u8 TxData)
 {		 			 
- 
+	
 //  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//??????  
 	SPI1->DR=TxData;
 	//SPI_I2S_SendData(SPI1, TxData); //????SPIx????byte  ??

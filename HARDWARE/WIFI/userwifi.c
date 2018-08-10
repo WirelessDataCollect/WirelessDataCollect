@@ -59,32 +59,34 @@ void receive_udp_package()
 u8 wifi_send_package()
 {
 	int Head;
-	int Length;
+	u32 Length;
 	
 	if(!Wifi_Send_EN) return 0;
 
 	if(Time_Sync_Flag==1)
 	{
-		queue_addtime_addIO(&adc_queue, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; 
+		Length = queue_length(adc_queue);
+		
+		queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; 
+		
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
-		Length = queue_length(adc_queue);
 		adc_queue.head = adc_queue.tail; 
-		
 		//  why not use   rsi_send_data()				
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
-	if(queue_length(adc_queue) >= UDP_SEND_SIZE - 10 )//我觉得>=比较好，万一没来得及发现==UDP_SEND_SIZE - 10的情况呢
+	if(queue_length(adc_queue) >= UDP_SEND_SIZE - 16 )//我觉得>=比较好，万一没来得及发现==UDP_SEND_SIZE - 10的情况呢
 	{
 		
-		queue_addtime_addIO(&adc_queue,WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
+		Length = queue_length(adc_queue);
+		
+		queue_addtime_addIO(&adc_queue,Length,WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
-		Length = queue_length(adc_queue);
-		adc_queue.head = (adc_queue.tail+UDP_SEND_SIZE)%QUEUE_SIZE; 
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],UDP_SEND_SIZE, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx ,&bytes_sent);
+		adc_queue.head = adc_queue.tail; 
+		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx ,&bytes_sent);
 	}
 	return 1;
 }
@@ -94,8 +96,8 @@ u8 order_anay(u8 arr[])
 	switch(arr[0])
 	{
 		case GET_TIME_SYNC://时钟同步信号
-			memcpy(&YYMMDD,&arr[1],4);
-			memcpy(&SYSTEMTIME,&arr[5],4);
+//			memcpy(&YYMMDD,&arr[1],4);
+//			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			break;		
 		case GET_WIFI_SEND_EN:
