@@ -49,7 +49,7 @@ void TIM3_IRQHandler(void)
 	{
 		time1 = TIM3->CNT;
 		SYSTEMTIME++;
-		if(SYSTEMTIME%10==0)
+		if(SYSTEMTIME%1000==0)
 		{
 			LED1=!LED1;//DS1翻转
 		}
@@ -66,7 +66,7 @@ void TIM3_IRQHandler(void)
 		time2 = TIM3->CNT;
 		time_inter = time2-time1;
 	}
-	if(TIM3->CNT>10000)
+	if(TIM3->CNT>1000)//用来显示是否有超时
 		status++;
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
 }

@@ -96,8 +96,8 @@ u8 order_anay(u8 arr[])
 	switch(arr[0])
 	{
 		case GET_TIME_SYNC://时钟同步信号
-//			memcpy(&YYMMDD,&arr[1],4);
-//			memcpy(&SYSTEMTIME,&arr[5],4);
+			memcpy(&YYMMDD,&arr[1],4);
+			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			break;		
 		case GET_WIFI_SEND_EN:
