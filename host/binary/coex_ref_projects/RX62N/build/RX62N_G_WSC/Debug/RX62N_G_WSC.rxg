@@ -1,0 +1,3 @@
+-cpu=rx600
+-output="C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\build\RX62N_G_WSC\Debug\RX62N_G_WSC.lib"
+-head=runtime,stdio,stdlib,string,new

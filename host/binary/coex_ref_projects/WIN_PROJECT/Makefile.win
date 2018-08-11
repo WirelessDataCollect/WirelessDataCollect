@@ -1,0 +1,382 @@
+# Project: coex_project
+# Makefile created by Dev-C++ 5.6.3
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = ../coex_app_framework/bt_zb/src/rsi_bt_coex_execute_cmd.o ../coex_app_framework/bt_zb/src/rsi_bt_zb_event_handler.o ../coex_app_framework/bt_zb/src/rsi_zigb_coex_execute_cmd.o ../coex_app_framework/wlan/src/rsi_coex_execute_cmd.o ../coex_app_framework/wlan/src/rsi_send_raw_data.o ../coex_app_framework/wlan/src/rsi_wlan_event_handler.o ../coex_app_framework/common/src/bget.o ../coex_app_framework/common/src/rsi_common_apis.o ../coex_app_framework/common/src/rsi_common_event_handlers.o ../coex_app_framework/common/src/rsi_event.o ../coex_app_framework/common/src/rsi_main.o ../coex_app_framework/common/src/rsi_scheduler.o ../coex_app_framework/common/src/rsi_utils.o ../../apis/wlan/core/src/rsi_api.o ../../apis/wlan/core/src/rsi_band.o ../../apis/wlan/core/src/rsi_bg_scan.o ../../apis/wlan/core/src/rsi_bootup_config.o ../../apis/wlan/core/src/rsi_build_frame_descriptor.o ../../apis/wlan/core/src/rsi_bytes_sent_count.o ../../apis/wlan/core/src/rsi_cfg_enable.o ../../apis/wlan/core/src/rsi_cfg_get.o ../../apis/wlan/core/src/rsi_cfg_save.o ../../apis/wlan/core/src/rsi_debug_prints.o ../../apis/wlan/core/src/rsi_disconnect.o ../../apis/wlan/core/src/rsi_dns_query.o ../../apis/wlan/core/src/rsi_dns_server.o ../../apis/wlan/core/src/rsi_ftp_client.o ../../apis/wlan/core/src/rsi_fwup_frm_host.o ../../apis/wlan/core/src/rsi_gpio_config.o ../../apis/wlan/core/src/rsi_ht_caps.o ../../apis/wlan/core/src/rsi_http_abort.o ../../apis/wlan/core/src/rsi_http_credentials.o ../../apis/wlan/core/src/rsi_http_get.o ../../apis/wlan/core/src/rsi_http_post.o ../../apis/wlan/core/src/rsi_init.o ../../apis/wlan/core/src/rsi_interrupt_handler.o ../../apis/wlan/core/src/rsi_ip_param_set.o ../../apis/wlan/core/src/rsi_ipv6_param_set.o ../../apis/wlan/core/src/rsi_join.o ../../apis/wlan/core/src/rsi_json_create.o ../../apis/wlan/core/src/rsi_json_erase_file.o ../../apis/wlan/core/src/rsi_lib_util.o ../../apis/wlan/core/src/rsi_load_web_page.o ../../apis/wlan/core/src/rsi_ltcp_conn_status.o ../../apis/wlan/core/src/rsi_mdns_sd.o ../../apis/wlan/core/src/rsi_module_soft_reset.o ../../apis/wlan/core/src/rsi_multicast.o ../../apis/wlan/core/src/rsi_multicast_filter.o ../../apis/wlan/core/src/rsi_oper_mode.o ../../apis/wlan/core/src/rsi_p2p_config.o ../../apis/wlan/core/src/rsi_per_mode.o ../../apis/wlan/core/src/rsi_per_stats.o ../../apis/wlan/core/src/rsi_ping_request.o ../../apis/wlan/core/src/rsi_power_mode.o ../../apis/wlan/core/src/rsi_psk.o ../../apis/wlan/core/src/rsi_query_conn_status.o ../../apis/wlan/core/src/rsi_query_fw_version.o ../../apis/wlan/core/src/rsi_query_go_parms.o ../../apis/wlan/core/src/rsi_query_mac_address.o ../../apis/wlan/core/src/rsi_query_net_parms.o ../../apis/wlan/core/src/rsi_query_rssi.o ../../apis/wlan/core/src/rsi_query_snr.o ../../apis/wlan/core/src/rsi_register_interrupt_irq.o ../../apis/wlan/core/src/rsi_rejoin_params.o ../../apis/wlan/core/src/rsi_rf_current_mode.o ../../apis/wlan/core/src/rsi_roam_params.o ../../apis/wlan/core/src/rsi_scan.o ../../apis/wlan/core/src/rsi_select_antenna.o ../../apis/wlan/core/src/rsi_send_boot_insn.o ../../apis/wlan/core/src/rsi_send_data.o ../../apis/wlan/core/src/rsi_send_ludp_data.o ../../apis/wlan/core/src/rsi_send_url_rsp.o ../../apis/wlan/core/src/rsi_send_websocket_data.o ../../apis/wlan/core/src/rsi_set_ap_config.o ../../apis/wlan/core/src/rsi_set_certificate.o ../../apis/wlan/core/src/rsi_set_eap.o ../../apis/wlan/core/src/rsi_set_mac_addr.o ../../apis/wlan/core/src/rsi_set_region.o ../../apis/wlan/core/src/rsi_set_region_ap.o ../../apis/wlan/core/src/rsi_set_wepkey.o ../../apis/wlan/core/src/rsi_sleep_timer.o ../../apis/wlan/core/src/rsi_snmp_enable.o ../../apis/wlan/core/src/rsi_snmp_get_next_rsp.o ../../apis/wlan/core/src/rsi_snmp_get_rsp.o ../../apis/wlan/core/src/rsi_snmp_trap.o ../../apis/wlan/core/src/rsi_sntp_client.o ../../apis/wlan/core/src/rsi_socket.o ../../apis/wlan/core/src/rsi_socket_close.o ../../apis/wlan/core/src/rsi_socket_config.o ../../apis/wlan/core/src/rsi_trigger_auto_config.o ../../apis/wlan/core/src/rsi_uart_flow_control.o ../../apis/wlan/core/src/rsi_user_store_config.o ../../apis/wlan/core/src/rsi_web_fields.o ../../apis/wlan/core/src/rsi_webpage_clear_files.o ../../apis/wlan/core/src/rsi_webpage_erase_file.o ../../apis/wlan/core/src/rsi_wireless_fwupgrade.o ../../apis/wlan/core/src/rsi_wmm_ps.o ../../apis/wlan/core/src/rsi_wps_method.o ../../apis/hal/src/rsi_hal_mcu_ioports.o ../../apis/hal/src/rsi_hal_mcu_timers.o ../../apis/wlan/ref_apps/src/rsi_buildHttpExtendedHeader.o ../../apis/wlan/ref_apps/src/rsi_user_store_config_init.o ../../apis/wlan/ref_apps/src/rsi_wifi_state_mc.o ../../apis/wlan/ref_apps/src/rsi_app_util.o ../../apis/wlan/ref_apps/src/rsi_config_init.o ../LINUX_WINDOWS/src/main.o ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_interrupt.o ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_uart.o ../LINUX_WINDOWS/src/hal/src/rsi_uart_frame_rd_wr.o ../../apis/ble/core/src/rsi_ble_api.o ../../apis/ble/core/src/rsi_ble_core.o ../../apis/ble/core/src/rsi_ble_gatt.o ../../apis/ble/ref_apps/src/ble_app.o ../../apis/ble/ref_apps/src/ble_main.o ../../apis/ble/ref_apps/src/rsi_ble_config_init.o ../../apis/ble/ref_apps/src/rsi_ble_state_mc.o ../../apis/bt/core/src/rsi_bt_api.o ../../apis/bt/core/src/rsi_bt_build_frame_descriptor.o ../../apis/bt/core/src/rsi_bt_generic.o
+LINKOBJ  = ../coex_app_framework/bt_zb/src/rsi_bt_coex_execute_cmd.o ../coex_app_framework/bt_zb/src/rsi_bt_zb_event_handler.o ../coex_app_framework/bt_zb/src/rsi_zigb_coex_execute_cmd.o ../coex_app_framework/wlan/src/rsi_coex_execute_cmd.o ../coex_app_framework/wlan/src/rsi_send_raw_data.o ../coex_app_framework/wlan/src/rsi_wlan_event_handler.o ../coex_app_framework/common/src/bget.o ../coex_app_framework/common/src/rsi_common_apis.o ../coex_app_framework/common/src/rsi_common_event_handlers.o ../coex_app_framework/common/src/rsi_event.o ../coex_app_framework/common/src/rsi_main.o ../coex_app_framework/common/src/rsi_scheduler.o ../coex_app_framework/common/src/rsi_utils.o ../../apis/wlan/core/src/rsi_api.o ../../apis/wlan/core/src/rsi_band.o ../../apis/wlan/core/src/rsi_bg_scan.o ../../apis/wlan/core/src/rsi_bootup_config.o ../../apis/wlan/core/src/rsi_build_frame_descriptor.o ../../apis/wlan/core/src/rsi_bytes_sent_count.o ../../apis/wlan/core/src/rsi_cfg_enable.o ../../apis/wlan/core/src/rsi_cfg_get.o ../../apis/wlan/core/src/rsi_cfg_save.o ../../apis/wlan/core/src/rsi_debug_prints.o ../../apis/wlan/core/src/rsi_disconnect.o ../../apis/wlan/core/src/rsi_dns_query.o ../../apis/wlan/core/src/rsi_dns_server.o ../../apis/wlan/core/src/rsi_ftp_client.o ../../apis/wlan/core/src/rsi_fwup_frm_host.o ../../apis/wlan/core/src/rsi_gpio_config.o ../../apis/wlan/core/src/rsi_ht_caps.o ../../apis/wlan/core/src/rsi_http_abort.o ../../apis/wlan/core/src/rsi_http_credentials.o ../../apis/wlan/core/src/rsi_http_get.o ../../apis/wlan/core/src/rsi_http_post.o ../../apis/wlan/core/src/rsi_init.o ../../apis/wlan/core/src/rsi_interrupt_handler.o ../../apis/wlan/core/src/rsi_ip_param_set.o ../../apis/wlan/core/src/rsi_ipv6_param_set.o ../../apis/wlan/core/src/rsi_join.o ../../apis/wlan/core/src/rsi_json_create.o ../../apis/wlan/core/src/rsi_json_erase_file.o ../../apis/wlan/core/src/rsi_lib_util.o ../../apis/wlan/core/src/rsi_load_web_page.o ../../apis/wlan/core/src/rsi_ltcp_conn_status.o ../../apis/wlan/core/src/rsi_mdns_sd.o ../../apis/wlan/core/src/rsi_module_soft_reset.o ../../apis/wlan/core/src/rsi_multicast.o ../../apis/wlan/core/src/rsi_multicast_filter.o ../../apis/wlan/core/src/rsi_oper_mode.o ../../apis/wlan/core/src/rsi_p2p_config.o ../../apis/wlan/core/src/rsi_per_mode.o ../../apis/wlan/core/src/rsi_per_stats.o ../../apis/wlan/core/src/rsi_ping_request.o ../../apis/wlan/core/src/rsi_power_mode.o ../../apis/wlan/core/src/rsi_psk.o ../../apis/wlan/core/src/rsi_query_conn_status.o ../../apis/wlan/core/src/rsi_query_fw_version.o ../../apis/wlan/core/src/rsi_query_go_parms.o ../../apis/wlan/core/src/rsi_query_mac_address.o ../../apis/wlan/core/src/rsi_query_net_parms.o ../../apis/wlan/core/src/rsi_query_rssi.o ../../apis/wlan/core/src/rsi_query_snr.o ../../apis/wlan/core/src/rsi_register_interrupt_irq.o ../../apis/wlan/core/src/rsi_rejoin_params.o ../../apis/wlan/core/src/rsi_rf_current_mode.o ../../apis/wlan/core/src/rsi_roam_params.o ../../apis/wlan/core/src/rsi_scan.o ../../apis/wlan/core/src/rsi_select_antenna.o ../../apis/wlan/core/src/rsi_send_boot_insn.o ../../apis/wlan/core/src/rsi_send_data.o ../../apis/wlan/core/src/rsi_send_ludp_data.o ../../apis/wlan/core/src/rsi_send_url_rsp.o ../../apis/wlan/core/src/rsi_send_websocket_data.o ../../apis/wlan/core/src/rsi_set_ap_config.o ../../apis/wlan/core/src/rsi_set_certificate.o ../../apis/wlan/core/src/rsi_set_eap.o ../../apis/wlan/core/src/rsi_set_mac_addr.o ../../apis/wlan/core/src/rsi_set_region.o ../../apis/wlan/core/src/rsi_set_region_ap.o ../../apis/wlan/core/src/rsi_set_wepkey.o ../../apis/wlan/core/src/rsi_sleep_timer.o ../../apis/wlan/core/src/rsi_snmp_enable.o ../../apis/wlan/core/src/rsi_snmp_get_next_rsp.o ../../apis/wlan/core/src/rsi_snmp_get_rsp.o ../../apis/wlan/core/src/rsi_snmp_trap.o ../../apis/wlan/core/src/rsi_sntp_client.o ../../apis/wlan/core/src/rsi_socket.o ../../apis/wlan/core/src/rsi_socket_close.o ../../apis/wlan/core/src/rsi_socket_config.o ../../apis/wlan/core/src/rsi_trigger_auto_config.o ../../apis/wlan/core/src/rsi_uart_flow_control.o ../../apis/wlan/core/src/rsi_user_store_config.o ../../apis/wlan/core/src/rsi_web_fields.o ../../apis/wlan/core/src/rsi_webpage_clear_files.o ../../apis/wlan/core/src/rsi_webpage_erase_file.o ../../apis/wlan/core/src/rsi_wireless_fwupgrade.o ../../apis/wlan/core/src/rsi_wmm_ps.o ../../apis/wlan/core/src/rsi_wps_method.o ../../apis/hal/src/rsi_hal_mcu_ioports.o ../../apis/hal/src/rsi_hal_mcu_timers.o ../../apis/wlan/ref_apps/src/rsi_buildHttpExtendedHeader.o ../../apis/wlan/ref_apps/src/rsi_user_store_config_init.o ../../apis/wlan/ref_apps/src/rsi_wifi_state_mc.o ../../apis/wlan/ref_apps/src/rsi_app_util.o ../../apis/wlan/ref_apps/src/rsi_config_init.o ../LINUX_WINDOWS/src/main.o ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_interrupt.o ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_uart.o ../LINUX_WINDOWS/src/hal/src/rsi_uart_frame_rd_wr.o ../../apis/ble/core/src/rsi_ble_api.o ../../apis/ble/core/src/rsi_ble_core.o ../../apis/ble/core/src/rsi_ble_gatt.o ../../apis/ble/ref_apps/src/ble_app.o ../../apis/ble/ref_apps/src/ble_main.o ../../apis/ble/ref_apps/src/rsi_ble_config_init.o ../../apis/ble/ref_apps/src/rsi_ble_state_mc.o ../../apis/bt/core/src/rsi_bt_api.o ../../apis/bt/core/src/rsi_bt_build_frame_descriptor.o ../../apis/bt/core/src/rsi_bt_generic.o
+LIBS     = -L"C:/Program Files/Dev-Cpp/MinGW32/lib" -L"C:/Program Files/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -g3
+INCS     = -I"C:/Program Files/Dev-Cpp/MinGW32/include" -I"C:/Program Files/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Program Files/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"../../coex_ref_projects/LINUX_WINDOWS/include" -I"../../apis/zb/ref_apps/include" -I"../../apis/zb/core/include" -I"../../apis/bt/ref_apps/include" -I"../../apis/bt/core/include" -I"../../apis/ble/ref_apps/include" -I"../../apis/ble/core/include" -I"../../coex_ref_projects/coex_app_framework/common/include" -I"../../coex_ref_projects/coex_app_framework/bt_zb/include" -I"../../apis/intf/spi/include" -I"../../apis/intf/uart/include" -I"../../apis/wlan/ref_apps/include" -I"../../apis/wlan/core/include"
+CXXINCS  = -I"C:/Program Files/Dev-Cpp/MinGW32/include" -I"C:/Program Files/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Program Files/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Program Files/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++" -I"../../coex_ref_projects/LINUX_WINDOWS/include" -I"../../apis/zb/ref_apps/include" -I"../../apis/zb/core/include" -I"../../apis/bt/ref_apps/include" -I"../../apis/bt/core/include" -I"../../apis/ble/ref_apps/include" -I"../../apis/ble/core/include" -I"../../coex_ref_projects/coex_app_framework/common/include" -I"../../coex_ref_projects/coex_app_framework/bt_zb/include" -I"../../apis/intf/spi/include" -I"../../apis/intf/uart/include" -I"../../apis/wlan/ref_apps/include" -I"../../apis/wlan/core/include"
+BIN      = coex_project.exe
+CXXFLAGS = $(CXXINCS) -g3
+CFLAGS   = $(INCS) -g3 -D WLAN_ENABLE -D COEX_APP_CHANGES -D APP_DEBUG -D WLAN_RAW_DATA_TEST -D WINDOWS -DWINDOWS -D RSI_DEBUG_PRINT -D BLE_ENABLE -D FSM_BASED_BLE_APP
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+../coex_app_framework/bt_zb/src/rsi_bt_coex_execute_cmd.o: ../coex_app_framework/bt_zb/src/rsi_bt_coex_execute_cmd.c
+	$(CC) -c ../coex_app_framework/bt_zb/src/rsi_bt_coex_execute_cmd.c -o ../coex_app_framework/bt_zb/src/rsi_bt_coex_execute_cmd.o $(CFLAGS)
+
+../coex_app_framework/bt_zb/src/rsi_bt_zb_event_handler.o: ../coex_app_framework/bt_zb/src/rsi_bt_zb_event_handler.c
+	$(CC) -c ../coex_app_framework/bt_zb/src/rsi_bt_zb_event_handler.c -o ../coex_app_framework/bt_zb/src/rsi_bt_zb_event_handler.o $(CFLAGS)
+
+../coex_app_framework/bt_zb/src/rsi_zigb_coex_execute_cmd.o: ../coex_app_framework/bt_zb/src/rsi_zigb_coex_execute_cmd.c
+	$(CC) -c ../coex_app_framework/bt_zb/src/rsi_zigb_coex_execute_cmd.c -o ../coex_app_framework/bt_zb/src/rsi_zigb_coex_execute_cmd.o $(CFLAGS)
+
+../coex_app_framework/wlan/src/rsi_coex_execute_cmd.o: ../coex_app_framework/wlan/src/rsi_coex_execute_cmd.c
+	$(CC) -c ../coex_app_framework/wlan/src/rsi_coex_execute_cmd.c -o ../coex_app_framework/wlan/src/rsi_coex_execute_cmd.o $(CFLAGS)
+
+../coex_app_framework/wlan/src/rsi_send_raw_data.o: ../coex_app_framework/wlan/src/rsi_send_raw_data.c
+	$(CC) -c ../coex_app_framework/wlan/src/rsi_send_raw_data.c -o ../coex_app_framework/wlan/src/rsi_send_raw_data.o $(CFLAGS)
+
+../coex_app_framework/wlan/src/rsi_wlan_event_handler.o: ../coex_app_framework/wlan/src/rsi_wlan_event_handler.c
+	$(CC) -c ../coex_app_framework/wlan/src/rsi_wlan_event_handler.c -o ../coex_app_framework/wlan/src/rsi_wlan_event_handler.o $(CFLAGS)
+
+../coex_app_framework/common/src/bget.o: ../coex_app_framework/common/src/bget.c
+	$(CC) -c ../coex_app_framework/common/src/bget.c -o ../coex_app_framework/common/src/bget.o $(CFLAGS)
+
+../coex_app_framework/common/src/rsi_common_apis.o: ../coex_app_framework/common/src/rsi_common_apis.c
+	$(CC) -c ../coex_app_framework/common/src/rsi_common_apis.c -o ../coex_app_framework/common/src/rsi_common_apis.o $(CFLAGS)
+
+../coex_app_framework/common/src/rsi_common_event_handlers.o: ../coex_app_framework/common/src/rsi_common_event_handlers.c
+	$(CC) -c ../coex_app_framework/common/src/rsi_common_event_handlers.c -o ../coex_app_framework/common/src/rsi_common_event_handlers.o $(CFLAGS)
+
+../coex_app_framework/common/src/rsi_event.o: ../coex_app_framework/common/src/rsi_event.c
+	$(CC) -c ../coex_app_framework/common/src/rsi_event.c -o ../coex_app_framework/common/src/rsi_event.o $(CFLAGS)
+
+../coex_app_framework/common/src/rsi_main.o: ../coex_app_framework/common/src/rsi_main.c
+	$(CC) -c ../coex_app_framework/common/src/rsi_main.c -o ../coex_app_framework/common/src/rsi_main.o $(CFLAGS)
+
+../coex_app_framework/common/src/rsi_scheduler.o: ../coex_app_framework/common/src/rsi_scheduler.c
+	$(CC) -c ../coex_app_framework/common/src/rsi_scheduler.c -o ../coex_app_framework/common/src/rsi_scheduler.o $(CFLAGS)
+
+../coex_app_framework/common/src/rsi_utils.o: ../coex_app_framework/common/src/rsi_utils.c
+	$(CC) -c ../coex_app_framework/common/src/rsi_utils.c -o ../coex_app_framework/common/src/rsi_utils.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_api.o: ../../apis/wlan/core/src/rsi_api.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_api.c -o ../../apis/wlan/core/src/rsi_api.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_band.o: ../../apis/wlan/core/src/rsi_band.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_band.c -o ../../apis/wlan/core/src/rsi_band.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_bg_scan.o: ../../apis/wlan/core/src/rsi_bg_scan.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_bg_scan.c -o ../../apis/wlan/core/src/rsi_bg_scan.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_bootup_config.o: ../../apis/wlan/core/src/rsi_bootup_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_bootup_config.c -o ../../apis/wlan/core/src/rsi_bootup_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_build_frame_descriptor.o: ../../apis/wlan/core/src/rsi_build_frame_descriptor.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_build_frame_descriptor.c -o ../../apis/wlan/core/src/rsi_build_frame_descriptor.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_bytes_sent_count.o: ../../apis/wlan/core/src/rsi_bytes_sent_count.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_bytes_sent_count.c -o ../../apis/wlan/core/src/rsi_bytes_sent_count.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_cfg_enable.o: ../../apis/wlan/core/src/rsi_cfg_enable.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_cfg_enable.c -o ../../apis/wlan/core/src/rsi_cfg_enable.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_cfg_get.o: ../../apis/wlan/core/src/rsi_cfg_get.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_cfg_get.c -o ../../apis/wlan/core/src/rsi_cfg_get.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_cfg_save.o: ../../apis/wlan/core/src/rsi_cfg_save.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_cfg_save.c -o ../../apis/wlan/core/src/rsi_cfg_save.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_debug_prints.o: ../../apis/wlan/core/src/rsi_debug_prints.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_debug_prints.c -o ../../apis/wlan/core/src/rsi_debug_prints.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_disconnect.o: ../../apis/wlan/core/src/rsi_disconnect.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_disconnect.c -o ../../apis/wlan/core/src/rsi_disconnect.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_dns_query.o: ../../apis/wlan/core/src/rsi_dns_query.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_dns_query.c -o ../../apis/wlan/core/src/rsi_dns_query.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_dns_server.o: ../../apis/wlan/core/src/rsi_dns_server.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_dns_server.c -o ../../apis/wlan/core/src/rsi_dns_server.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_ftp_client.o: ../../apis/wlan/core/src/rsi_ftp_client.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_ftp_client.c -o ../../apis/wlan/core/src/rsi_ftp_client.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_fwup_frm_host.o: ../../apis/wlan/core/src/rsi_fwup_frm_host.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_fwup_frm_host.c -o ../../apis/wlan/core/src/rsi_fwup_frm_host.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_gpio_config.o: ../../apis/wlan/core/src/rsi_gpio_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_gpio_config.c -o ../../apis/wlan/core/src/rsi_gpio_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_ht_caps.o: ../../apis/wlan/core/src/rsi_ht_caps.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_ht_caps.c -o ../../apis/wlan/core/src/rsi_ht_caps.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_http_abort.o: ../../apis/wlan/core/src/rsi_http_abort.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_http_abort.c -o ../../apis/wlan/core/src/rsi_http_abort.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_http_credentials.o: ../../apis/wlan/core/src/rsi_http_credentials.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_http_credentials.c -o ../../apis/wlan/core/src/rsi_http_credentials.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_http_get.o: ../../apis/wlan/core/src/rsi_http_get.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_http_get.c -o ../../apis/wlan/core/src/rsi_http_get.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_http_post.o: ../../apis/wlan/core/src/rsi_http_post.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_http_post.c -o ../../apis/wlan/core/src/rsi_http_post.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_init.o: ../../apis/wlan/core/src/rsi_init.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_init.c -o ../../apis/wlan/core/src/rsi_init.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_interrupt_handler.o: ../../apis/wlan/core/src/rsi_interrupt_handler.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_interrupt_handler.c -o ../../apis/wlan/core/src/rsi_interrupt_handler.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_ip_param_set.o: ../../apis/wlan/core/src/rsi_ip_param_set.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_ip_param_set.c -o ../../apis/wlan/core/src/rsi_ip_param_set.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_ipv6_param_set.o: ../../apis/wlan/core/src/rsi_ipv6_param_set.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_ipv6_param_set.c -o ../../apis/wlan/core/src/rsi_ipv6_param_set.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_join.o: ../../apis/wlan/core/src/rsi_join.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_join.c -o ../../apis/wlan/core/src/rsi_join.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_json_create.o: ../../apis/wlan/core/src/rsi_json_create.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_json_create.c -o ../../apis/wlan/core/src/rsi_json_create.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_json_erase_file.o: ../../apis/wlan/core/src/rsi_json_erase_file.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_json_erase_file.c -o ../../apis/wlan/core/src/rsi_json_erase_file.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_lib_util.o: ../../apis/wlan/core/src/rsi_lib_util.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_lib_util.c -o ../../apis/wlan/core/src/rsi_lib_util.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_load_web_page.o: ../../apis/wlan/core/src/rsi_load_web_page.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_load_web_page.c -o ../../apis/wlan/core/src/rsi_load_web_page.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_ltcp_conn_status.o: ../../apis/wlan/core/src/rsi_ltcp_conn_status.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_ltcp_conn_status.c -o ../../apis/wlan/core/src/rsi_ltcp_conn_status.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_mdns_sd.o: ../../apis/wlan/core/src/rsi_mdns_sd.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_mdns_sd.c -o ../../apis/wlan/core/src/rsi_mdns_sd.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_module_soft_reset.o: ../../apis/wlan/core/src/rsi_module_soft_reset.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_module_soft_reset.c -o ../../apis/wlan/core/src/rsi_module_soft_reset.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_multicast.o: ../../apis/wlan/core/src/rsi_multicast.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_multicast.c -o ../../apis/wlan/core/src/rsi_multicast.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_multicast_filter.o: ../../apis/wlan/core/src/rsi_multicast_filter.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_multicast_filter.c -o ../../apis/wlan/core/src/rsi_multicast_filter.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_oper_mode.o: ../../apis/wlan/core/src/rsi_oper_mode.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_oper_mode.c -o ../../apis/wlan/core/src/rsi_oper_mode.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_p2p_config.o: ../../apis/wlan/core/src/rsi_p2p_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_p2p_config.c -o ../../apis/wlan/core/src/rsi_p2p_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_per_mode.o: ../../apis/wlan/core/src/rsi_per_mode.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_per_mode.c -o ../../apis/wlan/core/src/rsi_per_mode.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_per_stats.o: ../../apis/wlan/core/src/rsi_per_stats.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_per_stats.c -o ../../apis/wlan/core/src/rsi_per_stats.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_ping_request.o: ../../apis/wlan/core/src/rsi_ping_request.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_ping_request.c -o ../../apis/wlan/core/src/rsi_ping_request.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_power_mode.o: ../../apis/wlan/core/src/rsi_power_mode.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_power_mode.c -o ../../apis/wlan/core/src/rsi_power_mode.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_psk.o: ../../apis/wlan/core/src/rsi_psk.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_psk.c -o ../../apis/wlan/core/src/rsi_psk.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_conn_status.o: ../../apis/wlan/core/src/rsi_query_conn_status.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_conn_status.c -o ../../apis/wlan/core/src/rsi_query_conn_status.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_fw_version.o: ../../apis/wlan/core/src/rsi_query_fw_version.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_fw_version.c -o ../../apis/wlan/core/src/rsi_query_fw_version.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_go_parms.o: ../../apis/wlan/core/src/rsi_query_go_parms.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_go_parms.c -o ../../apis/wlan/core/src/rsi_query_go_parms.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_mac_address.o: ../../apis/wlan/core/src/rsi_query_mac_address.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_mac_address.c -o ../../apis/wlan/core/src/rsi_query_mac_address.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_net_parms.o: ../../apis/wlan/core/src/rsi_query_net_parms.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_net_parms.c -o ../../apis/wlan/core/src/rsi_query_net_parms.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_rssi.o: ../../apis/wlan/core/src/rsi_query_rssi.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_rssi.c -o ../../apis/wlan/core/src/rsi_query_rssi.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_query_snr.o: ../../apis/wlan/core/src/rsi_query_snr.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_query_snr.c -o ../../apis/wlan/core/src/rsi_query_snr.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_register_interrupt_irq.o: ../../apis/wlan/core/src/rsi_register_interrupt_irq.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_register_interrupt_irq.c -o ../../apis/wlan/core/src/rsi_register_interrupt_irq.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_rejoin_params.o: ../../apis/wlan/core/src/rsi_rejoin_params.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_rejoin_params.c -o ../../apis/wlan/core/src/rsi_rejoin_params.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_rf_current_mode.o: ../../apis/wlan/core/src/rsi_rf_current_mode.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_rf_current_mode.c -o ../../apis/wlan/core/src/rsi_rf_current_mode.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_roam_params.o: ../../apis/wlan/core/src/rsi_roam_params.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_roam_params.c -o ../../apis/wlan/core/src/rsi_roam_params.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_scan.o: ../../apis/wlan/core/src/rsi_scan.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_scan.c -o ../../apis/wlan/core/src/rsi_scan.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_select_antenna.o: ../../apis/wlan/core/src/rsi_select_antenna.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_select_antenna.c -o ../../apis/wlan/core/src/rsi_select_antenna.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_send_boot_insn.o: ../../apis/wlan/core/src/rsi_send_boot_insn.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_send_boot_insn.c -o ../../apis/wlan/core/src/rsi_send_boot_insn.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_send_data.o: ../../apis/wlan/core/src/rsi_send_data.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_send_data.c -o ../../apis/wlan/core/src/rsi_send_data.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_send_ludp_data.o: ../../apis/wlan/core/src/rsi_send_ludp_data.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_send_ludp_data.c -o ../../apis/wlan/core/src/rsi_send_ludp_data.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_send_url_rsp.o: ../../apis/wlan/core/src/rsi_send_url_rsp.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_send_url_rsp.c -o ../../apis/wlan/core/src/rsi_send_url_rsp.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_send_websocket_data.o: ../../apis/wlan/core/src/rsi_send_websocket_data.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_send_websocket_data.c -o ../../apis/wlan/core/src/rsi_send_websocket_data.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_ap_config.o: ../../apis/wlan/core/src/rsi_set_ap_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_ap_config.c -o ../../apis/wlan/core/src/rsi_set_ap_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_certificate.o: ../../apis/wlan/core/src/rsi_set_certificate.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_certificate.c -o ../../apis/wlan/core/src/rsi_set_certificate.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_eap.o: ../../apis/wlan/core/src/rsi_set_eap.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_eap.c -o ../../apis/wlan/core/src/rsi_set_eap.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_mac_addr.o: ../../apis/wlan/core/src/rsi_set_mac_addr.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_mac_addr.c -o ../../apis/wlan/core/src/rsi_set_mac_addr.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_region.o: ../../apis/wlan/core/src/rsi_set_region.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_region.c -o ../../apis/wlan/core/src/rsi_set_region.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_region_ap.o: ../../apis/wlan/core/src/rsi_set_region_ap.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_region_ap.c -o ../../apis/wlan/core/src/rsi_set_region_ap.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_set_wepkey.o: ../../apis/wlan/core/src/rsi_set_wepkey.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_set_wepkey.c -o ../../apis/wlan/core/src/rsi_set_wepkey.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_sleep_timer.o: ../../apis/wlan/core/src/rsi_sleep_timer.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_sleep_timer.c -o ../../apis/wlan/core/src/rsi_sleep_timer.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_snmp_enable.o: ../../apis/wlan/core/src/rsi_snmp_enable.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_snmp_enable.c -o ../../apis/wlan/core/src/rsi_snmp_enable.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_snmp_get_next_rsp.o: ../../apis/wlan/core/src/rsi_snmp_get_next_rsp.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_snmp_get_next_rsp.c -o ../../apis/wlan/core/src/rsi_snmp_get_next_rsp.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_snmp_get_rsp.o: ../../apis/wlan/core/src/rsi_snmp_get_rsp.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_snmp_get_rsp.c -o ../../apis/wlan/core/src/rsi_snmp_get_rsp.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_snmp_trap.o: ../../apis/wlan/core/src/rsi_snmp_trap.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_snmp_trap.c -o ../../apis/wlan/core/src/rsi_snmp_trap.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_sntp_client.o: ../../apis/wlan/core/src/rsi_sntp_client.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_sntp_client.c -o ../../apis/wlan/core/src/rsi_sntp_client.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_socket.o: ../../apis/wlan/core/src/rsi_socket.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_socket.c -o ../../apis/wlan/core/src/rsi_socket.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_socket_close.o: ../../apis/wlan/core/src/rsi_socket_close.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_socket_close.c -o ../../apis/wlan/core/src/rsi_socket_close.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_socket_config.o: ../../apis/wlan/core/src/rsi_socket_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_socket_config.c -o ../../apis/wlan/core/src/rsi_socket_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_trigger_auto_config.o: ../../apis/wlan/core/src/rsi_trigger_auto_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_trigger_auto_config.c -o ../../apis/wlan/core/src/rsi_trigger_auto_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_uart_flow_control.o: ../../apis/wlan/core/src/rsi_uart_flow_control.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_uart_flow_control.c -o ../../apis/wlan/core/src/rsi_uart_flow_control.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_user_store_config.o: ../../apis/wlan/core/src/rsi_user_store_config.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_user_store_config.c -o ../../apis/wlan/core/src/rsi_user_store_config.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_web_fields.o: ../../apis/wlan/core/src/rsi_web_fields.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_web_fields.c -o ../../apis/wlan/core/src/rsi_web_fields.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_webpage_clear_files.o: ../../apis/wlan/core/src/rsi_webpage_clear_files.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_webpage_clear_files.c -o ../../apis/wlan/core/src/rsi_webpage_clear_files.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_webpage_erase_file.o: ../../apis/wlan/core/src/rsi_webpage_erase_file.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_webpage_erase_file.c -o ../../apis/wlan/core/src/rsi_webpage_erase_file.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_wireless_fwupgrade.o: ../../apis/wlan/core/src/rsi_wireless_fwupgrade.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_wireless_fwupgrade.c -o ../../apis/wlan/core/src/rsi_wireless_fwupgrade.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_wmm_ps.o: ../../apis/wlan/core/src/rsi_wmm_ps.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_wmm_ps.c -o ../../apis/wlan/core/src/rsi_wmm_ps.o $(CFLAGS)
+
+../../apis/wlan/core/src/rsi_wps_method.o: ../../apis/wlan/core/src/rsi_wps_method.c
+	$(CC) -c ../../apis/wlan/core/src/rsi_wps_method.c -o ../../apis/wlan/core/src/rsi_wps_method.o $(CFLAGS)
+
+../../apis/hal/src/rsi_hal_mcu_ioports.o: ../../apis/hal/src/rsi_hal_mcu_ioports.c
+	$(CC) -c ../../apis/hal/src/rsi_hal_mcu_ioports.c -o ../../apis/hal/src/rsi_hal_mcu_ioports.o $(CFLAGS)
+
+../../apis/hal/src/rsi_hal_mcu_timers.o: ../../apis/hal/src/rsi_hal_mcu_timers.c
+	$(CC) -c ../../apis/hal/src/rsi_hal_mcu_timers.c -o ../../apis/hal/src/rsi_hal_mcu_timers.o $(CFLAGS)
+
+../../apis/wlan/ref_apps/src/rsi_buildHttpExtendedHeader.o: ../../apis/wlan/ref_apps/src/rsi_buildHttpExtendedHeader.c
+	$(CC) -c ../../apis/wlan/ref_apps/src/rsi_buildHttpExtendedHeader.c -o ../../apis/wlan/ref_apps/src/rsi_buildHttpExtendedHeader.o $(CFLAGS)
+
+../../apis/wlan/ref_apps/src/rsi_user_store_config_init.o: ../../apis/wlan/ref_apps/src/rsi_user_store_config_init.c
+	$(CC) -c ../../apis/wlan/ref_apps/src/rsi_user_store_config_init.c -o ../../apis/wlan/ref_apps/src/rsi_user_store_config_init.o $(CFLAGS)
+
+../../apis/wlan/ref_apps/src/rsi_wifi_state_mc.o: ../../apis/wlan/ref_apps/src/rsi_wifi_state_mc.c
+	$(CC) -c ../../apis/wlan/ref_apps/src/rsi_wifi_state_mc.c -o ../../apis/wlan/ref_apps/src/rsi_wifi_state_mc.o $(CFLAGS)
+
+../../apis/wlan/ref_apps/src/rsi_app_util.o: ../../apis/wlan/ref_apps/src/rsi_app_util.c
+	$(CC) -c ../../apis/wlan/ref_apps/src/rsi_app_util.c -o ../../apis/wlan/ref_apps/src/rsi_app_util.o $(CFLAGS)
+
+../../apis/wlan/ref_apps/src/rsi_config_init.o: ../../apis/wlan/ref_apps/src/rsi_config_init.c
+	$(CC) -c ../../apis/wlan/ref_apps/src/rsi_config_init.c -o ../../apis/wlan/ref_apps/src/rsi_config_init.o $(CFLAGS)
+
+../LINUX_WINDOWS/src/main.o: ../LINUX_WINDOWS/src/main.c
+	$(CC) -c ../LINUX_WINDOWS/src/main.c -o ../LINUX_WINDOWS/src/main.o $(CFLAGS)
+
+../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_interrupt.o: ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_interrupt.c
+	$(CC) -c ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_interrupt.c -o ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_interrupt.o $(CFLAGS)
+
+../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_uart.o: ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_uart.c
+	$(CC) -c ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_uart.c -o ../LINUX_WINDOWS/src/hal/src/rsi_hal_mcu_uart.o $(CFLAGS)
+
+../LINUX_WINDOWS/src/hal/src/rsi_uart_frame_rd_wr.o: ../LINUX_WINDOWS/src/hal/src/rsi_uart_frame_rd_wr.c
+	$(CC) -c ../LINUX_WINDOWS/src/hal/src/rsi_uart_frame_rd_wr.c -o ../LINUX_WINDOWS/src/hal/src/rsi_uart_frame_rd_wr.o $(CFLAGS)
+
+../../apis/ble/core/src/rsi_ble_api.o: ../../apis/ble/core/src/rsi_ble_api.c
+	$(CC) -c ../../apis/ble/core/src/rsi_ble_api.c -o ../../apis/ble/core/src/rsi_ble_api.o $(CFLAGS)
+
+../../apis/ble/core/src/rsi_ble_core.o: ../../apis/ble/core/src/rsi_ble_core.c
+	$(CC) -c ../../apis/ble/core/src/rsi_ble_core.c -o ../../apis/ble/core/src/rsi_ble_core.o $(CFLAGS)
+
+../../apis/ble/core/src/rsi_ble_gatt.o: ../../apis/ble/core/src/rsi_ble_gatt.c
+	$(CC) -c ../../apis/ble/core/src/rsi_ble_gatt.c -o ../../apis/ble/core/src/rsi_ble_gatt.o $(CFLAGS)
+
+../../apis/ble/ref_apps/src/ble_app.o: ../../apis/ble/ref_apps/src/ble_app.c
+	$(CC) -c ../../apis/ble/ref_apps/src/ble_app.c -o ../../apis/ble/ref_apps/src/ble_app.o $(CFLAGS)
+
+../../apis/ble/ref_apps/src/ble_main.o: ../../apis/ble/ref_apps/src/ble_main.c
+	$(CC) -c ../../apis/ble/ref_apps/src/ble_main.c -o ../../apis/ble/ref_apps/src/ble_main.o $(CFLAGS)
+
+../../apis/ble/ref_apps/src/rsi_ble_config_init.o: ../../apis/ble/ref_apps/src/rsi_ble_config_init.c
+	$(CC) -c ../../apis/ble/ref_apps/src/rsi_ble_config_init.c -o ../../apis/ble/ref_apps/src/rsi_ble_config_init.o $(CFLAGS)
+
+../../apis/ble/ref_apps/src/rsi_ble_state_mc.o: ../../apis/ble/ref_apps/src/rsi_ble_state_mc.c
+	$(CC) -c ../../apis/ble/ref_apps/src/rsi_ble_state_mc.c -o ../../apis/ble/ref_apps/src/rsi_ble_state_mc.o $(CFLAGS)
+
+../../apis/bt/core/src/rsi_bt_api.o: ../../apis/bt/core/src/rsi_bt_api.c
+	$(CC) -c ../../apis/bt/core/src/rsi_bt_api.c -o ../../apis/bt/core/src/rsi_bt_api.o $(CFLAGS)
+
+../../apis/bt/core/src/rsi_bt_build_frame_descriptor.o: ../../apis/bt/core/src/rsi_bt_build_frame_descriptor.c
+	$(CC) -c ../../apis/bt/core/src/rsi_bt_build_frame_descriptor.c -o ../../apis/bt/core/src/rsi_bt_build_frame_descriptor.o $(CFLAGS)
+
+../../apis/bt/core/src/rsi_bt_generic.o: ../../apis/bt/core/src/rsi_bt_generic.c
+	$(CC) -c ../../apis/bt/core/src/rsi_bt_generic.c -o ../../apis/bt/core/src/rsi_bt_generic.o $(CFLAGS)

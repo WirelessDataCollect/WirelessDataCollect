@@ -1,0 +1,33 @@
+[HIMDBVersion]
+2.0
+[DATABASE_VERSION]
+"1.2" 
+[CURRENT_PROJECT]
+"RX62N_G_WSC" 
+[GENERAL_DATA]
+[BREAKPOINTS]
+[OPEN_WORKSPACE_FILES]
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\ble\core\src\rsi_ble_api.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\ble\core\src\rsi_ble_core.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\ble\ref_apps\src\ble_app.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\wlan\ref_apps\include\rsi_app.h" 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\wlan\ref_apps\include\rsi_config.h" 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\LINUX_WINDOWS\src\hal\src\rsi_hal_mcu_uart.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\build\RX62N_G_WSC\lowsrc.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\hal\src\rsi_hal_mcu_spi.c" 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\hal\src\rsi_uart_frame_rd_wr.c" 
+[WORKSPACE_FILE_STATES]
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\ble\core\src\rsi_ble_api.c" 0 0 895 235 0 0 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\ble\core\src\rsi_ble_core.c" 100 100 899 239 0 4 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\ble\ref_apps\src\ble_app.c" 75 75 899 239 0 3 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\wlan\ref_apps\include\rsi_app.h" 100 100 899 239 0 9 
+"C:\Users\test\Desktop\1.1.0\host\binary\apis\wlan\ref_apps\include\rsi_config.h" 25 25 899 239 0 1 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\LINUX_WINDOWS\src\hal\src\rsi_hal_mcu_uart.c" 50 50 899 239 0 2 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.c" 0 0 899 239 0 5 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\build\RX62N_G_WSC\lowsrc.c" 25 25 899 239 0 6 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\hal\src\rsi_hal_mcu_spi.c" 50 50 899 239 0 7 
+"C:\Users\test\Desktop\1.1.0\host\binary\coex_ref_projects\RX62N\hal\src\rsi_uart_frame_rd_wr.c" -8 -30 1015 377 1 8 
+[LOADED_PROJECTS]
+"RX62N_G_WSC" 
+[END]

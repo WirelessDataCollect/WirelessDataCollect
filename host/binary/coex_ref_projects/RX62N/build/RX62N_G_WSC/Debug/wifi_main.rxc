@@ -1,0 +1,18 @@
+-cpu=rx600
+-lang=c
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\wlan\ref_apps\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\hal\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\intf\spi\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\wlan\core\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\reference_projects\LINUX_WINDOWS_Coex\Application\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\ble\core\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\ble\ref_apps\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\bt\ref_apps\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\..\..\..\apis\bt\core\include"
+-include="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\RX62N_G_WSC"
+-define=WLAN_ENABLE,CO_EX,COEX_APP_CHANGES,BLE_ENABLE,FSM_BASED_BLE_APP
+-output=obj="C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\reference_projects\RX62N\build\RX62N_G_WSC\Debug\wifi_main.obj"
+-debug
+-optimize=0
+"C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\apis\wlan\ref_apps\src\wifi_main.c"
+-nologo

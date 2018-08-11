@@ -1,0 +1,717 @@
+[HIMDBVersion]
+2.0
+[DATABASE_VERSION]
+"2.8" 
+[PROJECT_DETAILS]
+"RX62N_G_WSC" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.hwp" "RX" "Renesas RX Standard" "Application" "RX600" "RX62N" 
+[INFORMATION]
+"No project information available" 
+[TOOL_CHAIN]
+"Renesas RX Standard Toolchain" "1.2.1.0" 
+[CONFIGURATIONS]
+"Debug" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\Debug" 
+"Debug_RX600_Segger_J-Link" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\Debug_RX600_Segger_J-Link" 
+"Release" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\Release" 
+[BUILD_PHASES]
+"Renesas OptLinker" 1 
+"Renesas RX Assembler" 1 
+"Renesas RX C/C++ Compiler" 1 
+"Renesas RX C/C++ Library Generator" 1 
+"Renesas RX Configurator" 1 
+[TOOL_ENVIRONMENT]
+[EXTENSIONS]
+"Absolute file" "ABS" 
+"Assembly include file" "INC" 
+"Assembly list file" "LST" 
+"Assembly source file" "S" 
+"Assembly source file" "SRC" 
+"Binary file" "BIN" 
+"C header file" "H" 
+"C source file" "C" 
+"C++ header file" "HPP" 
+"C++ source file" "CC" 
+"C++ source file" "CP" 
+"C++ source file" "CPP" 
+"CPU information file" "CPU" 
+"Calling information file" "CAL" 
+"Configuration file" "CFG" 
+"Debug information file" "DBG" 
+"Hex file" "HEX" 
+"Library file" "LIB" 
+"Library information file" "LBP" 
+"Linkage map file" "MAP" 
+"Linkage symbol file" "FSY" 
+"Object file" "OBJ" 
+"Optimize map file" "bls" 
+"Preprocessed C source file" "P" 
+"Preprocessed C++ source file" "PP" 
+"Relocatable file" "REL" 
+"Rts information file" "RTS" 
+"S-Record file" "MOT" 
+"Stack information file" "SNI" 
+"TD include object file" "RTI" 
+[FILE_GROUPS]
+"Absolute file" "BIN" "NONE" "" 
+"Assembly include file" "TEXT" "EDITOR" "" 
+"Assembly list file" "TEXT" "EDITOR" "" 
+"Assembly source file" "TEXT" "EDITOR" "" 
+"Binary file" "BIN" "NONE" "" 
+"C header file" "TEXT" "EDITOR" "" 
+"C source file" "TEXT" "EDITOR" "" 
+"C++ header file" "TEXT" "EDITOR" "" 
+"C++ source file" "TEXT" "EDITOR" "" 
+"CPU information file" "BIN" "NONE" "" 
+"Calling information file" "BIN" "NONE" "" 
+"Configuration file" "TEXT" "EDITOR" "" 
+"Debug information file" "BIN" "NONE" "" 
+"Hex file" "TEXT" "EDITOR" "" 
+"Library file" "BIN" "NONE" "" 
+"Library information file" "TEXT" "EDITOR" "" 
+"Linkage map file" "TEXT" "EDITOR" "" 
+"Linkage symbol file" "TEXT" "EDITOR" "" 
+"Object file" "BIN" "NONE" "" 
+"Optimize map file" "BIN" "NONE" "" 
+"Preprocessed C source file" "TEXT" "EDITOR" "" 
+"Preprocessed C++ source file" "TEXT" "EDITOR" "" 
+"Relocatable file" "BIN" "NONE" "" 
+"Rts information file" "BIN" "NONE" "" 
+"S-Record file" "TEXT" "EDITOR" "" 
+"Stack information file" "BIN" "NONE" "" 
+"TD include object file" "BIN" "NONE" "" 
+[ASSOCIATED_APPLICATIONS]
+[TOOLCHAIN_PHASE]
+"Renesas OptLinker" 
+"Renesas RX Assembler" 
+"Renesas RX C/C++ Compiler" 
+"Renesas RX C/C++ Library Generator" 
+"Renesas RX Configurator" 
+[UTILITY_PHASE]
+[CUSTOM_PHASES]
+[CUSTOM_PHASE_INPUT_GROUP]
+[CUSTOM_PHASE_OUTPUT_SYNTAX]
+[BUILD_ORDER]
+"Renesas RX C/C++ Library Generator" 1 
+"Renesas RX C/C++ Compiler" 1 
+"Renesas RX Assembler" 1 
+"Renesas OptLinker" 1 
+"Renesas RX Configurator" 0 
+[BUILD_PHASE_DETAILS]
+"Renesas OptLinker" "Object file|Library file|Relocatable file" 0 
+"Renesas RX Assembler" "Assembly source file|Linkage symbol file" 1 
+"Renesas RX C/C++ Compiler" "C source file|C++ source file" 1 
+"Renesas RX C/C++ Library Generator" "" 0 
+"Renesas RX Configurator" "Configuration file" 0 
+[BUILD_FILE_ORDER_Assembly source file]
+"Renesas RX Assembler" 1 
+[BUILD_FILE_ORDER_C source file]
+"Renesas RX C/C++ Compiler" 1 
+[BUILD_FILE_ORDER_C++ source file]
+"Renesas RX C/C++ Compiler" 1 
+[BUILD_FILE_ORDER_Linkage symbol file]
+"Renesas RX Assembler" 1 
+[SCRAP]
+"Project Generator Setup File" "" 
+[MAPPINGS]
+"Assembly source file" "Renesas RX Assembler" "Renesas RX C/C++ Compiler" 
+"Library file" "Renesas OptLinker" "Renesas RX C/C++ Library Generator" 
+"Object file" "Renesas OptLinker" "Renesas RX Assembler" 
+"Object file" "Renesas OptLinker" "Renesas RX C/C++ Compiler" 
+[PROJECT_FILES]
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\include\rsi_spi_cmd.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_frame_rd_wr.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_functs.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_iface_init.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_mem_rd_wr.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_reg_rd_wr.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\include\rsi_api.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\include\rsi_common_types.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\include\rsi_global.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\include\rsi_lib_util.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_api.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_band.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bg_scan.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bootup_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_build_frame_descriptor.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bytes_sent_count.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_enable.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_get.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_save.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_debug_prints.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dhcp_usr_cls.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_disconnect.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_query.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_server.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_update.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_execute_cmd.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ftp_client.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_fwup_frm_host.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_gpio_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ht_caps.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_abort.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_credentials.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_get.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_post.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_init.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_interrupt_handler.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ip_param_set.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ipv6_param_set.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_join.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_create.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_erase_file.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_lib_util.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_load_web_page.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ltcp_conn_status.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_mdns_sd.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_module_soft_reset.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast_filter.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_oper_mode.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ota_fw_up.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_p2p_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_mode.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_stats.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ping_request.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_pop3_client.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_power_mode.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_psk.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_conn_status.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_fw_version.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_go_parms.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_mac_address.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_net_parms.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_rssi.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_snr.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_read_data.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_register_interrupt_irq.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rejoin_params.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rf_current_mode.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_roam_params.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_scan.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_select_antenna.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_boot_insn.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_data.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_ludp_data.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_raw_data.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_url_rsp.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_websocket_data.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_ap_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_certificate.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_eap.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_mac_addr.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region_ap.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_wepkey.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sleep_timer.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_smtp_client.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_enable.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_next_rsp.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_rsp.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_stats.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_trap.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sntp_client.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_close.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sys_init.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_trigger_auto_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_uart_flow_control.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_user_store_config.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_web_fields.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_clear_files.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_erase_file.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wireless_fwupgrade.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wmm_ps.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wps_method.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\include\rsi_app.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\include\rsi_app_util.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\include\rsi_config.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\include\rsi_user_store_config_init.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\include\sensor_data.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\include\setregion_countryinfo.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_app_util.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_buildHttpExtendedHeader.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_build_smtp_header.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_config_init.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_user_store_config_init.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\sensor_data.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\setregion_countryinfo.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\wifi_main.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\dbsct.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\intprg.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\iodefine.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\lowsrc.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\resetprg.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\sbrk.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\sbrk.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\stacksct.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\typedefine.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\vect.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\vecttbl.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\include\platform_specific.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\include\rsi_hal.h" "User" "C header file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_interrupt.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_ioports.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_spi.c" "User" "C source file" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_timers.c" "User" "C source file" 2 
+[FOLDER]
+"C header file" "C header file" 
+"C source file" "C source file" 
+[GENERAL_DATA_PROJECT]
+"USE_CUSTOM_LINKAGE_ORDER" "0" 
+[ON_DEMAND_COMPONENTS_LOADED]
+[SYNC_SESSION_NAMES]
+[SESSIONS]
+"DefaultSession" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\DefaultSession.hsf" 0 
+"SessionRX600_Segger_J-Link" "D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\SessionRX600_Segger_J-Link.hsf" 0 
+[GENERAL_DATA_SESSION_DefaultSession]
+[GENERAL_DATA_SESSION_SessionRX600_Segger_J-Link]
+[OPTIONS_Debug_Renesas OptLinker]
+"Single Shot" "01b565c8d31e2d10" 5 
+[OPTIONS_Debug_Renesas RX Assembler]
+"Assembly source file" "03df9c7eaf6eec10" 4 
+"Linkage symbol file" "03df9c7eaf6eec10" 4 
+[OPTIONS_Debug_Renesas RX C/C++ Compiler]
+"C source file" "03b72044db8efc10" 2 
+"C++ source file" "03b72044db8efc10" 3 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_frame_rd_wr.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_functs.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_iface_init.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_mem_rd_wr.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_reg_rd_wr.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_api.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_band.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bg_scan.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bootup_config.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_build_frame_descriptor.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bytes_sent_count.c" "0ad18547955ffc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_enable.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_get.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_save.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_debug_prints.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dhcp_usr_cls.c" "0bf1ceb5f99c2d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_disconnect.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_query.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_server.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_update.c" "066749ba7c022d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_execute_cmd.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ftp_client.c" "0e08a7f752490d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_fwup_frm_host.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_gpio_config.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ht_caps.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_abort.c" "0fce52e584750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_credentials.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_get.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_post.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_init.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_interrupt_handler.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ip_param_set.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ipv6_param_set.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_join.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_create.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_erase_file.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_lib_util.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_load_web_page.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ltcp_conn_status.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_mdns_sd.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_module_soft_reset.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast_filter.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_oper_mode.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ota_fw_up.c" "0590cb9c7c022d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_p2p_config.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_mode.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_stats.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ping_request.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_pop3_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_power_mode.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_psk.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_conn_status.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_fw_version.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_go_parms.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_mac_address.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_net_parms.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_rssi.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_snr.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_read_data.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_register_interrupt_irq.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rejoin_params.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rf_current_mode.c" "029e13e484750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_roam_params.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_scan.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_select_antenna.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_boot_insn.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_data.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_ludp_data.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_raw_data.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_url_rsp.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_websocket_data.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_ap_config.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_certificate.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_eap.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_mac_addr.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region_ap.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_wepkey.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sleep_timer.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_smtp_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_enable.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_next_rsp.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_rsp.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_stats.c" "0365f4c8d31e2d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_trap.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sntp_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_close.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_config.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sys_init.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_trigger_auto_config.c" "0fce52e584750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_uart_flow_control.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_user_store_config.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_web_fields.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_clear_files.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_erase_file.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wireless_fwupgrade.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wmm_ps.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wps_method.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_app_util.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_buildHttpExtendedHeader.c" "05609d4b955ffc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_build_smtp_header.c" "0100b9151bc41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_config_init.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_user_store_config_init.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\sensor_data.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\setregion_countryinfo.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\wifi_main.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\dbsct.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\intprg.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\resetprg.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\sbrk.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\vecttbl.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_interrupt.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_ioports.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_spi.c" "03b72044db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_timers.c" "03b72044db8efc10" 2 
+[OPTIONS_Debug_Renesas RX C/C++ Library Generator]
+"Single Shot" "03c87c7eaf6eec10" 1 
+[OPTIONS_Debug_Renesas RX Configurator]
+"Single Shot" "0365f4c8d31e2d10" 6 
+[OPTIONS_Debug]
+"" 0 
+"[S|OUTPUTPATH|^"$(CONFIGDIR)\$(PROJECTNAME).lib^"] [V|VERSION|1] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|ROUND|NEAREST] [S|DBL_SIZE|4] [B|SIGNED_CHAR|0] [B|SIGNED_BITFIELD|0] [S|BIT_ORDER|RIGHT] [S|FINT_REGISTER|0] [S|BRANCH|24] [S|LANG|C] [B|RUNTIME|1] [B|CTYPE|0] [B|MATH|0] [B|MATHF|0] [B|STDARG|0] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] [B|IOS|0] [B|NEW|1] [B|COMPLEX|0] [B|CPPSTRING|0] [S|MODE|BUILD/CHANGED]" 1 
+"[V|VERSION|1] [B|COMMAND|1] [S|SPEC|UITRON4] [S|OUTPUTPATH|^"$(CONFIGDIR)^"] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|FINT_REGISTER|0]" 6 
+"[V|VERSION|1] [B|DEBUG|1] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|LISTFILE|0] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|FINT_REGISTER|0]" 4 
+"[V|VERSION|1] [S|LANG|CPP] [B|SJIS|1] [S|INCLUDE|^"$(WORKSPDIR)\..\..\..\apis\wlan\ref_apps\include^"|^"$(WORKSPDIR)\..\..\..\apis\hal\include^"|^"$(WORKSPDIR)\..\..\..\apis\intf\spi\include^"|^"$(WORKSPDIR)\..\..\..\apis\wlan\core\include^"|^"$(PROJDIR)\include^"] [S|DEFINE|WLAN_ENABLE|CO_EX] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|DEBUG|1] [S|OPTIMIZE|0] [B|SIZE|1] [B|MAP|0] [I|INLINE|100] [I|LOOP|2] [S|MISRA2004|ALL] [S|MISRA2004RULEFILE|^"$(CONFIGDIR)\$(PROJECTNAME).rde^"] [S|CPU|RX600] [S|BASE|00000000=NONE] [I|PID|16]
+" 3 
+"[V|VERSION|1] [S|LANG|C] [B|SJIS|1] [S|INCLUDE|^"$(WORKSPDIR)\..\..\..\apis\wlan\ref_apps\include^"|^"$(WORKSPDIR)\..\hal\include^"|^"$(WORKSPDIR)\..\..\..\apis\intf\spi\include^"|^"$(WORKSPDIR)\..\..\..\apis\wlan\core\include^"|^"$(PROJDIR)^"] [S|DEFINE|WLAN_ENABLE|CO_EX] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|DEBUG|1] [S|OPTIMIZE|0] [B|SIZE|1] [B|MAP|0] [I|INLINE|100] [I|LOOP|2] [S|MISRA2004|ALL] [S|MISRA2004RULEFILE|^"$(CONFIGDIR)\$(PROJECTNAME).rde^"] [S|CPU|RX600] [S|BASE|00000000=NONE] [I|PID|16]
+" 2 
+"[V|VERSION|6] [S|FORM|STYPE] [S|BYTE_COUNT_VALUE|FF] [B|DEBUG|1] [S|ROM|(D,R)|(D_1,R_1)|(D_2,R_2)] [S|CRC|NONE|DEFAULT|00000000] [B|LIST|1] [S|LIST|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [S|SHOW|METHODCUSTOM|] [S|OUTPUT|^"$(CONFIGDIR)\$(PROJECTNAME).mot^"] [I|SPACE|^"FF^"] [B|OPTIMIZE|0] [S|START|B_1,R_1,B_2,R_2,B,R,SU,SI(01000)|PResetPRG,C_1,C_2,C,C$*,D_1,D_2,D,P,PIntPRG,W*,L(0FFF80000)|FIXEDVECT(0FFFFFFD0)] [S|MEMORY|HIGH]
+" 5 
+[EXCLUDED_FILES_Debug]
+[LINKAGE_ORDER_Debug]
+[GENERAL_DATA_CONFIGURATION_Debug]
+[OPTIONS_Debug_RX600_Segger_J-Link_Renesas OptLinker]
+"Single Shot" "01b565c8d31e2d10" 5 
+[OPTIONS_Debug_RX600_Segger_J-Link_Renesas RX Assembler]
+"Assembly source file" "03df9c7eaf6eec10" 4 
+"Linkage symbol file" "03df9c7eaf6eec10" 4 
+[OPTIONS_Debug_RX600_Segger_J-Link_Renesas RX C/C++ Compiler]
+"C source file" "03df9c7eaf6eec10" 2 
+"C++ source file" "03df9c7eaf6eec10" 3 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_frame_rd_wr.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_functs.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_iface_init.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_mem_rd_wr.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_reg_rd_wr.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_api.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_band.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bg_scan.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bootup_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_build_frame_descriptor.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bytes_sent_count.c" "0ad18547955ffc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_enable.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_get.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_save.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_debug_prints.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dhcp_usr_cls.c" "0bf1ceb5f99c2d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_disconnect.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_query.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_server.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_update.c" "066749ba7c022d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_execute_cmd.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ftp_client.c" "0e08a7f752490d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_fwup_frm_host.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_gpio_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ht_caps.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_abort.c" "0fce52e584750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_credentials.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_get.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_post.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_init.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_interrupt_handler.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ip_param_set.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ipv6_param_set.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_join.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_create.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_erase_file.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_lib_util.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_load_web_page.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ltcp_conn_status.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_mdns_sd.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_module_soft_reset.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast_filter.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_oper_mode.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ota_fw_up.c" "0590cb9c7c022d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_p2p_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_mode.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_stats.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ping_request.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_pop3_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_power_mode.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_psk.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_conn_status.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_fw_version.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_go_parms.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_mac_address.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_net_parms.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_rssi.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_snr.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_read_data.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_register_interrupt_irq.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rejoin_params.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rf_current_mode.c" "029e13e484750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_roam_params.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_scan.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_select_antenna.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_boot_insn.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_ludp_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_raw_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_url_rsp.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_websocket_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_ap_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_certificate.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_eap.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_mac_addr.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region_ap.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_wepkey.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sleep_timer.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_smtp_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_enable.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_next_rsp.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_rsp.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_stats.c" "0365f4c8d31e2d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_trap.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sntp_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_close.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_config.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sys_init.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_trigger_auto_config.c" "0fce52e584750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_uart_flow_control.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_user_store_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_web_fields.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_clear_files.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_erase_file.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wireless_fwupgrade.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wmm_ps.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wps_method.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_app_util.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_buildHttpExtendedHeader.c" "05609d4b955ffc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_build_smtp_header.c" "0100b9151bc41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_config_init.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_user_store_config_init.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\sensor_data.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\setregion_countryinfo.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\wifi_main.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\dbsct.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\intprg.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\resetprg.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\sbrk.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\vecttbl.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_interrupt.c" "0f16aba3db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_ioports.c" "0f16aba3db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_spi.c" "0f16aba3db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_timers.c" "0f16aba3db8efc10" 2 
+[OPTIONS_Debug_RX600_Segger_J-Link_Renesas RX C/C++ Library Generator]
+"Single Shot" "03df9c7eaf6eec10" 1 
+[OPTIONS_Debug_RX600_Segger_J-Link_Renesas RX Configurator]
+"Single Shot" "0365f4c8d31e2d10" 6 
+[OPTIONS_Debug_RX600_Segger_J-Link]
+"" 0 
+"[S|OUTPUTPATH|^"$(CONFIGDIR)\$(PROJECTNAME).lib^"] [V|VERSION|1] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|ROUND|NEAREST] [S|DBL_SIZE|4] [B|SIGNED_CHAR|0] [B|SIGNED_BITFIELD|0] [S|BIT_ORDER|RIGHT] [S|FINT_REGISTER|0] [S|BRANCH|24] [S|LANG|C] [B|RUNTIME|1] [B|CTYPE|0] [B|MATH|0] [B|MATHF|0] [B|STDARG|0] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] [B|IOS|0] [B|NEW|1] [B|COMPLEX|0] [B|CPPSTRING|0] [S|MODE|BUILD/CHANGED]" 1 
+"[V|VERSION|1] [B|COMMAND|1] [S|SPEC|UITRON4] [S|OUTPUTPATH|^"$(CONFIGDIR)^"] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|FINT_REGISTER|0]" 6 
+"[V|VERSION|1] [B|DEBUG|1] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|LISTFILE|0] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|FINT_REGISTER|0]" 4 
+"[V|VERSION|1] [B|DEBUG|1] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|LISTFILE|0] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|ROUND|NEAREST] [S|DBL_SIZE|4] [B|SIGNED_CHAR|0] [B|SIGNED_BITFIELD|0] [S|BIT_ORDER|RIGHT] [S|FINT_REGISTER|0] [S|BRANCH|24]" 2 
+"[V|VERSION|1] [S|LANG|CPP] [B|SJIS|1] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|DEBUG|1] [B|SIZE|1] [B|MAP|0] [I|INLINE|100] [I|LOOP|2] [S|MISRA2004|ALL] [S|MISRA2004RULEFILE|^"$(CONFIGDIR)\$(PROJECTNAME).rde^"] [S|CPU|RX600] [S|BASE|00000000=NONE] [I|PID|16]
+" 3 
+"[V|VERSION|6] [B|DEBUG|1] [S|OUTPUT|^"$(CONFIGDIR)\$(PROJECTNAME).abs^"]  [B|LIST|1] [S|LIST|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [B|OPTIMIZE|0] [S|ROM|(D,R)|(D_1,R_1)|(D_2,R_2)] [S|ENDIAN|LITTLE] [S|FORM|STYPE] [S|OUTPUT|^"$(CONFIGDIR)\$(PROJECTNAME).mot^"] [S|START|B_1,R_1,B_2,R_2,B,R,SU,SI(1000)|PResetPRG(FFFF8000)|C_1,C_2,C,C$*,D_1,D_2,D,P,PIntPRG,W*,L(FFFF8100)|FIXEDVECT(FFFFFFD0)]" 5 
+[EXCLUDED_FILES_Debug_RX600_Segger_J-Link]
+[LINKAGE_ORDER_Debug_RX600_Segger_J-Link]
+[GENERAL_DATA_CONFIGURATION_Debug_RX600_Segger_J-Link]
+[OPTIONS_Release_Renesas OptLinker]
+"Single Shot" "01b565c8d31e2d10" 5 
+[OPTIONS_Release_Renesas RX Assembler]
+"Assembly source file" "0274cc7eaf6eec10" 4 
+"Linkage symbol file" "0274cc7eaf6eec10" 4 
+[OPTIONS_Release_Renesas RX C/C++ Compiler]
+"C source file" "0274cc7eaf6eec10" 2 
+"C++ source file" "0274cc7eaf6eec10" 3 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_frame_rd_wr.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_functs.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_iface_init.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_mem_rd_wr.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\intf\spi\src\rsi_spi_reg_rd_wr.c" "0f64ce82db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_api.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_band.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bg_scan.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bootup_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_build_frame_descriptor.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_bytes_sent_count.c" "0ad18547955ffc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_enable.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_get.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_cfg_save.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_debug_prints.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dhcp_usr_cls.c" "0bf1ceb5f99c2d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_disconnect.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_query.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_server.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_dns_update.c" "066749ba7c022d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_execute_cmd.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ftp_client.c" "0e08a7f752490d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_fwup_frm_host.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_gpio_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ht_caps.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_abort.c" "0fce52e584750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_credentials.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_get.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_http_post.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_init.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_interrupt_handler.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ip_param_set.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ipv6_param_set.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_join.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_create.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_json_erase_file.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_lib_util.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_load_web_page.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ltcp_conn_status.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_mdns_sd.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_module_soft_reset.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_multicast_filter.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_oper_mode.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ota_fw_up.c" "0590cb9c7c022d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_p2p_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_mode.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_per_stats.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_ping_request.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_pop3_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_power_mode.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_psk.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_conn_status.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_fw_version.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_go_parms.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_mac_address.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_net_parms.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_rssi.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_query_snr.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_read_data.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_register_interrupt_irq.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rejoin_params.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_rf_current_mode.c" "029e13e484750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_roam_params.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_scan.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_select_antenna.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_boot_insn.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_ludp_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_raw_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_url_rsp.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_send_websocket_data.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_ap_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_certificate.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_eap.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_mac_addr.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_region_ap.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_set_wepkey.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sleep_timer.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_smtp_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_enable.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_next_rsp.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_rsp.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_get_stats.c" "0365f4c8d31e2d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_snmp_trap.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sntp_client.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_close.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_socket_config.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_sys_init.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_trigger_auto_config.c" "0fce52e584750d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_uart_flow_control.c" "0d344096fac41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_user_store_config.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_web_fields.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_clear_files.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_webpage_erase_file.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wireless_fwupgrade.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wmm_ps.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_wps_method.c" "01baf513db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_app_util.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_buildHttpExtendedHeader.c" "05609d4b955ffc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_build_smtp_header.c" "0100b9151bc41d10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_config_init.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\rsi_user_store_config_init.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\sensor_data.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\setregion_countryinfo.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\ref_apps\src\wifi_main.c" "006ed053db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\RX62N_G_WSC.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\dbsct.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\intprg.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\resetprg.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\sbrk.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\vecttbl.c" "04bbceaa4a0bfc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_interrupt.c" "0f16aba3db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_ioports.c" "0f16aba3db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_spi.c" "0f16aba3db8efc10" 2 
+"D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\hal\src\rsi_hal_mcu_timers.c" "0f16aba3db8efc10" 2 
+[OPTIONS_Release_Renesas RX C/C++ Library Generator]
+"Single Shot" "0274cc7eaf6eec10" 1 
+[OPTIONS_Release_Renesas RX Configurator]
+"Single Shot" "0365f4c8d31e2d10" 6 
+[OPTIONS_Release]
+"" 0 
+"[S|OUTPUTPATH|^"$(CONFIGDIR)\$(PROJECTNAME).lib^"] [V|VERSION|1] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|ROUND|NEAREST] [S|DBL_SIZE|4] [B|SIGNED_CHAR|0] [B|SIGNED_BITFIELD|0] [S|BIT_ORDER|RIGHT] [S|FINT_REGISTER|0] [S|BRANCH|24] [S|LANG|C] [B|RUNTIME|1] [B|CTYPE|0] [B|MATH|0] [B|MATHF|0] [B|STDARG|0] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] [B|IOS|0] [B|NEW|1] [B|COMPLEX|0] [B|CPPSTRING|0] [S|MODE|BUILD/CHANGED]" 1 
+"[V|VERSION|1] [B|COMMAND|1] [S|SPEC|UITRON4] [S|OUTPUTPATH|^"$(CONFIGDIR)^"] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|FINT_REGISTER|0]" 6 
+"[V|VERSION|1] [B|DEBUG|0] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|LISTFILE|0] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|FINT_REGISTER|0]" 4 
+"[V|VERSION|1] [B|DEBUG|0] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|LISTFILE|0] [S|CPU|RX600] [S|ENDIAN|LITTLE] [S|ROUND|NEAREST] [S|DBL_SIZE|4] [B|SIGNED_CHAR|0] [B|SIGNED_BITFIELD|0] [S|BIT_ORDER|RIGHT] [S|FINT_REGISTER|0] [S|BRANCH|24]" 2 
+"[V|VERSION|1] [S|LANG|CPP] [B|SJIS|1] [S|OUTPUTPATH|^"$(CONFIGDIR)\$(FILELEAF).obj^"] [B|SIZE|1] [B|MAP|0] [I|INLINE|100] [I|LOOP|2] [S|MISRA2004|ALL] [S|MISRA2004RULEFILE|^"$(CONFIGDIR)\$(PROJECTNAME).rde^"] [S|CPU|RX600] [S|BASE|00000000=NONE] [I|PID|16]
+" 3 
+"[V|VERSION|6] [B|DEBUG|0] [S|OUTPUT|^"$(CONFIGDIR)\$(PROJECTNAME).abs^"]  [B|LIST|1] [S|LIST|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [B|OPTIMIZE|0] [S|ROM|(D,R)|(D_1,R_1)|(D_2,R_2)] [S|ENDIAN|LITTLE] [S|FORM|STYPE] [S|OUTPUT|^"$(CONFIGDIR)\$(PROJECTNAME).mot^"] [S|START|B_1,R_1,B_2,R_2,B,R,SU,SI(1000)|PResetPRG(FFFF8000)|C_1,C_2,C,C$*,D_1,D_2,D,P,PIntPRG,W*,L(FFFF8100)|FIXEDVECT(FFFFFFD0)]" 5 
+[EXCLUDED_FILES_Release]
+[LINKAGE_ORDER_Release]
+[GENERAL_DATA_CONFIGURATION_Release]
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Release_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_Release_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Release_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_Release_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[EXT_DEBUGGER_INFO]
+0 "" "" "" "" 
+[END]

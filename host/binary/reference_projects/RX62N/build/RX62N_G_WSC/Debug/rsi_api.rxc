@@ -1,0 +1,13 @@
+-cpu=rx600
+-lang=c
+-include="D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\..\..\..\apis\wlan\ref_apps\include"
+-include="D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\..\hal\include"
+-include="D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\..\..\..\apis\intf\spi\include"
+-include="D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\..\..\..\apis\wlan\core\include"
+-include="D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC"
+-define=WLAN_ENABLE,CO_EX
+-output=obj="D:\direct_testing\Host_Embedded\binary\reference_projects\RX62N\build\RX62N_G_WSC\Debug\rsi_api.obj"
+-debug
+-optimize=0
+"D:\direct_testing\Host_Embedded\binary\apis\wlan\core\src\rsi_api.c"
+-nologo
