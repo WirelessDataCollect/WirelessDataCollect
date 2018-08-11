@@ -38,16 +38,16 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 #if IAM_MASTER_CLOCK
 u16 sync_interval_time = 0;
 #endif
-short int time_inter=0;
-volatile u32 time1 = 0;
-volatile u32 time2 = 0;
-volatile u32 status = 0;
+//short int time_inter=0;
+//volatile u32 time1 = 0;
+//volatile u32 time2 = 0;
+//volatile u32 status = 0;
 //定时器3中断服务函数
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
-		time1 = TIM3->CNT;
+//		time1 = TIM3->CNT;
 		SYSTEMTIME++;
 		if(SYSTEMTIME%1000==0)
 		{
@@ -61,13 +61,15 @@ void TIM3_IRQHandler(void)
 		{
 			adc_queue.HeadTime = SYSTEMTIME;
 		}
-		
-		ADS8266_read();
-		time2 = TIM3->CNT;
-		time_inter = time2-time1;
+		if(Wifi_Send_EN)//开始发数据了再开始采集
+		{
+			ADS8266_read();
+		}
+//		time2 = TIM3->CNT;
+//		time_inter = time2-time1;
 	}
-	if(TIM3->CNT>1000)//用来显示是否有超时
-		status++;
+//	if(TIM3->CNT>1000)//用来显示是否有超时
+//		status++;
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
 }
 

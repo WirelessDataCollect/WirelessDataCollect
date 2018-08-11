@@ -1,0 +1,1 @@
+make ARCH=arm CROSS_COMPILE=/work/venkateshl/venky/sam9/G20/arm-2007q1/bin/arm-none-linux-gnueabi-

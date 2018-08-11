@@ -57,7 +57,7 @@ void Initialization (void)
 	WIFI_Conf();
     queue_init(&adc_queue);
 	ADS8266_config();
-	delay_ms(1000);delay_ms(1000);
+	delay_ms(1000);
 	TIM3_Int_Init(999,83); //1ms
 //	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 //	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
@@ -82,6 +82,7 @@ int main(void)
 		#if IAM_MASTER_CLOCK
 			if(sync_interval_time>=SYNC_INTERVAL_TIME)
 			{
+				LED2 = !LED2;//用来表示在更新时钟
 				sync_interval_time = 0;
 				Send_Sync_Time();//时钟同步一下
 			}

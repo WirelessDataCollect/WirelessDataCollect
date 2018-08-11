@@ -11,7 +11,7 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN =1;
+u8 Wifi_Send_EN = 0;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
@@ -37,7 +37,7 @@ void receive_udp_package()
 	unsigned short  recvSocket;
 	RspCode = Check_PKT();
 	
-	switch (RspCode)     //???
+	switch (RspCode)     
 	{
 		case 0x00:
 			data_recv = (rsi_recvFrameUdp *)&(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad);

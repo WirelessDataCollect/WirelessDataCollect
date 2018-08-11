@@ -1,0 +1,12 @@
+-cpu=rx600
+-lang=c
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\ref_apps\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\hal\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\intf\spi\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\core\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\include"
+-output=obj="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\Debug\rsi_spi_framerdwr.obj"
+-debug
+-optimize=0
+"C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\apis\intf\spi\src\rsi_spi_framerdwr.c"
+-nologo

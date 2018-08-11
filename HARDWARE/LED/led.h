@@ -16,8 +16,8 @@
 
 
 //数字信号电平检测
-#define DIGITAL_INPUT1 GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_14)
-#define DIGITAL_INPUT2 GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15)
+#define DIGITAL_INPUT1 GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_1)
+#define DIGITAL_INPUT2 GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0)
 
 
 void LED_GPIO_Init(void);//初始化	

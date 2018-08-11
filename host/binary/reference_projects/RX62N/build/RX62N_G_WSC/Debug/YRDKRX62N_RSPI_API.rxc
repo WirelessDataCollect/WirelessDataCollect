@@ -1,0 +1,11 @@
+-cpu=rx600
+-lang=c
+-include="C:\Documents and Settings\Farooq\Desktop\new godavari\apis\intf\spi\include"
+-include="C:\Documents and Settings\Farooq\Desktop\new godavari\apis\hal\include"
+-include="C:\Documents and Settings\Farooq\Desktop\new godavari\apis\core\include"
+-include="C:\Documents and Settings\Farooq\Desktop\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\include"
+-include="C:\Documents and Settings\Farooq\Desktop\new godavari\apis\ref_apps\include"
+-output=obj="C:\Documents and Settings\Farooq\Desktop\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\Debug\YRDKRX62N_RSPI_API.obj"
+-debug
+"C:\Documents and Settings\Farooq\Desktop\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\YRDKRX62N_RSPI_API.c"
+-nologo

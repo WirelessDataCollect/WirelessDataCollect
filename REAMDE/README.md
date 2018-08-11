@@ -30,6 +30,13 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 # 2、版本修改内容：
 
+### 2018-8-11
+1、数据采集函数只有在开始发送命令收到后再开始。
+
+定时器中断中的修改。
+
+2、更新时钟时，LED2闪烁。
+
 ### 2018-8-9
 1、wifi_send_package中的moduleSocket要改为dest
 

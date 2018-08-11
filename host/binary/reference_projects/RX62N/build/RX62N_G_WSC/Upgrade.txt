@@ -1,0 +1,8 @@
+Project name : RX62N_G_WSC
+
+Renesas RX Standard Toolchain 1.2.0.0 was upgraded to
+   Renesas RX Standard Toolchain 1.2.1.0.
+
+
+PhaseOptions:
+  Please check the parameter of -misra2004=required_remove option.

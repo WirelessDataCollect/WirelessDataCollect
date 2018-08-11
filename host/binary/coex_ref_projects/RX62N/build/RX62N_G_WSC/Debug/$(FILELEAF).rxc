@@ -1,0 +1,5 @@
+-cpu=rx600
+-lang=c
+-output=obj="$(CONFIGDIR)\$(FILELEAF).obj"
+"C:\Documents and Settings\test\Desktop\Renesas_project\RS9113.NBZ.WC.GEN.OSI.1.1.0a_UART\host\binary\apis\wlan\ref_apps\src\wifi_main.c"
+-nologo

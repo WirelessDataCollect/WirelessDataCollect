@@ -1,0 +1,12 @@
+-cpu=rx600
+-lang=c
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\ref_apps\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\hal\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\intf\spi\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\..\..\..\apis\core\include"
+-include="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\include"
+-output=obj="C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\reference_projects\spi\RX62N\RX62N_G_WSC\Debug\rsi_dnsserver.obj"
+-debug
+-optimize=0
+"C:\Documents and Settings\Guru\Desktop\cleanup\new godavari\apis\core\src\rsi_dnsserver.c"
+-nologo
