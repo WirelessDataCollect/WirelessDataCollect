@@ -30,10 +30,11 @@ u32 bytes_sent=0;
 
 
 rsi_recvFrameUdp *data_recv=NULL;
-
+#define ANAL_RSP_LENGTH 3
 void receive_udp_package()
 {
 	u8 RspCode;
+	u8 AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回wifi信息
 	unsigned short  recvSocket;
 	RspCode = Check_PKT();
 	
@@ -44,8 +45,15 @@ void receive_udp_package()
 		    recvSocket = rsi_bytes2R_to_uint16(data_recv->recvSocket);
 		    if(recvSocket ==socketDescriptor_sync)//命令或者时钟同步信息
 			{ 
-				order_anay(data_recv->recvDataBuf);
+				if(order_anay(data_recv->recvDataBuf))//如果返回了1说明，需要回复信息
+				{
+					AnalRsp[0] = RETURN_INFO;//表示这是返回信息
+					AnalRsp[1] = data_recv->recvDataBuf[0];//返回传过来的命令
+					AnalRsp[2] = WIFI_CLIENT_ID;
+					rsi_send_ludp_data(socketDescriptor_sync,AnalRsp ,ANAL_RSP_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
+				}
 			}
+			
 			break;
 		case 0x59:
 			rsi_wireless_fwupgrade();
@@ -91,6 +99,8 @@ u8 wifi_send_package()
 	return 1;
 }
 
+//如果返回了1说明，需要回复信息
+//或者本次接收到的信息无用也返回0
 u8 order_anay(u8 arr[])
 {
 	switch(arr[0])
@@ -100,6 +110,8 @@ u8 order_anay(u8 arr[])
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			break;		
+		case RETURN_INFO://返回了回复信号
+			return 0;//表示不需要返回信息
 		case GET_WIFI_SEND_EN:
 			Wifi_Send_EN =1;  //wifi开始发送
 			break;
@@ -107,7 +119,10 @@ u8 order_anay(u8 arr[])
 			Wifi_Send_EN =0;
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择
-			Channel_model(&arr[1]);
+			if(arr[1]==WIFI_CLIENT_ID)//如果命令指定了本ID
+				Channel_model(&arr[2]);
+			else  //如果命令不是给本设备的，则返回0，表示不需要返回ack
+				return 0;
 			break;
 		case GET_CAN_SEND_EN:
 			CAN_Send_EN = 1; // CAN转发数据，时间+2路IO+4路AD
@@ -117,7 +132,7 @@ u8 order_anay(u8 arr[])
 		    memcpy(&destSocket_txrx,&arr[5],2);
 			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
 			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
-			break;			
+			break;	
 		default:
 			return 0;
 	}
