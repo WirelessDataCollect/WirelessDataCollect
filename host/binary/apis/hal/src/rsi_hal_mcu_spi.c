@@ -78,10 +78,13 @@ int16 rsi_spi_send(uint8 *ptrBuf, uint16 bufLen,uint8 *valBuf,uint8 mode)
 	SPI_CS_L;
 	for(i =0;i <bufLen;i ++) 
 	{	  
-		temp1 =SPI1_TxRx(ptrBuf[i]);										   // //SPI ????    SPI????  8bit
+		SPI1->DR=ptrBuf[i];
+		while ((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0);
+		temp1 = SPI1->DR;
+		//temp1 = SPI1_TxRx(ptrBuf[i]);
 		if(i <2)
 		{
-			valBuf[i] =temp1;
+			valBuf[i] = temp1;
 		}
 	}
 	SPI_CS_H;

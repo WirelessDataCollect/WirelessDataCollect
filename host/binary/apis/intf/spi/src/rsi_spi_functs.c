@@ -23,6 +23,7 @@
 /*
  * Includes
  */
+ #include "spi.h"
 #include "rsi_global.h"
 #include "rsi_spi_cmd.h"
 #include "rsi_config.h"
@@ -71,6 +72,24 @@ int16 rsi_send_c1c2(uint8 c1, uint8 c2)
 #endif
   //! Send C1 & C2 
   retval = rsi_spi_send(&txCmd[0], 2,localBuf,RSI_MODE_8BIT);
+   
+//    uint16        i; 
+//	uint8 	temp1;
+	/*这里用移植好的代码*/
+	/*SPI_CS    SPI1_TxRx 这两个*/
+//	SPI_CS_L;
+//	for(i =0;i <2;i ++) 
+//	{	  
+//		SPI1->DR=txCmd[i];
+//		while ((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0); //???????byte  
+
+
+//		temp1 = SPI1->DR;//SPI_I2S_ReceiveData(SPI1); //????SPIx???????	
+
+//		localBuf[i] =temp1;
+
+//	}
+//	SPI_CS_H;
   if((localBuf[1] == RSI_SPI_SUCCESS) ||(localBuf[1] == 0x00))  {            
    //! success, so return now 
    retval = RSI_SUCCESS;
@@ -119,8 +138,28 @@ int16 rsi_send_c3c4(uint8 c3, uint8 c4)
  RSI_DPRINT(RSI_PL15," C3C4=");
 #endif
  //!command should send only 8 bit mode 
- retval = rsi_spi_send(txCmd, (uint16)sizeof(txCmd),localBuf,
-   RSI_MODE_8BIT);   
+ retval = rsi_spi_send(txCmd, (uint16)sizeof(txCmd),localBuf,RSI_MODE_8BIT);
+//    uint16        i; 
+//	uint8 	temp1;
+//	/*这里用移植好的代码*/
+//	/*SPI_CS    SPI1_TxRx 这两个*/
+//	SPI_CS_L;
+//	for(i =0;i <2;i ++) 
+//	{	  
+//		//  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//??????  
+//	SPI1->DR=txCmd[i];
+//	//SPI_I2S_SendData(SPI1, TxData); //????SPIx????byte  ??
+//  while ((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0); //???????byte  
+//		
+//  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET){} //???????byte  
+// 
+//	temp1 = SPI1->DR;//SPI_I2S_ReceiveData(SPI1); //????SPIx???????	
+
+//	localBuf[i] =temp1;
+
+//	}
+//	SPI_CS_H;
+	
  return retval;
 }
 

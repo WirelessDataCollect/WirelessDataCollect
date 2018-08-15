@@ -136,6 +136,7 @@ int16 rsi_execute_cmd(uint8 *descparam,uint8 *payloadparam,uint16 size_param)
 #endif
   //! Write descriptor and payload
   retval = rsi_frame_write(&uFrameDscFrame, payloadparam, size_param);
+
 #if ((RSI_POWER_MODE == RSI_POWER_MODE_2)||(RSI_POWER_MODE == RSI_POWER_MODE_8))
   if(powersave_enable){
     rsi_allow_sleep();

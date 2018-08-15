@@ -64,7 +64,7 @@ void Initialization (void)
 		
 }
 u8 Status=1;
-//extern u32 bytes_sent;
+extern u32 bytes_sent;
 //extern int delta_time;
 int main(void)
 {        
@@ -72,9 +72,11 @@ int main(void)
 	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
 	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
 	//rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉
+	//SPI_CS_L;
 	while(1)
 	{
-//		rsi_send_ludp_data(socketDescriptor_txrx, (uint8 *)"123",3, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx ,&bytes_sent);
+		
+//		rsi_send_ludp_data(socketDescriptor_txrx, adc_queue.arr,1400, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx ,&bytes_sent);
 //		LOGS("data_sent = %d\n",bytes_sent);
 		
 		receive_udp_package();//接收命令，比如时钟同步信号、PC端的命令等
@@ -87,7 +89,6 @@ int main(void)
 				Send_Sync_Time();//时钟同步一下
 			}
 		#endif		
-		//can_send_package();
 	}
 }
 
