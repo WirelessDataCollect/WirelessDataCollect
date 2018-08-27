@@ -101,17 +101,27 @@ u8 wifi_send_package()
 
 //如果返回了1说明，需要回复信息
 //或者本次接收到的信息无用也返回0
+extern u8 txrx_refreshed;
 u8 order_anay(u8 arr[])
 {
 	switch(arr[0])
 	{
-		case GET_TIME_SYNC://时钟同步信号
+		case GET_TIME_SYNC_PC://时钟同步信号
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
-			break;		
+			LED2 = ~LED2;
+			break;
+		case 	GET_TIME_SYNC_MAIN_CLOCK:
+			memcpy(&YYMMDD,&arr[1],4);
+			memcpy(&SYSTEMTIME,&arr[5],4);
+			Time_Sync_Flag = 1;
+			LED2 = ~LED2;
+			return 0;				
 		case RETURN_INFO://返回了回复信号
 			return 0;//表示不需要返回信息
+		case GET_TEST:
+			break;
 		case GET_WIFI_SEND_EN:
 			Wifi_Send_EN =1;  //wifi开始发送
 			break;
@@ -129,10 +139,11 @@ u8 order_anay(u8 arr[])
 			break;
 		case GET_REMOTE_IP_PORT:            //主机地址
 			memcpy(destIp_txrx,&arr[1],4);
-		    memcpy(&destSocket_txrx,&arr[5],2);
-			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
-			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
-			break;	
+		  memcpy(&destSocket_txrx,&arr[5],2);
+		  txrx_refreshed = 0;//需要更新远程的IP
+//			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
+//			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
+			break;
 		default:
 			return 0;
 	}
@@ -161,7 +172,7 @@ void Send_Sync_Time(void)
 {
 
 	uint8 time[SYNC_TIME_BYTES] = {0};//时间信息
-	time[0] = GET_TIME_SYNC;//时间同步命令
+	time[0] = GET_TIME_SYNC_MAIN_CLOCK;//时间同步命令
 	time[1] = (uint8) YYMMDD;
 	time[2] = (uint8) (YYMMDD>>8);
 	time[3] = (uint8) (YYMMDD>>16);
@@ -171,10 +182,20 @@ void Send_Sync_Time(void)
 	time[7] = (uint8) (SYSTEMTIME>>16);
 	time[8] = (uint8) (SYSTEMTIME>>24);
 	rsi_send_ludp_data(socketDescriptor_sync,time ,SYNC_TIME_BYTES, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
+	//rsi_send_data(socketDescriptor_sync, time, SYNC_TIME_BYTES,RSI_PROTOCOL_UDP_V4,&bytes_sent);
 }
 #endif
 
-
+void txrx_refresh(u8 txrxfreshed)
+{
+	if(!txrxfreshed)//没有更新
+	{
+		
+		rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
+		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
+		txrx_refreshed = 1;//这个必须放在后面，因为这个=0用于告诉中断，不要check掉缓存
+	}
+}
 
 
 

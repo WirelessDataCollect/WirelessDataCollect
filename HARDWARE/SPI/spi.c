@@ -84,6 +84,7 @@ void SPI_Conf(void)
 
 	SPI_Cmd(SPI1, ENABLE); 
 	SPI_CS_L;
+
 	//	SPI1_TxRx(0xff);	 
 }   
 void EXTI_Conf(void)
@@ -94,6 +95,7 @@ void EXTI_Conf(void)
 	EXTI_Type.EXTI_Line=EXTI_Line4;
 	EXTI_Type.EXTI_LineCmd=ENABLE;
 	EXTI_Init(&EXTI_Type);
+	
 }
 
 

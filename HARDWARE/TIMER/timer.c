@@ -49,10 +49,12 @@ void TIM3_IRQHandler(void)
 	{
 //		time1 = TIM3->CNT;
 		SYSTEMTIME++;
+#if LED_SHINE_IN_TIMER
 		if(SYSTEMTIME%1000==0)
 		{
 			LED1=!LED1;//DS1·­×ª
 		}
+#endif
 		
 #if IAM_MASTER_CLOCK
 		sync_interval_time++;

@@ -172,7 +172,7 @@ int16 rsi_multicast_mac_filter(uint8 cmd, uint8 MAC[6])
 #endif
   uMcastBitMapFrame = (uint16)(cmd);
   if((cmd == RSI_MULTICAST_MAC_ADD_BIT) || (cmd == RSI_MULTICAST_MAC_CLEAR_BIT)){
-    uMcastBitMapFrame |= (multicast_mac_hash(MAC) << 8);
+    uMcastBitMapFrame |= (multicast_mac_hash(MAC) << 8);//返回一个6bit的hash
   }
   retval = rsi_execute_cmd((uint8 *)rsi_frameCmdMcastFilter, (uint8 *)&uMcastBitMapFrame, 2);
   return retval;

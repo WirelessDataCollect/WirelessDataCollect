@@ -30,6 +30,29 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 # 2、版本修改内容：
 
+### 2018-8-27
+
+1、opensocket的ReadPKT重新使用（8-24删除了）
+
+2、为了避免在中断中，Order_anal()函数中的checkPKT将IP更新命令和信息缓存check掉
+
+原来的逻辑问题：OpenSocket放在Order_anal函数中。OpenSocket发送关闭原socket的信息----》等待返回信息 ----》  消息到来，但是无法打断中断（OpenSocket在中断中等待）
+----》 Opensocket还在等待消息，直到等待时间到  ----》  再一次进入中断，Order_anal解析了数据，并将pending减1   ----》   OpenSocket始终没有接收到返回信息
+
+现在的逻辑：Order_anal中，接收到数据IP和端口更新命令后，不进行关闭旧socket打开新socket。而是置位flag，告诉外界和中断（所以中断也不会check掉缓存）要更新IP和端口了。  ----》   在while中更新数据IP和端口    ----》flag清除。
+
+### 2018-8-24
+
+1、加入从时钟收到同步信号闪烁灯信号
+
+2、删掉opensocket的readPKT（这里有问题，所以后面继续修改，不能删除）
+
+因为在中断中调用了数据接收，会check掉
+
+3、加入GET_TEST
+
+用于返回本机ID给上位机
+
 ### 2018-8-13
 1、添加设备对上位机命令的回复
 

@@ -47,42 +47,39 @@ void Initialization (void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	RCC_Config();	
 	LED_GPIO_Init();
-	EXTI_Conf();
-	NVIC_Config();
 	uart_init(115200);		
 	delay_init(168); 
-	
-    SPI_Conf();	
+	EXTI_Conf();//必须在wifi设置前
+	NVIC_Config();	//必须在wifi设置前
+  SPI_Conf();	
 	WIFI_BOOT();
 	WIFI_Conf();
-    queue_init(&adc_queue);
+  queue_init(&adc_queue);
 	ADS8266_config();
 	delay_ms(1000);
-	TIM3_Int_Init(999,83); //1ms
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
+	TIM3_Int_Init(999,83); //1ms
+
 		
 }
 u8 Status=1;
 extern u32 bytes_sent;
-//extern int delta_time;
+u8 sync_open_flag = 1;//如果=0，则socket创建成功
+u8 txtr_open_flag = 1;
+volatile u8 txrx_refreshed = 1;//需不需要更新txrx的socket,1：已经更新，0：需要更新
 int main(void)
 {        
 	Initialization();//初始化系统
-	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
-	//rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉
-	//SPI_CS_L;
+	txtr_open_flag = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+	sync_open_flag = OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
 	while(1)
 	{
 		
-//		rsi_send_ludp_data(socketDescriptor_txrx, adc_queue.arr,1400, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx ,&bytes_sent);
-//		LOGS("data_sent = %d\n",bytes_sent);
-		
-		receive_udp_package();//接收命令，比如时钟同步信号、PC端的命令等
+		txrx_refresh(txrx_refreshed);//更新txrx的IP 和socket,必须放在while中，不能放在更新pending的外部中断中
 		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 		#if IAM_MASTER_CLOCK
-			if(sync_interval_time>=SYNC_INTERVAL_TIME)
+			if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 			{
 				LED2 = !LED2;//用来表示在更新时钟
 				sync_interval_time = 0;

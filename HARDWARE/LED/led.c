@@ -1,5 +1,7 @@
 #include "led.h" 
 
+s8 channel[4];
+
 //初始化PF9和PF10为输出口.并使能这两个口的时钟		    
 //LED IO初始化
 //LED1 PC10
@@ -47,9 +49,13 @@ void LED_GPIO_Init(void)
 void Channel_model(u8 modle[])
 {		
  Channel1 = modle[0];
+	channel[0] = modle[0];
  Channel2 = modle[1];
+	channel[1] = modle[1];
  Channel3 = modle[2];
+	channel[2] = modle[2];
  Channel4 = modle[3];
+	channel[3] = modle[3];
 }
 
 

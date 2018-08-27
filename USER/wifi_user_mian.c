@@ -20,6 +20,7 @@
  * Include files
  */ 
  #include "SPI.h"
+ #include "userwifi.h"
  
 #include "rsi_global.h"
 #include "rsi_config.h"
@@ -282,16 +283,21 @@ rsi_uCmdRsp *rsi_parse_response(uint8 *rsp);
 uint8 *rsi_wrapper_to_rsp(uint8 *rsp, uint8 rsp_type);
 void  rsi_receive_data_packet(uint8 *payloadPtr);
 int16 rsi_per_cont_wave_mode(rsi_uPerMode *uPerModeFrame, int8 per_cw_mode_state);
-
+extern u8 sync_open_flag;
+extern u8 txrx_refreshed;
 void EXTI4_IRQHandler(void)
 {
 //	uint32_t value=taskENTER_CRITICAL_FROM_ISR();
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
+	if(txrx_refreshed&&(!sync_open_flag))//sync的socket创建成功后,而且txrx没有重新建立时（建立socket时需要readpkt，不能让receive函数把他check掉了）
+	{
+		receive_udp_package();
+	}
 //	taskEXIT_CRITICAL_FROM_ISR(value);
 }
 
-int RspCode     =0,retval,tmp=0;
+int RspCode =0,retval,tmp=0;
 
 
 
@@ -372,6 +378,8 @@ RSI_WIFI_OPER_MODE 0
 	RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
 	RspCode=Read_PKT();	
 	
+	
+	
 #else
 //AP	0//   AP   AP   AP   AP   AP   AP   AP   AP   AP   AP
 ///*WIFI模块AP热点,模式 注意下细节*/
@@ -397,7 +405,13 @@ RSI_WIFI_OPER_MODE 0
 #endif	////end apapapapapapapapapapap	
 
 	
-	
+#if RSI_MULTICAST_SUPPORT //如果支持组播
+	rsi_multicast((rsi_uMulticast *)rsi_fill_parameters(RSI_REQ_MULTICAST,&rsi_app_cb.send_buffer[0]));
+	#if RSI_MULTICAST_FILTER_ENABLE//设置滤波
+		rsi_multicast_mac_filter(RSI_MULTICAST_MAC_CMD_TYPE,RSI_MULTICAST_MAC_ADDRESS);
+	#endif
+
+#endif
 	
 	
 	
@@ -417,21 +431,6 @@ RSI_WIFI_OPER_MODE 0
 	
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //#include <WyzBee_Ext.h>
 char WIFI_BOOT(void)
@@ -508,15 +507,15 @@ int Read_PKT(void)
 {
 	/*防止超时的一个计数器*/
 	dumm=0x8FFFFFFF;
-   while((rsi_app_cb.pkt_pending ==0)&&dumm--);
+	while((rsi_app_cb.pkt_pending ==0)&&dumm--);
 	if(dumm<=0)return -1;
-	
-   rsi_app_cb.pkt_pending -=1;  
-	rsi_frame_read(rsi_app_cb.read_packet_buffer);                     //读取数据帧
-   rsi_app_cb.uCmdRspFrame = rsi_parse_response(rsi_app_cb.read_packet_buffer);    //转换uCmdRspFrame
 
-   rsi_app_cb.error_code = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->status);
-   return  rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->rspCode);                 //返回响应类型
+	rsi_app_cb.pkt_pending -=1;  
+	rsi_frame_read(rsi_app_cb.read_packet_buffer);                     //读取数据帧
+	rsi_app_cb.uCmdRspFrame = rsi_parse_response(rsi_app_cb.read_packet_buffer);    //转换uCmdRspFrame
+
+	rsi_app_cb.error_code = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->status);
+	return  rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->rspCode);                 //返回响应类型
 }
 
 

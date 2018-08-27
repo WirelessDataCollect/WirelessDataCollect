@@ -200,7 +200,7 @@
 #define CLIENT_MAC_ADDRESS             "00:17:34:51:68:86"     //@ MAC address of the client to be disconnected
 
 /*Mac address filter*/
-#define RSI_MULTICAST_FILTER_ENABLE   0// DISABLE                   //@ ENABLE or DIABLE multicast filter   
+#define RSI_MULTICAST_FILTER_ENABLE   0// ENABLE               //@ ENABLE or DIABLE multicast filter   
 #define RSI_MULTICAST_MAC_CMD_TYPE     RSI_MULTICAST_MAC_SET_ALL //@ RSI_MULTICAST_MAC_ADD_BIT or RSI_MULTICAST_MAC_CLEAR_BIT or RSI_MULTICAST_MAC_CLEAR_ALL or RSI_MULTICAST_MAC_SET_ALL
 #define RSI_MULTICAST_MAC_ADDRESS      "01:00:5E:7F:FF:FA"       //@ MAC address used to calculate hash value for multicast filtering
 
@@ -379,7 +379,7 @@
 #define WEBPAGE_BYPASS_SUPPORT        0// DISABLE                  //@ Enable or0// DISABLE webpage bypass feature
 
 //@ multicast params
-#define RSI_MULTICAST_SUPPORT             0// DISABLE             //@ ENABLE or0// DISABLE multicast support
+#define RSI_MULTICAST_SUPPORT             0// ENABLE             //@ ENABLE or0// DISABLE multicast support
 #define RSI_MULTICAST_MESSAGE_TYPE         RSI_MULTICAST_JOIN  //@ RSI_MULTICAST_JOIN or RSI_MULTICAST_LEAVE
 #define RSI_MULTICAST_GROUP_IPV4_ADDRESS   "239.255.0.1"       //@ Multicast IPv4 address
 #define RSI_MULTICAST_GROUP_IPV6_ADDRESS   "FF01:0:0:0:0:0:0:1"//@ Multicast IPv6 address
@@ -667,7 +667,7 @@
 #define   USER_CFG_FIPS_BYPASS_MODE                     1             //@ 0 - ENABLE FIPS bypass mode, 1 -0// DISABLE FIPS bypass mode
 #define   USER_CFG_KEYS_RESTORE                        0// DISABLE       //@ 0 - Makes all the keys Zero, 1 - Restore the previous keys 
 //! Multicast MAC filter support
-#define   USER_CFG_MULTICAST_SUPPORT                   0// DISABLE                    //@ ENABLE or0// DISABLE multicast support
+#define   USER_CFG_MULTICAST_SUPPORT                   0// ENABLE                  //@ ENABLE or0// DISABLE multicast support
 #if USER_CFG_MULTICAST_SUPPORT
 #define   USER_CFG_MULTICAST_MAC_CMD_TYPE               RSI_MULTICAST_MAC_SET_ALL  //@ RSI_MULTICAST_MAC_ADD_BIT or RSI_MULTICAST_MAC_CLEAR_BIT or RSI_MULTICAST_MAC_CLEAR_ALL or RSI_MULTICAST_MAC_SET_ALL
 #define   USER_CFG_MULTICAST_MAC_ADDRESS                "00:23:A7:1a:d0:50"        //@ MAC address used to calculate hash value for multicast filtering
