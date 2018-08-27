@@ -65,18 +65,16 @@ void Initialization (void)
 }
 u8 Status=1;
 extern u32 bytes_sent;
-u8 sync_open_flag = 1;//如果=0，则socket创建成功
-u8 txtr_open_flag = 1;
+
 volatile u8 txrx_refreshed = 1;//需不需要更新txrx的socket,1：已经更新，0：需要更新
 int main(void)
 {        
 	Initialization();//初始化系统
-	txtr_open_flag = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-	sync_open_flag = OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
+	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
 	while(1)
 	{
-		
-		txrx_refresh(txrx_refreshed);//更新txrx的IP 和socket,必须放在while中，不能放在更新pending的外部中断中
+		receive_udp_package();
 		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 		#if IAM_MASTER_CLOCK
 			if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)

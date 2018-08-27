@@ -73,7 +73,7 @@ int16 rsi_spi_send(uint8 *ptrBuf, uint16 bufLen,uint8 *valBuf,uint8 mode)
 {
   uint16        i; 
 	uint8 	temp1;
-	uint16    time=0;
+	uint32    time=0;
 	/*这里用移植好的代码*/
 	/*SPI_CS    SPI1_TxRx 这两个*/
 	SPI_CS_L;

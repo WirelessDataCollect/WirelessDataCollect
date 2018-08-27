@@ -140,9 +140,8 @@ u8 order_anay(u8 arr[])
 		case GET_REMOTE_IP_PORT:            //主机地址
 			memcpy(destIp_txrx,&arr[1],4);
 		  memcpy(&destSocket_txrx,&arr[5],2);
-		  txrx_refreshed = 0;//需要更新远程的IP
-//			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
-//			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
+			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
+			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
 			break;
 		default:
 			return 0;
@@ -185,18 +184,6 @@ void Send_Sync_Time(void)
 	//rsi_send_data(socketDescriptor_sync, time, SYNC_TIME_BYTES,RSI_PROTOCOL_UDP_V4,&bytes_sent);
 }
 #endif
-
-extern u8 txtr_open_flag;
-void txrx_refresh(u8 txrxfreshed)
-{
-	if(!txrxfreshed)//没有更新
-	{
-		
-		rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
-		txtr_open_flag = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
-		txrx_refreshed = 1;//这个必须放在后面，因为这个=0用于告诉中断，不要check掉缓存
-	}
-}
 
 
 

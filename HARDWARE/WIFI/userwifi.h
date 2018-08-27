@@ -45,11 +45,6 @@ void receive_udp_package(void);
 u8 OpenLudpSocket(u8* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
 u8 wifi_send_package(void);
 u8 order_anay(u8 arr[]);
-//txrx的socket更新
-//为什么单独拿出来而不是放在order_anal中
-//因为order_anal在外部中断中，而中断中更新pending，所以在中断退出前没法更新新的pending
-//而txrx关闭和打开需要接受消息，所以需要pending更新，把txrx关闭和打开放在while中
-void txrx_refresh(u8 txrxfreshed);
 void Send_Sync_Time(void);
 
 #endif

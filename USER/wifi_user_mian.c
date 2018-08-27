@@ -292,7 +292,7 @@ void EXTI4_IRQHandler(void)
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
 	if(txrx_refreshed&&(!sync_open_flag))//sync的socket创建成功后,而且txrx没有重新建立时（建立socket时需要readpkt，不能让receive函数把他check掉了）
 	{
-		receive_udp_package();
+		
 	}
 //	taskEXIT_CRITICAL_FROM_ISR(value);
 }

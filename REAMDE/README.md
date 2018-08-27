@@ -30,8 +30,16 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 # 2、版本修改内容：
 
+
+
 ### 2018-8-27
 
+回滚到最初的接受命令放置在while中
+
+因为在send数据时，也有spi，如果在中断中放入了spi，则会被打断，出现卡死的问题。
+
+
+<del>
 1、opensocket的ReadPKT重新使用（8-24删除了）
 
 2、为了避免在中断中，Order_anal()函数中的checkPKT将IP更新命令和信息缓存check掉
@@ -45,6 +53,7 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 如果time++超过50000次，则跳出。防止卡死。
 
+</del>
 
 ### 2018-8-24
 
