@@ -59,7 +59,7 @@ void TIM3_IRQHandler(void)
 #if IAM_MASTER_CLOCK
 		sync_interval_time++;
 #endif
-	    if(queue_empty(adc_queue)) //如果队列空了
+	  if(queue_empty(adc_queue)) //如果队列空了
 		{
 			adc_queue.HeadTime = SYSTEMTIME;
 		}

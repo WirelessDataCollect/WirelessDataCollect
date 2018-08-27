@@ -41,6 +41,11 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 现在的逻辑：Order_anal中，接收到数据IP和端口更新命令后，不进行关闭旧socket打开新socket。而是置位flag，告诉外界和中断（所以中断也不会check掉缓存）要更新IP和端口了。  ----》   在while中更新数据IP和端口    ----》flag清除。
 
+3、在rsi_spi_send中加入了时间限定
+
+如果time++超过50000次，则跳出。防止卡死。
+
+
 ### 2018-8-24
 
 1、加入从时钟收到同步信号闪烁灯信号

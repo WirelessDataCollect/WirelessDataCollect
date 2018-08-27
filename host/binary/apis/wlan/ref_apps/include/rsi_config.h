@@ -285,8 +285,8 @@
 //@ Module IP Parameters
 #define RSI_IP_CFG_MODE                RSI_DHCP_IP_MODE        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
                                                                //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
+#define RSI_DHCP_HOST_NAME             "dhcp_lient"           //@ DHCP HOST NAME
 
-#define RSI_DHCP_HOST_NAME             "dhcp_client"           //@ DHCP HOST NAME
 #define RSI_IPV6_CFG_MODE              RSI_STATIC_IP_MODE      //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE.static or DHCPV6 mode for IPv6
 #define IPV6_SUPPORT                  0// DISABLE                 //@ ENABLE or0// DISABLE IPV6 support
 #define RSI_IP_VERSION                 IP_VERSION_4            //@ IP_VERSION_4 or IP_VERSION_6. IP version to use.

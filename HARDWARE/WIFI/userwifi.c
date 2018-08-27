@@ -11,7 +11,7 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN = 1;//发送数据的命令
+u8 Wifi_Send_EN = 0;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
@@ -186,13 +186,14 @@ void Send_Sync_Time(void)
 }
 #endif
 
+extern u8 txtr_open_flag;
 void txrx_refresh(u8 txrxfreshed)
 {
 	if(!txrxfreshed)//没有更新
 	{
 		
 		rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
-		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
+		txtr_open_flag = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
 		txrx_refreshed = 1;//这个必须放在后面，因为这个=0用于告诉中断，不要check掉缓存
 	}
 }

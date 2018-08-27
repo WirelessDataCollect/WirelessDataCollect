@@ -73,13 +73,14 @@ int16 rsi_spi_send(uint8 *ptrBuf, uint16 bufLen,uint8 *valBuf,uint8 mode)
 {
   uint16        i; 
 	uint8 	temp1;
+	uint16    time=0;
 	/*这里用移植好的代码*/
 	/*SPI_CS    SPI1_TxRx 这两个*/
 	SPI_CS_L;
 	for(i =0;i <bufLen;i ++) 
 	{	  
 		SPI1->DR=ptrBuf[i];
-		while ((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0);
+		while (((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0)&&time<50000){time++;}
 		temp1 = SPI1->DR;
 		//temp1 = SPI1_TxRx(ptrBuf[i]);
 		if(i <2)
