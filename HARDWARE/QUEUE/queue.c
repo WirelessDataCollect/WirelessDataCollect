@@ -44,6 +44,7 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 wifi_client_id, 
 	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = wifi_client_id;
 	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1;
 	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = IO_input2;
+	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//ะฃั้ฮป
 
 }
 

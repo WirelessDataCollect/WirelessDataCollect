@@ -30,7 +30,10 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 # 2、版本修改内容：
 
+### 2018-8-27
+1、添加校验位
 
+校验位为包的第15bit，等于headtime的低八位。
 
 ### 2018-8-27
 
