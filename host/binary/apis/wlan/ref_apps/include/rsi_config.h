@@ -99,7 +99,7 @@
 #define RSI_AUTO_JOIN_KEY          "03cafbe7d1671947dc649af44d0219e6f7f62d4c26e5f6e0aa614e11b33ed24d"
 #endif
 #define RSI_ENABLE_UPGRADATION_FROM_HOST DISBLE
-#define RSI_BAND                   RSI_BAND_2P4GHZ             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
+#define RSI_BAND                   RSI_DUAL_BAND             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
 #define RSI_CONFIGURE_ANTENNA      0                           //@ 0 for internal antenna 1 for external antenna
 #define RSI_ANTENNA_GAIN_2G        0                           //@ antenna gain for 2.4 GHz band
 #define RSI_ANTENNA_GAIN_5G        0                           //@ antenna gain for 5 GHz band
@@ -129,7 +129,7 @@
 #define RSI_SCAN_FEAT_BITMAP       0                           //@ scan_feature_bitmap ,valid only if specific channel and ssid are given
 #define RSI_SCAN_CHANNEL_BIT_MAP_2_4    0                      //@ scan channle bit map,valid if RSI_SCAN_CHANNEL is 0
 #define RSI_SCAN_CHANNEL_BIT_MAP_5      0                      //@ scan channle bit map,valid if RSI_SCAN_CHANNEL is 0
-#define RSI_JOIN_SSID              "TP-LINK_528"                  //@ SSID to join
+#define RSI_JOIN_SSID              "TP-LINK_5G_528"                  //@ SSID to join
 #define SEND_PSK_IN_JOIN           1                           //@ 1-to send PSK in join frame, 0 - not to send PSK in join
 #define RSI_AP_BSSID               "00:00:00:00:00:00"         //@ BSSID of the selected AP
 #define RSI_MAC_ADDRESS            "00:17:34:51:68:85"         //@ MAC address of the module

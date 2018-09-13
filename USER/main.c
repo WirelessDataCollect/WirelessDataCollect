@@ -70,8 +70,14 @@ volatile u8 txrx_refreshed = 1;//需不需要更新txrx的socket,1：已经更新，0：需要更
 int main(void)
 {        
 	Initialization();//初始化系统
+#ifdef SEND_WITH_UDP
 	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+#else
+		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+#endif
+
 	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
+
 	while(1)
 	{
 		receive_udp_package();

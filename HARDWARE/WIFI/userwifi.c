@@ -11,14 +11,14 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN = 0;//发送数据的命令
+u8 Wifi_Send_EN = 1;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
 Queue adc_queue;	 //adc接收缓存
 
 //wifi_main
-u8 destIp_txrx[4]={255,255,255,255};    //数据收发
+u8 destIp_txrx[4]={115,159,154,160};    //数据收发
 u8 destIp_sync[4]={255,255,255,255};  //同步
 unsigned short destSocket_txrx= 5001;
 unsigned short moduleSocket_txrx=5002;
@@ -80,8 +80,13 @@ u8 wifi_send_package()
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
-		//  why not use   rsi_send_data()				
+		//  why not use   rsi_send_data()		
+#ifdef SEND_WITH_UDP
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+#else
+		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+#endif
+		//
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
@@ -94,7 +99,11 @@ u8 wifi_send_package()
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx ,&bytes_sent);
+#ifdef SEND_WITH_UDP
+		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+#else
+		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+#endif
 	}
 	return 1;
 }
@@ -141,7 +150,11 @@ u8 order_anay(u8 arr[])
 			memcpy(destIp_txrx,&arr[1],4);
 		  memcpy(&destSocket_txrx,&arr[5],2);
 			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
+#ifdef SEND_WITH_UDP
 			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
+#else
+			OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+#endif
 			break;
 		default:
 			return 0;
@@ -150,6 +163,7 @@ u8 order_anay(u8 arr[])
 	
 }
 
+//打开udp
 u8 OpenLudpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
 {
 	int RspCode;
@@ -165,6 +179,21 @@ u8 OpenLudpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSock
 	return 0;
 }
 
+//打开tcp
+u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
+{
+	int RspCode;
+	OpenSocket(destIp,destSocket,moduleSocket,RSI_SOCKET_TCP_CLIENT);
+	RspCode=Read_PKT();
+	if(RspCode!=RSI_RSP_SOCKET_CREATE)
+	{
+		return 1;
+	}
+	
+	*socketDescriptor = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.socketFrameRcv.socketDescriptor);
+	
+	return 0;
+}
 #if IAM_MASTER_CLOCK
 #define SYNC_TIME_BYTES   9   //同步时钟命令长度
 void Send_Sync_Time(void)
