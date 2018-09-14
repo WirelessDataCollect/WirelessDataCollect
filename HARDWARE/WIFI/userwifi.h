@@ -33,15 +33,19 @@ extern Queue adc_queue;	 //adc接收缓存
 
 extern u8 destIp_txrx[4];    //数据收发 IP
 extern u8 destIp_sync[4];  //同步    IP
+extern u8 localDestIp_txrx[4];    //数据收发 IP
 
 extern unsigned short destSocket_txrx;
 extern unsigned short moduleSocket_txrx;
+extern unsigned short localDestSocket_txrx;
+extern unsigned short localModuleSocket_txrx;	
 
 extern unsigned short destSocket_sync;
 extern unsigned short moduleSocket_sync;
 
 extern unsigned short socketDescriptor_txrx;
 extern unsigned short socketDescriptor_sync;
+extern unsigned short localSocketDescriptor_txrx;
 
 void receive_udp_package(void);
 

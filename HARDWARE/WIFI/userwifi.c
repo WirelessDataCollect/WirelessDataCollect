@@ -11,21 +11,27 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN = 0;//发送数据的命令
+u8 Wifi_Send_EN = 1;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
 Queue adc_queue;	 //adc接收缓存
 
-//wifi_main
-u8 destIp_txrx[4]={255,255,255,255};    //数据收发
+//wifi_main 
+u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
+u8 destIp_txrx[4]={115,159,154,160};    //服务器远程数据收发
 u8 destIp_sync[4]={255,255,255,255};  //同步
 unsigned short destSocket_txrx= 5001;
 unsigned short moduleSocket_txrx=5002;
 unsigned short destSocket_sync= 5003;//这里要一样
 unsigned short moduleSocket_sync=5003;
+unsigned short localDestSocket_txrx= 5004;//局域网的远程IP
+unsigned short localModuleSocket_txrx=5005;
+
 unsigned short socketDescriptor_txrx=0;
 unsigned short socketDescriptor_sync=1;
+unsigned short localSocketDescriptor_txrx=2;
+
 u32 bytes_sent=0;
 
 
@@ -81,12 +87,15 @@ u8 wifi_send_package()
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//  why not use   rsi_send_data()		
+		
+		//发送到远程服务器
 #ifdef SEND_WITH_UDP
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 #else
 		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 #endif
-		//
+		//发送到局域网
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
@@ -99,11 +108,14 @@ u8 wifi_send_package()
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
+		//发送到远程服务器
 #ifdef SEND_WITH_UDP
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 #else
 		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 #endif
+		//发送到局域网
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	}
 	return 1;
 }
@@ -149,7 +161,7 @@ u8 order_anay(u8 arr[])
 		case GET_REMOTE_IP_PORT:            //主机地址
 			memcpy(destIp_txrx,&arr[1],4);
 		  memcpy(&destSocket_txrx,&arr[5],2);
-			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的socket
+			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的远程服务器的socket
 #ifdef SEND_WITH_UDP
 			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
 #else
