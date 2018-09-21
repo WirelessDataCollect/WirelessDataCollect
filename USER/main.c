@@ -66,7 +66,6 @@ void Initialization (void)
 u8 Status=1;
 extern u32 bytes_sent;
 
-volatile u8 txrx_refreshed = 1;//需不需要更新txrx的socket,1：已经更新，0：需要更新
 int main(void)
 {        
 	Initialization();//初始化系统

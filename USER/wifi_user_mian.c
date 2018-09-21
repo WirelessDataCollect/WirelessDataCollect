@@ -283,24 +283,15 @@ rsi_uCmdRsp *rsi_parse_response(uint8 *rsp);
 uint8 *rsi_wrapper_to_rsp(uint8 *rsp, uint8 rsp_type);
 void  rsi_receive_data_packet(uint8 *payloadPtr);
 int16 rsi_per_cont_wave_mode(rsi_uPerMode *uPerModeFrame, int8 per_cw_mode_state);
-extern u8 sync_open_flag;
-extern u8 txrx_refreshed;
 void EXTI4_IRQHandler(void)
 {
 //	uint32_t value=taskENTER_CRITICAL_FROM_ISR();
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
-	if(txrx_refreshed&&(!sync_open_flag))//sync的socket创建成功后,而且txrx没有重新建立时（建立socket时需要readpkt，不能让receive函数把他check掉了）
-	{
-		
-	}
 //	taskEXIT_CRITICAL_FROM_ISR(value);
 }
 
 int RspCode =0,retval,tmp=0;
-
-
-
 
 char WIFI_Conf(void)
 {

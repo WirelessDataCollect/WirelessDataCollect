@@ -19,6 +19,7 @@ Queue adc_queue;	 //adc接收缓存
 
 //wifi_main 
 u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
+//u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
 u8 destIp_txrx[4]={115,159,154,160};    //服务器远程数据收发
 u8 destIp_sync[4]={255,255,255,255};  //同步
 unsigned short destSocket_txrx= 5001;
