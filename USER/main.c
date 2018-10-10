@@ -47,7 +47,7 @@ void Initialization (void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	RCC_Config();	
 	LED_GPIO_Init();
-	uart_init(115200);		
+	//uart_init(115200);		
 	delay_init(168); 
 	EXTI_Conf();//必须在wifi设置前
 	NVIC_Config();	//必须在wifi设置前
@@ -67,13 +67,15 @@ u8 Status=1;
 extern u32 bytes_sent;
 
 int main(void)
-{        
+{     
+ 	
 	Initialization();//初始化系统
 	
 #ifdef SEND_WITH_UDP
 	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
 #else
 		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+	  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 #endif
 	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
 	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket

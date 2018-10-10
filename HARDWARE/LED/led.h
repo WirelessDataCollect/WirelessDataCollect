@@ -9,10 +9,10 @@
 #define LED2 PDout(2)	// DS1	
 
 //模拟信号输入模式选择
-#define Channel1 PCout(6)
-#define Channel2 PCout(7)
-#define Channel3 PCout(8)
-#define Channel4 PCout(9)
+#define Channel1 PCout(0)
+#define Channel2 PCout(1)
+#define Channel3 PCout(2)
+#define Channel4 PCout(3)
 
 
 //数字信号电平检测

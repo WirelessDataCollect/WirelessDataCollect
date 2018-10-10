@@ -54,6 +54,10 @@ void TIM3_IRQHandler(void)
 		{
 			LED1=!LED1;//DS1翻转
 		}
+		if(SYSTEMTIME%50==0){//50ms输出一个脉冲
+			PAout(9) = ~PAout(9);
+			PAout(10) = ~PAout(10);
+		}
 #endif
 		
 #if IAM_MASTER_CLOCK

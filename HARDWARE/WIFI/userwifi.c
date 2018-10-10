@@ -11,7 +11,7 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN = 1;//发送数据的命令
+u8 Wifi_Send_EN = 0;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
@@ -70,11 +70,13 @@ void receive_udp_package()
 	
 	}
 }
-
+int16 TcpStatus =-1;
+int TcpCount = 0;
 u8 wifi_send_package()
 {
 	int Head;
-	u32 Length;
+	uint32 Length;
+
 	
 	if(!Wifi_Send_EN) return 0;
 
@@ -90,11 +92,11 @@ u8 wifi_send_package()
 		//  why not use   rsi_send_data()		
 		
 		//发送到远程服务器
-#ifdef SEND_WITH_UDP
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-#else
-		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
-#endif
+//#ifdef SEND_WITH_UDP
+//		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+//#else
+//		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+//#endif
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		Time_Sync_Flag = 0;//时钟同步位清零
@@ -113,10 +115,16 @@ u8 wifi_send_package()
 #ifdef SEND_WITH_UDP
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 #else
-		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+		while(TcpStatus!=0&&TcpCount <100)
+		{
+			TcpCount++;
+		TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
+		}
+		TcpCount=0;
+		TcpStatus=-1;
 #endif
 		//发送到局域网
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+	//	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	}
 	return 1;
 }
@@ -133,11 +141,15 @@ u8 order_anay(u8 arr[])
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			LED2 = ~LED2;
+		  
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
+		 // GPIO_SetBits(GPIOA, GPIO_Pin_9);
+//		  PAout(9) = ~PAout(9);
+//		   PAout(10) = ~PAout(10);
 			LED2 = ~LED2;
 			return 0;				
 		case RETURN_INFO://返回了回复信号

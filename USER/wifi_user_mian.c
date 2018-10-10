@@ -313,14 +313,14 @@ char WIFI_Conf(void)
 	/*init指令*/
 	retval = rsi_init();                 	//init基带和RF组件
 	RspCode=Read_PKT();
-	LOGS("MAC:%0.2X.%0.2X.%0.2X.%0.2X.%0.2X.%0.2X\r\n",
-	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[0],
-	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[1],
-	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[2],
-	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[3],
-	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[4],
-	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[5]
-	);//打印mac地址
+//	LOGS("MAC:%0.2X.%0.2X.%0.2X.%0.2X.%0.2X.%0.2X\r\n",
+//	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[0],
+//	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[1],
+//	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[2],
+//	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[3],
+//	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[4],
+//	rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.initResponse.macAddress1[5]
+//	);//打印mac地址
 
 	/*选择天线 和增益*/
 	retval = rsi_select_antenna(0,8,8);                  //init
@@ -330,7 +330,7 @@ char WIFI_Conf(void)
  	RspCode=rsi_query_fw_version();          //this is command
 	RspCode=Read_PKT();
 	//OLED_ShowStr(0,2,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion,2);	
-	LOGS("FWversion:%s\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion);
+//	LOGS("FWversion:%s\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion);
 
 #if 1										/**MDOE MDOE MDOE MDOE MDOE MDOE MDOEMDOE*///***********************	
 //STA 1
@@ -348,15 +348,15 @@ RSI_WIFI_OPER_MODE 0
 		return 1;
 	}else{
 		tmp=0;
-		LOGS("scan num:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]);
+//		LOGS("scan num:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]);
 		while(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]--)
 		{
 			
-			LOGS("%d.SSID:%s",tmp,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].ssid);
-			LOGS("  securityMode:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].securityMode);
-			LOGS("  rfChannel:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rfChannel);
-			LOGS("  rssiVal:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rssiVal);
-			LOGS("  uNetworkType:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].uNetworkType);
+//			LOGS("%d.SSID:%s",tmp,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].ssid);
+//			LOGS("  securityMode:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].securityMode);
+//			LOGS("  rfChannel:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rfChannel);
+//			LOGS("  rssiVal:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rssiVal);
+//			LOGS("  uNetworkType:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].uNetworkType);
 			tmp++;
 		}
 		
@@ -415,7 +415,7 @@ RSI_WIFI_OPER_MODE 0
 	/*查询RSSI [成功链接之后]*/
 	RspCode=rsi_query_rssi();          			//this is command
 	RspCode=Read_PKT();
-	LOGS("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
+//	LOGS("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
 
 #endif	
 	RspCode=RspCode+1;

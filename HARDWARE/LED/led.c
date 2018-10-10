@@ -7,10 +7,10 @@ s8 channel[4];
 //LED1 PC10
 //LED2 PD10
 // Vin Iin modle choose  高电平为电压输入模式
-//EN1 PC6
-//EN2 PC7
-//EN3 PC8
-//EN4 PC9
+//EN1 PC0
+//EN2 PC1
+//EN3 PC2
+//EN4 PC3
 void LED_GPIO_Init(void)
 {    	 
 	GPIO_InitTypeDef  GPIO_InitStructure;
@@ -24,13 +24,16 @@ void LED_GPIO_Init(void)
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
 	GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
 
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 |  GPIO_Pin_9;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化
+	
 	GPIO_SetBits(GPIOC, GPIO_Pin_10);//LED1设置高，灯灭
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 ;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
