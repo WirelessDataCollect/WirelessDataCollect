@@ -47,36 +47,36 @@ void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
-//		time1 = TIM3->CNT;
 		SYSTEMTIME++;
-#if LED_SHINE_IN_TIMER
-		if(SYSTEMTIME%1000==0)
+		if(SYSTEMTIME%10 == 0)
 		{
-			LED1=!LED1;//DS1翻转
-		}
-		if(SYSTEMTIME%50==0){//50ms输出一个脉冲
-			PAout(9) = ~PAout(9);
-			PAout(10) = ~PAout(10);
-		}
+#if LED_SHINE_IN_TIMER
+			if(SYSTEMTIME%1000==0)
+			{
+				LED1=!LED1;//DS1翻转
+			}
+			if(SYSTEMTIME%50==0){//50ms输出一个脉冲
+				PAout(9) = ~PAout(9);
+				PAout(10) = ~PAout(10);
+			}
 #endif
 		
 #if IAM_MASTER_CLOCK
-		sync_interval_time++;
-#endif
-	  if(queue_empty(adc_queue)) //如果队列空了
-		{
-			adc_queue.HeadTime = SYSTEMTIME;
-		}
-		if(Wifi_Send_EN)//开始发数据了再开始采集
-		{
-			ADS8266_read();
-		}
-//		time2 = TIM3->CNT;
-//		time_inter = time2-time1;
+			sync_interval_time++;
+#else
+			if(queue_empty(adc_queue)) //如果队列空了
+			{
+				adc_queue.HeadTime = SYSTEMTIME;
+			}
+			if(Wifi_Send_EN)//开始发数据了再开始采集
+			{
+				ADS8266_read();
+			}
+#endif		
+	 }
 	}
-//	if(TIM3->CNT>1000)//用来显示是否有超时
-//		status++;
-	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
+
+	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);	//清除中断标志位
 }
 
 
