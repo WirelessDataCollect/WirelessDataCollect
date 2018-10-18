@@ -43,6 +43,7 @@ u16 sync_interval_time = 0;
 //volatile u32 time2 = 0;
 //volatile u32 status = 0;
 //定时器3中断服务函数
+//100us INC
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
@@ -55,7 +56,7 @@ void TIM3_IRQHandler(void)
 			{
 				LED1=!LED1;//DS1翻转
 			}
-			if(SYSTEMTIME%50==0){//50ms输出一个脉冲
+			if(SYSTEMTIME%500==0){//50ms输出一个脉冲
 				PAout(9) = ~PAout(9);
 				PAout(10) = ~PAout(10);
 			}

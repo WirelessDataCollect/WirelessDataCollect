@@ -11,7 +11,7 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN = 0;//发送数据的命令
+u8 Wifi_Send_EN = 1;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
@@ -112,19 +112,19 @@ u8 wifi_send_package()
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//发送到远程服务器
-#ifdef SEND_WITH_UDP
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-#else
-		while(TcpStatus!=0&&TcpCount <100)
-		{
-			TcpCount++;
-		TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
-		}
-		TcpCount=0;
-		TcpStatus=-1;
-#endif
+//#ifdef SEND_WITH_UDP
+//		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+//#else
+//		while(TcpStatus!=0&&TcpCount <100)
+//		{
+//			TcpCount++;
+//		TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
+//		}
+//		TcpCount=0;
+//		TcpStatus=-1;
+//#endif
 		//发送到局域网
-	//	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	}
 	return 1;
 }
