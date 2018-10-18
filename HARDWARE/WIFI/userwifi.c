@@ -92,11 +92,12 @@ u8 wifi_send_package()
 		//  why not use   rsi_send_data()		
 		
 		//发送到远程服务器
-//#ifdef SEND_WITH_UDP
-//		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-//#else
-//		rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
-//#endif
+	#ifdef SEND_WITHb_UDP
+			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+	#else
+			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+	#endif
+		delay_ms(5);
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		Time_Sync_Flag = 0;//时钟同步位清零
@@ -112,17 +113,18 @@ u8 wifi_send_package()
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//发送到远程服务器
-//#ifdef SEND_WITH_UDP
-//		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-//#else
-//		while(TcpStatus!=0&&TcpCount <100)
-//		{
-//			TcpCount++;
-//		TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
-//		}
-//		TcpCount=0;
-//		TcpStatus=-1;
-//#endif
+#ifdef SEND_WITH_UDP
+		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+#else
+		while(TcpStatus!=0&&TcpCount <100)
+		{
+			TcpCount++;
+		TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
+		}
+		TcpCount=0;
+		TcpStatus=-1;
+#endif
+		delay_ms(5);
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	}
