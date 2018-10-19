@@ -97,7 +97,14 @@ u8 wifi_send_package()
 	#else
 			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
-		delay_ms(5);
+		
+		//延时保证两个udp发送正常
+		delay_us(100);
+		for(int n=0;n<20;n++){
+			receive_udp_package();
+			delay_us(100);
+		}
+		
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		Time_Sync_Flag = 0;//时钟同步位清零
@@ -124,7 +131,12 @@ u8 wifi_send_package()
 		TcpCount=0;
 		TcpStatus=-1;
 #endif
-		delay_ms(5);
+		//延时保证两个udp发送正常
+		delay_us(100);
+		for(int n=0;n<20;n++){
+			receive_udp_package();
+			delay_us(100);
+		}
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	}

@@ -27,7 +27,7 @@ void TIM4_Int_Init(u16 arr,u16 psc)
 	TIM_Cmd(TIM4,ENABLE); //使能定时器4
 
 	NVIC_InitStructure.NVIC_IRQChannel=TIM4_IRQn; //定时器4中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x00; //抢占优先级1
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -40,14 +40,14 @@ void TIM4_IRQHandler(void)
 	{
 		SYSTEMTIME++;
 #if IO_SHINE_IN_TIMER
-			if(SYSTEMTIME%500==0)//50ms输出一个脉冲
+			if(SYSTEMTIME%125==0)//50ms输出一个脉冲
 			{
 				PAout(9) = ~PAout(9);
 				PAout(10) = ~PAout(10);
 			}
 #endif
 #if LED_SHINE_IN_TIMER	
-		if(SYSTEMTIME%10000==0)
+		if(SYSTEMTIME%2500==0)
 		{
 			LED1=!LED1;//DS1翻转
 		}
@@ -74,7 +74,7 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 	TIM_Cmd(TIM3,ENABLE); //使能定时器3
 
 	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x02; //抢占优先级1
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -90,7 +90,7 @@ volatile u16 sync_interval_time = 0;
 //volatile u32 status = 0;
 //定时器3中断服务函数
 //100us INC
-volatile u32 AckFlag = 0;
+volatile u32 AckFlag = 0;//用于测试是否出现没有接收到Ack的情况，次数
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断

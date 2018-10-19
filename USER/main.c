@@ -60,7 +60,7 @@ void Initialization (void)
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	TIM3_Int_Init(999,83); //1000us
-	TIM4_Int_Init(99,83); //100us
+	TIM4_Int_Init(399,83); //100us
 	
 }
 u8 Status=1;
