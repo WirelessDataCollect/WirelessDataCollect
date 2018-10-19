@@ -21,7 +21,7 @@
 #define  GET_CHANNEL_MODEL      0xa7
 #define  GET_CAN_SEND_EN        0xa8
 #define  GET_REMOTE_IP_PORT     0xa9
-
+#define  PAGING     0xaa  //—∞∫Ù–≈∫≈
 
 extern u32 SYSTEMTIME;
 extern u32  YYMMDD;
