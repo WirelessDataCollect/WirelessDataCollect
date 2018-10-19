@@ -11,7 +11,7 @@ extern rsi_app_cb_t rsi_app_cb;
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
 u8 Time_Sync_Flag=0;//时钟同步信号
-u8 Wifi_Send_EN = 1;//发送数据的命令
+u8 Wifi_Send_EN = 0;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
 //IIC
@@ -194,6 +194,8 @@ u8 order_anay(u8 arr[])
 #else
 			OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
 #endif
+			break;
+		case PAGING://寻呼信号
 			break;
 		default:
 			return 0;
