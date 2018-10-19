@@ -40,14 +40,14 @@ void TIM4_IRQHandler(void)
 	{
 		SYSTEMTIME++;
 #if IO_SHINE_IN_TIMER
-			if(SYSTEMTIME%125==0)//50ms输出一个脉冲
+			if(SYSTEMTIME%100==0)//50ms输出一个脉冲
 			{
 				PAout(9) = ~PAout(9);
 				PAout(10) = ~PAout(10);
 			}
 #endif
 #if LED_SHINE_IN_TIMER	
-		if(SYSTEMTIME%2500==0)
+		if(SYSTEMTIME%2000==0)
 		{
 			LED1=!LED1;//DS1翻转
 		}

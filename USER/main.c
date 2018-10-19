@@ -43,7 +43,6 @@ u8 IO_input[3];
 u8 can_send_package(void);
 void Initialization (void)
 {
-//	uint32_t client_port=0;	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	RCC_Config();	
 	LED_GPIO_Init();
@@ -60,23 +59,22 @@ void Initialization (void)
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	TIM3_Int_Init(999,83); //1000us
-	TIM4_Int_Init(399,83); //100us
-	
+	TIM4_Int_Init(499,83); //500us
 }
+
 u8 Status=1;
 extern u32 bytes_sent;
-
 int main(void)
 {     
- 	
+
 	Initialization();//初始化系统
-	
-#ifdef SEND_WITH_UDP
-	OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
-#else
+
+	#ifdef SEND_WITH_UDP
+		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
+	#else
 		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
 	//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
-#endif
+	#endif
 	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
 	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
 
@@ -101,7 +99,7 @@ u8 can_send_package()
 	if(CAN_Send_EN&&CAN1_Send_EN){   
 		if(queue_empty(adc_queue)) delay_ms(2);
 		IO_input[0] = DIGITAL_INPUT1;
-	    IO_input[1] = DIGITAL_INPUT2;
+		IO_input[1] = DIGITAL_INPUT2;
 		IO_input[2] = WIFI_CLIENT_ID;
 		CAN1_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
 		CAN1_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
@@ -110,15 +108,15 @@ u8 can_send_package()
 		CAN1_Send_EN = 0;
 	}
 	if(CAN_Send_EN && CAN2_Send_EN){
-	
+
 		if(queue_empty(adc_queue)) delay_ms(2);
 		IO_input[0] = DIGITAL_INPUT1;
-	    IO_input[1] = DIGITAL_INPUT2;
+		IO_input[1] = DIGITAL_INPUT2;
 		IO_input[2] = WIFI_CLIENT_ID;
 		CAN2_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
 		CAN2_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
 		CAN2_Send_Msg(IO_input,3);
-	    CAN_Send_EN = 0;
+		CAN_Send_EN = 0;
 		CAN2_Send_EN = 0;
 	}
 	return 1;

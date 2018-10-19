@@ -126,7 +126,7 @@ u8 wifi_send_package()
 		while(TcpStatus!=0&&TcpCount <100)
 		{
 			TcpCount++;
-		TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
+			TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
 		}
 		TcpCount=0;
 		TcpStatus=-1;
@@ -239,7 +239,6 @@ u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocke
 #define SYNC_TIME_BYTES   9   //同步时钟命令长度
 void Send_Sync_Time(void)
 {
-
 	uint8 time[SYNC_TIME_BYTES] = {0};//时间信息
 	time[0] = GET_TIME_SYNC_MAIN_CLOCK;//时间同步命令
 	time[1] = (uint8) YYMMDD;
