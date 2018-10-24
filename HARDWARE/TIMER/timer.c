@@ -90,7 +90,7 @@ volatile u16 sync_interval_time = 0;
 //volatile u32 status = 0;
 //定时器3中断服务函数
 //100us INC
-volatile u32 AckFlag = 0;//用于测试是否出现没有接收到Ack的情况，次数
+//volatile u32 AckFlag = 0;//用于测试是否出现没有接收到Ack的情况，次数
 void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
@@ -105,10 +105,8 @@ void TIM3_IRQHandler(void)
 			}
 			if(Wifi_Send_EN)//开始发数据了再开始采集
 			{
-				if(!ADS8266_read())
-				{
-						AckFlag++;
-				}
+				ADS8266_read();
+
 			}
 #endif		
 	 }

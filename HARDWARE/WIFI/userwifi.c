@@ -10,7 +10,7 @@ extern rsi_app_cb_t rsi_app_cb;
 //timer 
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
-u8 Time_Sync_Flag=0;//时钟同步信号
+u8 Time_Sync_Flag = 0;//时钟同步信号
 u8 Wifi_Send_EN = 0;//发送数据的命令
 u8 CAN_Send_EN = 0;
 
@@ -171,10 +171,15 @@ u8 order_anay(u8 arr[])
 		case GET_TEST:
 			break;
 		case GET_WIFI_SEND_EN:
-			Wifi_Send_EN =1;  //wifi开始发送
+			//如果启动了本设备
+			if(arr[1]==WIFI_CLIENT_ID){
+				Wifi_Send_EN =1;  //wifi开始发送
+			}
 			break;
-		case GET_WIFI_SEND_DISABLE:          //wifi停止发送
-			Wifi_Send_EN =0;
+		case GET_WIFI_SEND_DISABLE:          
+			if(arr[1]==WIFI_CLIENT_ID){
+				Wifi_Send_EN =0;//wifi停止发送
+			}
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择
 			if(arr[1]==WIFI_CLIENT_ID)//如果命令指定了本ID
