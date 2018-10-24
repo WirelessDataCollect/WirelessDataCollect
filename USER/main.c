@@ -15,24 +15,30 @@
 
 /*
 优先级
-    //TIM 3
-   	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x00; //抢占优先级0
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级0
 	
 	//外部中断
 	NVIC_InitStructure.NVIC_IRQChannel=EXTI4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0;
+	
+    //TIM 4
+   	NVIC_InitStructure.NVIC_IRQChannel=TIM4_IRQn; //定时器3中断
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级0
+	
+    //TIM 3
+   	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x02; //抢占优先级0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级0
 	
 	//CAN1
 	NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;     // 主优先级为2
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;     // 主优先级为2
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // 次优先级为0
 	
 	//CAN2
 	NVIC_InitStructure.NVIC_IRQChannel = CAN2_RX1_IRQn;
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;     // 主优先级为2
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;     // 主优先级为2
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;            // 次优先级为1
 	
 */
