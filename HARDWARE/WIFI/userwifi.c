@@ -92,7 +92,7 @@ u8 wifi_send_package()
 		//  why not use   rsi_send_data()		
 		
 		//发送到远程服务器
-	#ifdef SEND_WITHb_UDP
+	#ifdef SEND_WITH_UDP
 			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 	#else
 			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
@@ -175,10 +175,16 @@ u8 order_anay(u8 arr[])
 			if(arr[1]==WIFI_CLIENT_ID){
 				Wifi_Send_EN =1;  //wifi开始发送
 			}
+			else{
+				return 0;
+			}
 			break;
 		case GET_WIFI_SEND_DISABLE:          
 			if(arr[1]==WIFI_CLIENT_ID){
 				Wifi_Send_EN =0;//wifi停止发送
+			}
+			else{
+				return 0;
 			}
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择

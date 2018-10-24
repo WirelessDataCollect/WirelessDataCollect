@@ -56,10 +56,10 @@ void Initialization (void)
 	delay_init(168); 
 	EXTI_Conf();//必须在wifi设置前
 	NVIC_Config();	//必须在wifi设置前
-  SPI_Conf();	
+	SPI_Conf();	
 	WIFI_BOOT();
 	WIFI_Conf();
-  queue_init(&adc_queue);
+	queue_init(&adc_queue);
 	ADS8266_config();
 	delay_ms(1000);
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
