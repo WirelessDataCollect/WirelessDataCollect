@@ -6,7 +6,7 @@
 #define  UDP_SEND_SIZE          552  // 最好不要超过548    546 = 8 * 67 + 10
 
 #define  IAM_MASTER_CLOCK       0  //是不是主时钟设备
-#define  WIFI_CLIENT_ID         3//1,2,3,4，不要超过255
+#define  WIFI_CLIENT_ID         1//1,2,3,4，不要超过255
 //#define  SEND_WITH_TCP    //用tcp传
 #define SEND_WITH_UDP
 

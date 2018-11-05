@@ -196,6 +196,7 @@ u8 ADS8266_read()
 	{
 		return 0;
 	}
+	//通道1的地址，并设置为连续读
 	IIC_Send_Byte(DATA0_U_Adress|0x80);
 	if(IIC_Wait_Ack())
 	{
@@ -208,6 +209,7 @@ u8 ADS8266_read()
 	{
 		return 0;
 	}
+	//读八个数据
 	for(i=0;i<8;i++)
 	{
 		val = IIC_Read_Byte(1);

@@ -34,7 +34,7 @@ extern Queue adc_queue;
 
 
 #define MODECNTRL_Adress 0x00
-#define MODECNTRL_Reg    0xFC
+#define MODECNTRL_Reg    0xE4//0xFC
 
 #define SLPCONFIG_Adress 0x13
 #define SLPCONFIG_Reg    0x20
