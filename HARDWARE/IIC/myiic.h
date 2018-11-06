@@ -34,13 +34,14 @@ extern Queue adc_queue;
 
 
 #define MODECNTRL_Adress 0x00
-#define MODECNTRL_Reg    0xE4//0xFC
+#define MODECNTRL_Reg    0xFC//0xFC
 
 #define SLPCONFIG_Adress 0x13
 #define SLPCONFIG_Reg    0x20
 
 #define ACQCONFIG_Adress 0x14
 #define ACQCONFIG_Reg 0x1f
+
 // Tacq= 0x1f*2+6 = 68us
 // Tconv = 4 us
 //SLPTime = 2.5ms/4
