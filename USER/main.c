@@ -73,7 +73,7 @@ int main(void)
 {     
 
 	Initialization();//初始化系统
-
+	DATA_AUTO_CHECK_EN= 0;
 	#ifdef SEND_WITH_UDP
 		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
 	#else

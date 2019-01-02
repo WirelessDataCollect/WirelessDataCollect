@@ -120,7 +120,7 @@ u8 wifi_send_package()
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//  why not use   rsi_send_data()	
-		
+		u8 temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		//发送到远程服务器
 	#ifdef SEND_WITH_UDP
@@ -129,7 +129,7 @@ u8 wifi_send_package()
 		#else
 			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
-		DATA_AUTO_CHECK_EN = 1;
+		DATA_AUTO_CHECK_EN = temp;
 		
 		
 //		//延时保证两个udp发送正常
@@ -140,10 +140,11 @@ u8 wifi_send_package()
 //		}
 		delay_ms(5);
 		
+		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-		DATA_AUTO_CHECK_EN = 1;
+		DATA_AUTO_CHECK_EN = temp;
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
@@ -157,6 +158,7 @@ u8 wifi_send_package()
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//发送到远程服务器
+		u8 temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 #ifdef SEND_WITH_UDP
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
@@ -169,7 +171,7 @@ u8 wifi_send_package()
 		TcpCount=0;
 		TcpStatus=-1;
 #endif
-		DATA_AUTO_CHECK_EN = 1;
+		DATA_AUTO_CHECK_EN = temp;
 		
 		//延时保证两个udp发送正常
 //		delay_us(100);
