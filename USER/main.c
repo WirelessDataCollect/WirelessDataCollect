@@ -9,6 +9,7 @@
 #include "can.h"
 #include "can2.h"
 #include "timer.h"
+#include "adc.h"
 
 #include "rsi_global.h"
 #include "rsi_app.h"
@@ -58,12 +59,11 @@ void Initialization (void)
 	WIFI_BOOT();
 	WIFI_Conf();
 	queue_init(&adc_queue);
-	//EXTI_TX_Conf();
-	ADS8266_config();
 	delay_ms(1000);
+	ADC_CTRL_Conf();//ADC相关引脚初始化
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
-	//TIM3_Int_Init(999,83); //1000us
+	TIM3_Int_Init(999,83); //1000us
 	TIM4_Int_Init(4,83); //5us
 }
 
@@ -88,9 +88,9 @@ int main(void)
 	{
 	//	receive_udp_package();
 		
-		//wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 		
-		wifi_send_package_test();
+//		wifi_send_package_test();
 		GPIO_SetBits(GPIOA,GPIO_Pin_9);
 		DATA_AUTO_CHECK_EN= 1;
 		delay_ms(60);

@@ -5,6 +5,7 @@
 #include "stm32f4xx.h"
 
 //====定义ADC相关的引脚
+#define ADC_MAX_BYTES 8//ADC一次最多读取的bytes数，2*通道数
 #define ADC_SPIx SPI2
 #define ADC_SPIx_AF GPIO_AF_SPI2
 #define ADC_SPIx_PERIPH RCC_APB1Periph_SPI2
@@ -56,5 +57,7 @@
 
 //和ADC交互的引脚配置
 void ADC_CTRL_Conf(void);
+u8 ADC_SPIx_ReadWriteByte(u8 TxData);
+u8 * ADC_Read(u16 NumByteToRead);
 
 #endif

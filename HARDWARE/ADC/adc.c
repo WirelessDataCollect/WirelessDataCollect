@@ -1,19 +1,17 @@
 #include "adc.h"
 #include "rsi_global.h"
 #include "rsi_app.h"
+#include "queue.h"
+#include "userwifi.h"
 //时钟配置
-
-
 void ADC_RCC_Config(void)
 {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);//使能时钟
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能时钟
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//使能时钟
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);//使能时钟
 	RCC_APB2PeriphClockCmd(ADC_SPIx_PERIPH, ENABLE);
-	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
-	RNG_Cmd(ENABLE );
+
 }
 
 //ADC的控制引脚配置（包括SPI、复位等）配置
@@ -85,15 +83,43 @@ void ADC_CTRL_Conf(void)
 	SPI_Init(ADC_SPIx, &SPI_InitStructure);  
 
 	SPI_Cmd(ADC_SPIx, ENABLE); 
-	ADC_CS_L(); 
+	ADC_CS_L();
 }
-//ADC的SPIx的中断
-void ADC_EXTI_Conf(void)
+//读取ADC数据，最多8个通道，16bytes数据
+//如果使用AD7606-4则只有4个通道，8bytes数据
+u8 AD7606_Data_Temp[16]={0,0};
+u8 * ADC_Read(u16 NumByteToRead)
 {
-	
+ 	u16 i;    												    
+	ADC_CS_L();   //片选    
+	//4四个通道的数据全部保存
+    for(i=0;i<NumByteToRead;i++)
+	{ 
+		AD7606_Data_Temp[i] = ADC_SPIx_ReadWriteByte(0XFF);//循环读数   
+			
+    }
+	ADC_CS_H();                            //取消片选 
+	return AD7606_Data_Temp;
 }
-//ADC的SPIx的NVIC
-void ADC_NVIC_Config(void)
-{
-	
+
+//SPIx 读写一个字节
+//TxData:要写入的字节
+//返回值:读取到的字节
+u8 ADC_SPIx_ReadWriteByte(u8 TxData)
+{		
+	u8 retry=0;				 	
+	while (SPI_I2S_GetFlagStatus(ADC_SPIx, SPI_I2S_FLAG_TXE) == RESET) //检查指定的SPI标志位设置与否:发送缓存空标志位
+		{
+		retry++;
+		if(retry>200)return 0;
+		}			  
+	SPI_I2S_SendData(ADC_SPIx, TxData); //通过外设SPIx发送一个数据
+	retry=0;
+
+	while (SPI_I2S_GetFlagStatus(ADC_SPIx, SPI_I2S_FLAG_RXNE) == RESET) //检查指定的SPI标志位设置与否:接受缓存非空标志位
+		{
+		retry++;
+		if(retry>200)return 0;
+		}	  						    
+	return SPI_I2S_ReceiveData(ADC_SPIx); //返回通过SPIx最近接收的数据					    
 }

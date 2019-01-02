@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "string.h"
 #include "userwifi.h"
+#include "adc.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //定时器溢出时间计算方法:Tout=((arr+1)*(psc+1))/Ft us.
 //Ft=定时器工作频率,单位:Mhz  84M
@@ -105,7 +106,11 @@ void TIM3_IRQHandler(void)
 			}
 			if(Wifi_Send_EN)//开始发数据了再开始采集
 			{
-				ADS8266_read();
+				u8 * temp = ADC_Read(ADC_MAX_BYTES);
+				for(int i=0;i<ADC_MAX_BYTES;i++)
+				{
+					queue_put(&adc_queue, temp[i]);
+				}
 
 			}
 #endif		
