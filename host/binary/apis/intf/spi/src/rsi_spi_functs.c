@@ -308,9 +308,11 @@ int16 rsi_device_interrupt_status(uint8 *int_status)
 {
  int16                   retval;
  uint32                  timeout; 
-
- timeout = 1 * RSI_TICKS_PER_SECOND;
-
+	
+ //ø®À¿
+ // timeout = 1 * RSI_TICKS_PER_SECOND;
+	timeout = 10;
+ 
  RSI_RESET_TIMER2;
  while(1) 
  {

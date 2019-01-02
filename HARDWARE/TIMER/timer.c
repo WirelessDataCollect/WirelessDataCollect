@@ -27,7 +27,7 @@ void TIM4_Int_Init(u16 arr,u16 psc)
 	TIM_Cmd(TIM4,ENABLE); //使能定时器4
 
 	NVIC_InitStructure.NVIC_IRQChannel=TIM4_IRQn; //定时器4中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x00; //抢占优先级1
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -40,14 +40,14 @@ void TIM4_IRQHandler(void)
 	{
 		SYSTEMTIME++;
 #if IO_SHINE_IN_TIMER
-			if(SYSTEMTIME%100==0)//50ms输出一个脉冲
+			if(SYSTEMTIME%10000==0)//50ms输出一个脉冲
 			{
 				PAout(9) = ~PAout(9);
 				PAout(10) = ~PAout(10);
 			}
 #endif
 #if LED_SHINE_IN_TIMER	
-		if(SYSTEMTIME%2000==0)
+		if(SYSTEMTIME%200000==0)
 		{
 			LED1=!LED1;//DS1翻转
 		}

@@ -12,6 +12,7 @@
 
 u8 SPI1_TxRx(u8 TxData);
 void EXTI_Conf(void) ;
+void EXTI_TX_Conf(void);
 void SPI_Conf(void);
 
 void NVIC_Config(void);

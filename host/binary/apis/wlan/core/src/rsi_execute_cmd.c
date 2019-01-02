@@ -97,7 +97,7 @@ int16 rsi_execute_cmd(uint8 *descparam,uint8 *payloadparam,uint16 size_param)
 #ifndef UART_INTERFACE
   if ((queueno == WLAN_MGMT_TYPE) || (queueno == WLAN_DATA_TYPE)) {  //WLAN_MGMT_TYPE=0x04；WLAN_DATA_TYPE=0x05
     //! Buffer full has to be checked before calling send data
-    retval = rsi_device_interrupt_status(&int_status);//返回设备的中断状态
+    retval = rsi_device_interrupt_status(&int_status);//返回设备的中断状态 //！会卡死
   }
  // printk("intr_status = %x\n", int_status);
   if(retval != 0x0) 

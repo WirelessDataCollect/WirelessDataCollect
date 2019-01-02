@@ -121,7 +121,7 @@
 
 #define RSI_SECURITY_MODE          SECURITY_MODE_WPA2          //@ For selecting different security mode APs.
 #define RSI_PSK_SUPPORT           0// DISABLE                     //@ ENABLE or0// DISABLE PSK support
-#define RSI_PSK                   "1234567890"//    "12345678"    //"518518518"                  //@ PSK.If we are using WPA2, this is the key, In open mode NULL
+#define RSI_PSK                   "518518518"//    "12345678"    //"518518518"                  //@ PSK.If we are using WPA2, this is the key, In open mode NULL
 #define RSI_PMK                    ""                          //@ PMK "661cb4a09ddffbb778372f302900919d57b5e065a261234de7b2962ca7a0d830"//"1d55d6ad23a22b46af91b222348e9a195341204320fed8b6b4193ce557c0d555"
 #define RSI_PSK_TYPE               RSI_PSK_FROM_HOST           //@ RSI_PSK_FROM_HOST or RSI_PMK_FROM_HOST or RSI_GENERATE_PMK
 #define RSI_SCAN_SSID              ""                //@ SSID to scan, null string ("") to scans all ssids
@@ -129,7 +129,7 @@
 #define RSI_SCAN_FEAT_BITMAP       0                           //@ scan_feature_bitmap ,valid only if specific channel and ssid are given
 #define RSI_SCAN_CHANNEL_BIT_MAP_2_4    0                      //@ scan channle bit map,valid if RSI_SCAN_CHANNEL is 0
 #define RSI_SCAN_CHANNEL_BIT_MAP_5      0                      //@ scan channle bit map,valid if RSI_SCAN_CHANNEL is 0
-#define RSI_JOIN_SSID              "mywifi5G"////"TP-LINK_5G_528"  "Song iPhone"                //@ SSID to join
+#define RSI_JOIN_SSID              "TP-LINK_5G_418" // "Song iPhone"                //@ SSID to join
 #define SEND_PSK_IN_JOIN           1                           //@ 1-to send PSK in join frame, 0 - not to send PSK in join
 #define RSI_AP_BSSID               "00:00:00:00:00:00"         //@ BSSID of the selected AP
 #define RSI_MAC_ADDRESS            "00:17:34:51:68:85"         //@ MAC address of the module

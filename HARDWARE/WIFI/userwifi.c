@@ -7,6 +7,8 @@
 extern rsi_app_cb_t rsi_app_cb;
 /* Gloab  data*/
 
+u8 DATA_AUTO_CHECK_EN = 0;	
+
 //timer 
 u32 SYSTEMTIME=0;
 u32  YYMMDD =0;
@@ -36,16 +38,19 @@ unsigned short localSocketDescriptor_txrx=2;
 u32 bytes_sent=0;
 
 
-rsi_recvFrameUdp *data_recv=NULL;
-#define ANAL_RSP_LENGTH 3
+
+
+
 void receive_udp_package()
 {
+	rsi_recvFrameUdp *data_recv=NULL;
+	u8 ANAL_RSP_LENGTH = 3;
 	u8 RspCode;
 	u8 AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回wifi信息
 	unsigned short  recvSocket;
 	RspCode = Check_PKT();
 	
-	switch (RspCode)     
+	switch (RspCode)
 	{
 		case 0x00:
 			data_recv = (rsi_recvFrameUdp *)&(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad);
@@ -70,6 +75,31 @@ void receive_udp_package()
 	
 	}
 }
+
+
+void wifi_send_package_test()
+{
+	int Head;
+	uint32 Length;
+	u8 temp= DATA_AUTO_CHECK_EN;
+	for(int i =0;i<UDP_SEND_SIZE;i++)
+	{
+		queue_put(&adc_queue,i);
+	}
+	
+	Length = queue_length(adc_queue);
+	queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);
+	if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
+	Head = adc_queue.head;
+	adc_queue.head = adc_queue.tail; 
+	
+  DATA_AUTO_CHECK_EN = 0;
+	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+  receive_udp_package();
+	DATA_AUTO_CHECK_EN = temp;
+	
+}
+
 int16 TcpStatus =-1;
 int TcpCount = 0;
 u8 wifi_send_package()
@@ -84,7 +114,7 @@ u8 wifi_send_package()
 	{
 		Length = queue_length(adc_queue);
 		
-		queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; 
+		queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; //
 		
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
@@ -94,9 +124,11 @@ u8 wifi_send_package()
 		//发送到远程服务器
 	#ifdef SEND_WITH_UDP
 			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-	#else
+	    
+		#else
 			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
+		
 		
 		//延时保证两个udp发送正常
 		delay_us(100);
@@ -151,11 +183,13 @@ u8 order_anay(u8 arr[])
 	switch(arr[0])
 	{
 		case GET_TIME_SYNC_PC://时钟同步信号
+			if(DATA_AUTO_CHECK_EN)
+			{
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			LED2 = ~LED2;
-		  
+		  }
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
 			memcpy(&YYMMDD,&arr[1],4);
@@ -201,6 +235,7 @@ u8 order_anay(u8 arr[])
 		case GET_REMOTE_IP_PORT:            //主机地址
 			memcpy(destIp_txrx,&arr[1],4);
 		  memcpy(&destSocket_txrx,&arr[5],2);
+		  
 			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的远程服务器的socket
 #ifdef SEND_WITH_UDP
 			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
@@ -221,29 +256,36 @@ u8 order_anay(u8 arr[])
 u8 OpenLudpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
 {
 	int RspCode;
+	u8 temp= DATA_AUTO_CHECK_EN ;
+	DATA_AUTO_CHECK_EN= 0;
 	OpenSocket(destIp,destSocket,moduleSocket,RSI_SOCKET_LUDP);
 	RspCode=Read_PKT();
 	if(RspCode!=RSI_RSP_SOCKET_CREATE)
 	{
+		DATA_AUTO_CHECK_EN = temp;
 		return 1;
 	}
 	
 	*socketDescriptor = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.socketFrameRcv.socketDescriptor);
-	
+	DATA_AUTO_CHECK_EN = temp;
 	return 0;
 }
 
 //打开tcp
 u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
 {
+	u8 temp= DATA_AUTO_CHECK_EN ;
+	DATA_AUTO_CHECK_EN= 0;
+	
 	int RspCode;
 	OpenSocket(destIp,destSocket,moduleSocket,RSI_SOCKET_TCP_CLIENT);
 	RspCode=Read_PKT();
 	if(RspCode!=RSI_RSP_SOCKET_CREATE)
 	{
+		DATA_AUTO_CHECK_EN = temp;
 		return 1;
 	}
-	
+	DATA_AUTO_CHECK_EN = temp;
 	*socketDescriptor = rsi_bytes2R_to_uint16(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.socketFrameRcv.socketDescriptor);
 	
 	return 0;
@@ -262,11 +304,20 @@ void Send_Sync_Time(void)
 	time[6] = (uint8) (SYSTEMTIME>>8);
 	time[7] = (uint8) (SYSTEMTIME>>16);
 	time[8] = (uint8) (SYSTEMTIME>>24);
+	u8 temp= DATA_AUTO_CHECK_EN ;
+	DATA_AUTO_CHECK_EN= 0;
 	rsi_send_ludp_data(socketDescriptor_sync,time ,SYNC_TIME_BYTES, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
+	receive_udp_package();
+	DATA_AUTO_CHECK_EN = temp;
 	//rsi_send_data(socketDescriptor_sync, time, SYNC_TIME_BYTES,RSI_PROTOCOL_UDP_V4,&bytes_sent);
 }
 #endif
 
 
 
-
+void EXTI15_10_IRQHandler(void)
+{
+	EXTI->PR		|=1<<10;
+	wifi_send_package_test();
+	GPIO_ResetBits(GPIOA,GPIO_Pin_9);
+}

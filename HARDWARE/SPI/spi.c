@@ -16,14 +16,22 @@ void RCC_Config(void)
 	RNG_Cmd(ENABLE );
 }
  
+
+
 void NVIC_Config(void)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel=EXTI4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0;//设置成最高优先级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;//设置成最高优先级
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+	
+	//
+//	NVIC_InitStructure.NVIC_IRQChannel=EXTI15_10_IRQn;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority=1;
+//	NVIC_Init(&NVIC_InitStructure);
+	//
 }
 
 void SPI_Conf(void)
@@ -54,7 +62,23 @@ void SPI_Conf(void)
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(GPIOC, &GPIO_InitStructure); 
 	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC,GPIO_PinSource4);  
-
+  
+	
+//	// TX INTR中断：PA10
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+//	GPIO_Init(GPIOA, &GPIO_InitStructure); 
+//	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA,GPIO_PinSource10); 
+//	//
+//	
+//	//PA9 
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+//	GPIO_Init(GPIOA, &GPIO_InitStructure);
+//	//
+	
 	//CLK:PA5;MISO:PA6;MOSI:PA7
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -95,8 +119,18 @@ void EXTI_Conf(void)
 	EXTI_Type.EXTI_LineCmd=ENABLE;
 	EXTI_Init(&EXTI_Type);
 	
+	
 }
 
+void EXTI_TX_Conf(void)
+{
+	EXTI_InitTypeDef   EXTI_Type;
+	EXTI_Type.EXTI_Mode=EXTI_Mode_Interrupt;
+	EXTI_Type.EXTI_Trigger=EXTI_Trigger_Rising;
+	EXTI_Type.EXTI_Line=EXTI_Line10;
+	EXTI_Type.EXTI_LineCmd=ENABLE;
+	EXTI_Init(&EXTI_Type);
+}
 
 u8 SPI1_TxRx(u8 TxData)
 {		 			 

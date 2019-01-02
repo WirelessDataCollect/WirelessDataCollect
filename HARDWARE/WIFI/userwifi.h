@@ -8,9 +8,10 @@
 #define  IAM_MASTER_CLOCK       0  //是不是主时钟设备
 #define  WIFI_CLIENT_ID         1//1,2,3,4，不要超过255
 //#define  SEND_WITH_TCP    //用tcp传
-#define SEND_WITH_UDP
+//#define SEND_WITH_UDP
 
 //请修改				RSI_DHCP_HOST_NAME
+
 
 #define  GET_TIME_SYNC_PC          0xa1
 #define  RETURN_INFO			0xa2
@@ -48,12 +49,13 @@ extern unsigned short socketDescriptor_sync;
 extern unsigned short localSocketDescriptor_txrx;
 
 void receive_udp_package(void);
-
+void wifi_send_package_test(void);
 u8 OpenLudpSocket(u8* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
 u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
 u8 wifi_send_package(void);
 u8 order_anay(u8 arr[]);
 void Send_Sync_Time(void);
+
 
 #endif
 
