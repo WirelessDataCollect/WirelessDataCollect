@@ -45,6 +45,7 @@
 extern u8 CAN_Send_EN;
 extern u8 CAN1_Send_EN;
 extern u8 CAN2_Send_EN;
+extern u8 DATA_AUTO_CHECK_EN;
 u8 IO_input[3];
 u8 can_send_package(void);
 void Initialization (void)
@@ -60,12 +61,13 @@ void Initialization (void)
 	WIFI_BOOT();
 	WIFI_Conf();
 	queue_init(&adc_queue);
+	//EXTI_TX_Conf();
 	ADS8266_config();
 	delay_ms(1000);
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
-	TIM3_Int_Init(999,83); //1000us
-	TIM4_Int_Init(499,83); //500us
+	//TIM3_Int_Init(999,83); //1000us
+	TIM4_Int_Init(4,83); //5us
 }
 
 u8 Status=1;
@@ -83,11 +85,18 @@ int main(void)
 	#endif
 	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
 	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
-
+  DATA_AUTO_CHECK_EN= 1;
+	
 	while(1)
 	{
-		receive_udp_package();
-		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+	//	receive_udp_package();
+		
+		//wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+		
+		wifi_send_package_test();
+		GPIO_SetBits(GPIOA,GPIO_Pin_9);
+		DATA_AUTO_CHECK_EN= 1;
+		delay_ms(60);
 		#if IAM_MASTER_CLOCK
 			if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 			{

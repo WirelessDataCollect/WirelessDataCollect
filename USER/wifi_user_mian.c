@@ -21,7 +21,7 @@
  */ 
  #include "SPI.h"
  #include "userwifi.h"
- 
+ extern u8 DATA_AUTO_CHECK_EN;
 #include "rsi_global.h"
 #include "rsi_config.h"
 #include "rsi_app_util.h"
@@ -283,12 +283,21 @@ rsi_uCmdRsp *rsi_parse_response(uint8 *rsp);
 uint8 *rsi_wrapper_to_rsp(uint8 *rsp, uint8 rsp_type);
 void  rsi_receive_data_packet(uint8 *payloadPtr);
 int16 rsi_per_cont_wave_mode(rsi_uPerMode *uPerModeFrame, int8 per_cw_mode_state);
+
+
 void EXTI4_IRQHandler(void)
 {
 //	uint32_t value=taskENTER_CRITICAL_FROM_ISR();
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
+	if(DATA_AUTO_CHECK_EN)
+	{
+		receive_udp_package();
+	}
+	
 //	taskEXIT_CRITICAL_FROM_ISR(value);
+	
+	
 }
 
 int RspCode =0,retval,tmp=0;
