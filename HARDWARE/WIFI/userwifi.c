@@ -86,16 +86,16 @@ void wifi_send_package_test()
 	{
 		queue_put(&adc_queue,i);
 	}
-	
+
 	Length = queue_length(adc_queue);
 	queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);
 	if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 	Head = adc_queue.head;
 	adc_queue.head = adc_queue.tail; 
-	
-  DATA_AUTO_CHECK_EN = 0;
+
+	DATA_AUTO_CHECK_EN = 0;
 	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-  receive_udp_package();
+	receive_udp_package();
 	DATA_AUTO_CHECK_EN = temp;
 	
 }

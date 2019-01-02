@@ -75,20 +75,20 @@ int16 rsi_spi_send(uint8 *ptrBuf, uint16 bufLen,uint8 *valBuf,uint8 mode)
 	uint8 	temp1;
 	uint32    time=0;
 	/*这里用移植好的代码*/
-	/*SPI_CS    SPI1_TxRx 这两个*/
-	SPI_CS_L;
+	/*SPI_CS    WIFI_SPIx_TxRx 这两个*/
+	WIFI_CS_L;
 	for(i =0;i <bufLen;i ++) 
 	{	  
 		SPI1->DR=ptrBuf[i];
 		while (((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0)&&time<50000){time++;}
 		temp1 = SPI1->DR;
-		//temp1 = SPI1_TxRx(ptrBuf[i]);
+		//temp1 = WIFI_SPIx_TxRx(ptrBuf[i]);
 		if(i <2)
 		{
 			valBuf[i] = temp1;
 		}
 	}
-	SPI_CS_H;
+	WIFI_CS_H;
 	
 	
   return 0;
@@ -110,13 +110,13 @@ int16 rsi_spi_recv(uint8 *ptrBuf, uint16 bufLen, uint8 mode)
 {
   int16        i;
 /*这里用移植好的代码*/
-	/*SPI_CS    SPI1_TxRx 这两个*/
-	SPI_CS_L;
+	/*SPI_CS    WIFI_SPIx_TxRx 这两个*/
+	WIFI_CS_L;
 	for(i =0;i <bufLen;i ++) 
 	{  
-		ptrBuf[i] =SPI1_TxRx(0x55);
+		ptrBuf[i] =WIFI_SPIx_TxRx(0x55);
 	}
-	SPI_CS_H;
+	WIFI_CS_H;
   return 0;
 }
 

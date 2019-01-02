@@ -76,8 +76,8 @@ int16 rsi_send_c1c2(uint8 c1, uint8 c2)
 //    uint16        i; 
 //	uint8 	temp1;
 	/*这里用移植好的代码*/
-	/*SPI_CS    SPI1_TxRx 这两个*/
-//	SPI_CS_L;
+	/*SPI_CS    WIFI_SPIx_TxRx 这两个*/
+//	WIFI_CS_L;
 //	for(i =0;i <2;i ++) 
 //	{	  
 //		SPI1->DR=txCmd[i];
@@ -89,7 +89,7 @@ int16 rsi_send_c1c2(uint8 c1, uint8 c2)
 //		localBuf[i] =temp1;
 
 //	}
-//	SPI_CS_H;
+//	WIFI_CS_H;
   if((localBuf[1] == RSI_SPI_SUCCESS) ||(localBuf[1] == 0x00))  {            
    //! success, so return now 
    retval = RSI_SUCCESS;
@@ -142,8 +142,8 @@ int16 rsi_send_c3c4(uint8 c3, uint8 c4)
 //    uint16        i; 
 //	uint8 	temp1;
 //	/*这里用移植好的代码*/
-//	/*SPI_CS    SPI1_TxRx 这两个*/
-//	SPI_CS_L;
+//	/*SPI_CS    WIFI_SPIx_TxRx 这两个*/
+//	WIFI_CS_L;
 //	for(i =0;i <2;i ++) 
 //	{	  
 //		//  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//??????  
@@ -158,7 +158,7 @@ int16 rsi_send_c3c4(uint8 c3, uint8 c4)
 //	localBuf[i] =temp1;
 
 //	}
-//	SPI_CS_H;
+//	WIFI_CS_H;
 	
  return retval;
 }

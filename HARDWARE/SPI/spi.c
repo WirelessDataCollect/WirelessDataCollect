@@ -38,30 +38,27 @@ void SPI_Conf(void)
 {	 
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	SPI_InitTypeDef  SPI_InitStructure;
-
+	RCC_Config();
+	
 	//CS:PC5
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+	GPIO_InitStructure.GPIO_Pin = WIFI_CS_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_Init(WIFI_CS_PORT, &GPIO_InitStructure);
 	
-	//RST:PB0
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	//RST
+	GPIO_InitStructure.GPIO_Pin = WIFI_RST_PIN;
+	GPIO_Init(WIFI_RST_PORT, &GPIO_InitStructure);
 	
 	
-	//INTR中断：PC4
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+	//INTR中断
+	GPIO_InitStructure.GPIO_Pin = WIFI_INTR_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure); 
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC,GPIO_PinSource4);  
+	GPIO_Init(WIFI_INTR_PORT, &GPIO_InitStructure); 
+	SYSCFG_EXTILineConfig(WIFI_INTR_EXTI_PORTSOURCE,WIFI_INTR_EXTI_PINSOURCE);  
   
 	
 //	// TX INTR中断：PA10
@@ -79,21 +76,25 @@ void SPI_Conf(void)
 //	GPIO_Init(GPIOA, &GPIO_InitStructure);
 //	//
 	
-	//CLK:PA5;MISO:PA6;MOSI:PA7
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
+	//CLK;MISO;MOSI
+	GPIO_InitStructure.GPIO_Pin = WIFI_CLK_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	GPIO_Init(WIFI_CLK_PORT, &GPIO_InitStructure);//初始化
+	GPIO_InitStructure.GPIO_Pin = WIFI_MOSI_PIN;	
+	GPIO_Init(WIFI_MOSI_PORT, &GPIO_InitStructure);	//初始化
+	GPIO_InitStructure.GPIO_Pin = WIFI_MISO_PIN;	
+	GPIO_Init(WIFI_MISO_PORT, &GPIO_InitStructure);	//初始化
 
-	SPI_CS_H;
+	WIFI_CS_H;
+	//复用
+	GPIO_PinAFConfig(WIFI_CLK_PORT,WIFI_CLK_AF_PINSOURCE,WIFI_SPIx_AF);
+	GPIO_PinAFConfig(WIFI_MISO_PORT,WIFI_MISO_AF_PINSOURCE,WIFI_SPIx_AF);
+	GPIO_PinAFConfig(WIFI_MOSI_PORT,WIFI_MOSI_AF_PINSOURCE,WIFI_SPIx_AF);
 
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource5,GPIO_AF_SPI1);
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource6,GPIO_AF_SPI1);
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource7,GPIO_AF_SPI1);
-
-
+	//wifi spi的配置
 	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
 	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;	
 	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;	
@@ -103,12 +104,12 @@ void SPI_Conf(void)
 	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;		
 	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	
 	SPI_InitStructure.SPI_CRCPolynomial = 7;	
-	SPI_Init(SPI1, &SPI_InitStructure);  
+	SPI_Init(WIFI_SPIx, &SPI_InitStructure);  
 
-	SPI_Cmd(SPI1, ENABLE); 
-	SPI_CS_L;
+	SPI_Cmd(WIFI_SPIx, ENABLE); 
+	WIFI_CS_L;
 
-	//	SPI1_TxRx(0xff);	 
+	//	WIFI_SPIx_TxRx(0xff);	 
 }   
 void EXTI_Conf(void)
 {
@@ -132,17 +133,17 @@ void EXTI_TX_Conf(void)
 	EXTI_Init(&EXTI_Type);
 }
 
-u8 SPI1_TxRx(u8 TxData)
+u8 WIFI_SPIx_TxRx(u8 TxData)
 {		 			 
 	
 //  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//??????  
-	SPI1->DR=TxData;
+	WIFI_SPIx->DR=TxData;
 	//SPI_I2S_SendData(SPI1, TxData); //????SPIx????byte  ??
-  while ((SPI1->SR&SPI_I2S_FLAG_RXNE) == 0); //???????byte  
+  while ((WIFI_SPIx->SR&SPI_I2S_FLAG_RXNE) == 0); //???????byte  
 		
 //  while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET){} //???????byte  
  
-	return SPI1->DR;//SPI_I2S_ReceiveData(SPI1); //????SPIx???????	
+	return WIFI_SPIx->DR;//SPI_I2S_ReceiveData(SPI1); //????SPIx???????	
  		    
 }
 

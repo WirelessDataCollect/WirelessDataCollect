@@ -51,7 +51,6 @@ u8 can_send_package(void);
 void Initialization (void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	RCC_Config();	
 	LED_GPIO_Init();
 	//uart_init(115200);		
 	delay_init(168); 
