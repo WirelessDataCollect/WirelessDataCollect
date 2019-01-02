@@ -91,9 +91,9 @@ int main(void)
 		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 		
 //		wifi_send_package_test();
-		GPIO_SetBits(GPIOA,GPIO_Pin_9);
+//		GPIO_SetBits(GPIOA,GPIO_Pin_9);
 		DATA_AUTO_CHECK_EN= 1;
-		delay_ms(60);
+//		delay_ms(60);
 		#if IAM_MASTER_CLOCK
 			if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 			{

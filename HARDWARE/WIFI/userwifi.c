@@ -315,9 +315,9 @@ void Send_Sync_Time(void)
 
 
 
-void EXTI15_10_IRQHandler(void)
-{
-	EXTI->PR		|=1<<10;
-	wifi_send_package_test();
-	GPIO_ResetBits(GPIOA,GPIO_Pin_9);
-}
+//void EXTI15_10_IRQHandler(void)
+//{
+//	EXTI->PR		|=1<<10;
+//	wifi_send_package_test();
+//	GPIO_ResetBits(GPIOA,GPIO_Pin_9);
+//}

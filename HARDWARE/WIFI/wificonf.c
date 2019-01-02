@@ -1,6 +1,7 @@
 #include "wificonf.h"
 #include "rsi_global.h"
 #include "rsi_app.h"
+#include "userwifi.h"
 //时钟配置
 
 
@@ -106,6 +107,16 @@ u8 WIFI_SPIx_TxRx(u8 TxData)
 	return WIFI_SPIx->DR;//SPI_I2S_ReceiveData(SPI1);		    
 }
 
-
+//收到命令数据
+extern u8 DATA_AUTO_CHECK_EN;
+void EXTI4_IRQHandler(void)
+{
+	EXTI->PR		|=1<<4;
+	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
+	if(DATA_AUTO_CHECK_EN)
+	{
+		receive_udp_package();
+	}
+}
 
 
