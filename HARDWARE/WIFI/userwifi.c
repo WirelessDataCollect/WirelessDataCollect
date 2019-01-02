@@ -119,8 +119,9 @@ u8 wifi_send_package()
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
-		//  why not use   rsi_send_data()		
+		//  why not use   rsi_send_data()	
 		
+		DATA_AUTO_CHECK_EN = 0;
 		//发送到远程服务器
 	#ifdef SEND_WITH_UDP
 			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
@@ -128,17 +129,21 @@ u8 wifi_send_package()
 		#else
 			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
+		DATA_AUTO_CHECK_EN = 1;
 		
 		
-		//延时保证两个udp发送正常
-		delay_us(100);
-		for(int n=0;n<20;n++){
-			receive_udp_package();
-			delay_us(100);
-		}
+//		//延时保证两个udp发送正常
+//		delay_us(100);
+//		for(int n=0;n<20;n++){
+//			receive_udp_package();
+//			delay_us(100);
+//		}
+		delay_ms(5);
 		
+		DATA_AUTO_CHECK_EN = 0;
 		//发送到局域网
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		DATA_AUTO_CHECK_EN = 1;
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
@@ -152,6 +157,7 @@ u8 wifi_send_package()
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//发送到远程服务器
+		DATA_AUTO_CHECK_EN = 0;
 #ifdef SEND_WITH_UDP
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 #else
@@ -163,14 +169,20 @@ u8 wifi_send_package()
 		TcpCount=0;
 		TcpStatus=-1;
 #endif
+		DATA_AUTO_CHECK_EN = 1;
+		
 		//延时保证两个udp发送正常
-		delay_us(100);
-		for(int n=0;n<20;n++){
-			receive_udp_package();
-			delay_us(100);
-		}
+//		delay_us(100);
+//		for(int n=0;n<20;n++){
+//			receive_udp_package();
+//			delay_us(100);
+//		}
+		delay_ms(5);
 		//发送到局域网
+		u8 temp = DATA_AUTO_CHECK_EN;
+		DATA_AUTO_CHECK_EN = 0;
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		DATA_AUTO_CHECK_EN = temp;
 	}
 	return 1;
 }
