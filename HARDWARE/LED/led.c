@@ -10,7 +10,7 @@ s8 channel[4];
 //EN2 PC10
 //EN3 PC11
 //EN4 PC12
-void LED_GPIO_Init(void)
+void GP_IO_Init(void)
 {    	 
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	// ±÷” πƒ‹

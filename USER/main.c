@@ -3,7 +3,7 @@
 #include "delay.h"  
 #include "usart.h"   
 #include "led.h"
-#include "spi.h"
+#include "wificonf.h"
 #include "myiic.h"
 #include "queue.h"
 #include "can.h"
@@ -51,12 +51,10 @@ u8 can_send_package(void);
 void Initialization (void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	LED_GPIO_Init();
+	GP_IO_Init();
 	//uart_init(115200);		
 	delay_init(168); 
-	EXTI_Conf();//必须在wifi设置前
-	NVIC_Config();	//必须在wifi设置前
-	SPI_Conf();	
+	WIFI_SPI_Conf();	
 	WIFI_BOOT();
 	WIFI_Conf();
 	queue_init(&adc_queue);

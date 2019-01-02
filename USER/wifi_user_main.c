@@ -19,7 +19,7 @@
 /**
  * Include files
  */ 
- #include "SPI.h"
+ #include "wificonf.h"
  #include "userwifi.h"
  extern u8 DATA_AUTO_CHECK_EN;
 #include "rsi_global.h"

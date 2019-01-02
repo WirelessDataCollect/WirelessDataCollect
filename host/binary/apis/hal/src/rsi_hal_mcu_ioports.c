@@ -27,7 +27,7 @@
 #ifdef RSI_HAL
 #include "rsi_hal.h"
 #endif
-#include "SPI.h"
+#include "wificonf.h"
 
 /**
  * Global Variales
@@ -90,11 +90,11 @@ void rsi_module_power(uint8 tf)
 int16 rsi_module_power_cycle(void)
 {
 	/*Ó²¼þ¸´Î»*/
-	WIFI_RST_H;
+	WIFI_RST_H();
    delay_ms(50);
-	WIFI_RST_L;
+	WIFI_RST_L();
 	delay_ms(50);
-	WIFI_RST_H;
+	WIFI_RST_H();
    delay_ms(300); 
    return 0;
 }

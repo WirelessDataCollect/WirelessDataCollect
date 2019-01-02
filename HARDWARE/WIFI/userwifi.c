@@ -1,5 +1,5 @@
 #include "userwifi.h"
-#include  "spi.h"
+#include  "wificonf.h"
 #include "rsi_global.h"
 #include "led.h"
 #include "rsi_app.h"
