@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>STM32F405RGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.9.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.11.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x100000) IRAM(0x20000000,0x20000) IRAM2(0x10000000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -84,8 +84,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopA1X>0</nStopA1X>
-            <nStopA2X>0</nStopA2X>
           </AfterMake>
           <SelectedForBatchBuild>0</SelectedForBatchBuild>
           <SVCSIdString></SVCSIdString>
@@ -363,13 +361,11 @@
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
             <useXO>0</useXO>
-            <v6Lang>0</v6Lang>
-            <v6LangP>0</v6LangP>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\SPI;..\FWLIB\inc;..\HARDWARE\LCD;..\host\binary\apis\hal\include;..\host\binary\apis\intf\spi\include;..\host\binary\apis\wlan\core\include;..\host\binary\apis\wlan\ref_apps\include;..\HARDWARE\IIC;..\HARDWARE\CAN;..\HARDWARE\QUEUE;..\HARDWARE\TIMER;..\HARDWARE\WIFI</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\SPI;..\FWLIB\inc;..\HARDWARE\LCD;..\host\binary\apis\hal\include;..\host\binary\apis\intf\spi\include;..\host\binary\apis\wlan\core\include;..\host\binary\apis\wlan\ref_apps\include;..\HARDWARE\IIC;..\HARDWARE\CAN;..\HARDWARE\QUEUE;..\HARDWARE\TIMER;..\HARDWARE\WIFI;..\HARDWARE\ADC</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -438,11 +434,6 @@
               <FilePath>..\HARDWARE\LED\led.c</FilePath>
             </File>
             <File>
-              <FileName>spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\SPI\spi.c</FilePath>
-            </File>
-            <File>
               <FileName>myiic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\IIC\myiic.c</FilePath>
@@ -471,6 +462,16 @@
               <FileName>userwifi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\WIFI\userwifi.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\ADC\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>wificonf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\WIFI\wificonf.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -181,7 +181,7 @@ u8 wifi_send_package()
 //		}
 		delay_ms(5);
 		//∑¢ÀÕµΩæ÷”ÚÕ¯
-		u8 temp = DATA_AUTO_CHECK_EN;
+		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
