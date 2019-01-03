@@ -14,6 +14,14 @@
 #define LED2 PDout(2)	// LED2	
 #define LED2_OFF(x) LED2=x //是否关闭LED2
 
+//电源通断芯片shutdown端口定义（低电平有效）
+#define V5V_SHUTOWN_PORT GPIOC
+#define V5V_SHUTOWN_PIN GPIO_Pin_0
+#define V24V_SHUTOWN_PORT GPIOB
+#define V24V_SHUTOWN_PIN GPIO_Pin_14
+#define V5V_SHUTOWN(x) PCout(0)=~x //x=1：关闭电源；x=0，开启电源
+#define V24V_SHUTOWN(x) PBout(14)=~x //x=1：关闭电源；x=0，开启电源
+
 //模拟信号输入模式选择
 #define CH1_PORT GPIOA
 #define CH1_PIN GPIO_Pin_15
@@ -36,6 +44,8 @@
 #define DIG2_PIN GPIO_Pin_0
 #define DIGITAL_INPUT1 GPIO_ReadInputDataBit(DIG1_PORT,DIG1_PIN)
 #define DIGITAL_INPUT2 GPIO_ReadInputDataBit(DIG2_PORT,DIG2_PIN)
+
+
 
 
 void GP_IO_Init(void);//初始化	
