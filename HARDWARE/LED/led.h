@@ -4,7 +4,7 @@
 
 
 
-//LED端口定义
+//母版LED端口定义
 #define LED1_PORT GPIOB
 #define LED1_PIN GPIO_Pin_3
 #define LED2_PORT GPIOD
@@ -13,13 +13,22 @@
 #define LED1_OFF(x) LED1=x //是否关闭LED1
 #define LED2 PDout(2)	// LED2	
 #define LED2_OFF(x) LED2=x //是否关闭LED2
+//子板LED端口定义
+#define LED3_PORT GPIOC
+#define LED3_PIN GPIO_Pin_0
+#define LED4_PORT GPIOC
+#define LED4_PIN GPIO_Pin_1
+#define LED3 PCout(0)	// LED1
+#define LED3_OFF(x) LED3=x //是否关闭LED1
+#define LED4 PCout(1)	// LED2	
+#define LED4_OFF(x) LED4=x //是否关闭LED2
 
 //电源通断芯片shutdown端口定义（低电平有效）
 #define V5V_SHUTOWN_PORT GPIOC
-#define V5V_SHUTOWN_PIN GPIO_Pin_0
+#define V5V_SHUTOWN_PIN GPIO_Pin_13
 #define V24V_SHUTOWN_PORT GPIOB
 #define V24V_SHUTOWN_PIN GPIO_Pin_14
-#define V5V_SHUTOWN(x) PCout(0)=~x //x=1：关闭电源；x=0，开启电源
+#define V5V_SHUTOWN(x) PCout(13)=~x //x=1：关闭电源；x=0，开启电源
 #define V24V_SHUTOWN(x) PBout(14)=~x //x=1：关闭电源；x=0，开启电源
 
 //模拟信号输入模式选择

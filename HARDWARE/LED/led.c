@@ -42,7 +42,7 @@ void GP_IO_Init(void)
 	GPIO_Init(CH4_PORT, &GPIO_InitStructure);//初始化
 	//默认通道拉低
 	Channel1=0;Channel2=0;Channel3=0;Channel4=0;
-	//LED
+	//本版（母版）LED
 	GPIO_InitStructure.GPIO_Pin = LED1_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
@@ -52,6 +52,16 @@ void GP_IO_Init(void)
 	GPIO_InitStructure.GPIO_Pin = LED2_PIN;
 	GPIO_Init(LED2_PORT, &GPIO_InitStructure);//初始化
 	LED1_OFF(1);LED2_OFF(1);//关灯
+	//子板LED
+	GPIO_InitStructure.GPIO_Pin = LED3_PIN;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
+	GPIO_Init(LED3_PORT, &GPIO_InitStructure);//初始化
+	GPIO_InitStructure.GPIO_Pin = LED4_PIN;
+	GPIO_Init(LED4_PORT, &GPIO_InitStructure);//初始化
+	LED3_OFF(1);LED4_OFF(1);//关灯
 	//电源的通断，低电平有效(关电源)
 	GPIO_InitStructure.GPIO_Pin = V5V_SHUTOWN_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
