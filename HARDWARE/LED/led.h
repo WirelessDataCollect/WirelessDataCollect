@@ -37,13 +37,13 @@
 #define CH2_PORT GPIOC
 #define CH2_PIN GPIO_Pin_10
 #define CH3_PORT GPIOC
-#define CH3_PIN GPIO_Pin_11
+#define CH3_PIN GPIO_Pin_12
 #define CH4_PORT GPIOC
-#define CH4_PIN GPIO_Pin_12
+#define CH4_PIN GPIO_Pin_11
 #define Channel1 PAout(15)
 #define Channel2 PCout(10)
-#define Channel3 PCout(11)
-#define Channel4 PCout(12)
+#define Channel3 PCout(12)
+#define Channel4 PCout(11)
 
 
 //数字信号电平检测
