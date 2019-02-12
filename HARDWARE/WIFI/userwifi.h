@@ -23,6 +23,7 @@
 #define  GET_CAN_SEND_EN        0xa8
 #define  GET_REMOTE_IP_PORT     0xa9
 #define  PAGING     0xaa  //寻呼信号
+#define  GET_TEST_NAME     0xab  //获取测试名称
 
 extern u32 SYSTEMTIME;
 extern u32  YYMMDD;

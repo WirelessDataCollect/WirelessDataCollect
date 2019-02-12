@@ -61,3 +61,4 @@ u8 ADC_SPIx_ReadWriteByte(u8 TxData);
 u8 * ADC_Read(u16 NumByteToRead);
 
 #endif
+

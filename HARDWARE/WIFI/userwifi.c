@@ -19,6 +19,8 @@ u8 CAN_Send_EN = 0;
 //IIC
 Queue adc_queue;	 //adc接收缓存
 
+extern u8 test_name[MAX_TEST_NAME_LENGTH];//测试名称
+
 //wifi_main 
 u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
 //u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
@@ -259,6 +261,10 @@ u8 order_anay(u8 arr[])
 			break;
 		case PAGING://寻呼信号
 			break;
+		case GET_TEST_NAME://获取测试名称
+			memset(&test_name,0,MAX_TEST_NAME_LENGTH);//全部reset为0
+			memcpy(&test_name,&(arr[1]),MAX_TEST_NAME_LENGTH);
+			break;		
 		default:
 			return 0;
 	}

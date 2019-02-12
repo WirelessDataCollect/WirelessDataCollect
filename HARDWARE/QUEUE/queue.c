@@ -1,5 +1,8 @@
 #include "queue.h"
 #include <string.h>
+
+volatile u8 test_name[MAX_TEST_NAME_LENGTH] = "Default Name\0";
+
 void queue_init(volatile Queue * pQueue)
 {
     memset((void *)pQueue, 0, sizeof(Queue));
@@ -24,7 +27,7 @@ void queue_clear(volatile Queue * pQueue)
 }
 void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 wifi_client_id, u8 IO_input1, u8 IO_input2)
 {
-	pQueue->head = (pQueue->head-16 + QUEUE_SIZE)% QUEUE_SIZE;
+	pQueue->head = (pQueue->head-PACKAGE_HEAD_FRAME_LENGTH + QUEUE_SIZE)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
 	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
 	pQueue->arr[(pQueue->head+1)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>8);
 	pQueue->arr[(pQueue->head+2)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>16);
@@ -45,9 +48,24 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 wifi_client_id, 
 	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1;
 	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = IO_input2;
 	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//校验位
+	
+	queue_add_name(pQueue,test_name);//添加本次实验的名称，长度为MAX_TEST_NAME_LENGTH
 
 }
-
+/**
+* 函数作用：给某一个包添加本次实验的名称
+* 输入参数：pQueue：队列；testname：测试名称：长度为 MAX_TEST_NAME_LENGTH （bytes）
+* 备注：只能在本文件内使用
+*/
+static void queue_add_name(volatile Queue * pQueue, volatile u8 testname[MAX_TEST_NAME_LENGTH])
+{
+	for(int i = MAX_TEST_NAME_LENGTH;i>0;i--)
+	{
+		//从时间、IO等帧头后面开始加入测试名称
+		//如时间、IO的长度为16，则从第16个开始给队列赋值testname
+		pQueue->arr[(pQueue->head+PACKAGE_TIME_IO_LENGTH+i)% QUEUE_SIZE] = testname[i];
+	}
+}
 
 void queue_oversize(volatile Queue * pQueue,u32 length)
 {
