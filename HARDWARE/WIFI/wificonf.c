@@ -5,6 +5,7 @@
 //时钟配置
 
 
+
 void RCC_Config(void)
 {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);//使能时钟
@@ -119,4 +120,38 @@ void EXTI4_IRQHandler(void)
 	}
 }
 
-
+void InitWiFi(void){
+	WIFI_SPI_Conf();
+	u8 status;
+	status = WIFI_BOOT();
+	if(status!=0){//说明有问题
+		#if PRINT_UART_LOG
+		printf("WiFi Boot ERROR!");
+		#endif
+	}else if(status == 0){
+		#if PRINT_UART_LOG
+		printf("WiFi Boot Successfully!");
+		#endif	
+	}
+	status = WIFI_Conf();
+	if(status!=0){//说明有问题
+		#if PRINT_UART_LOG
+		printf("WiFi Config ERROR!");
+		#endif
+	}else if(status == 0){
+		#if PRINT_UART_LOG
+		printf("WiFi Config Successfully!");
+		#endif	
+	}
+	delay_ms(1000);
+	DATA_AUTO_CHECK_EN= 0;
+	#ifdef SEND_WITH_UDP
+		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
+	#else
+		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
+	//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+	#endif
+	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
+	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
+  DATA_AUTO_CHECK_EN= 1;
+}

@@ -213,18 +213,18 @@ uint8* rsi_fill_parameters(uint32 type, uint8 *buffer)
     case RSI_REQ_JOIN:
       {
         //! Join Parameters
-        rsi_uJoin *join = (rsi_uJoin *)buffer;            
+        rsi_uJoin *join = (rsi_uJoin *)buffer;  
 
         join->joinFrameSnd.securityType = RSI_SECURITY_MODE;
         join->joinFrameSnd.dataRate     = RSI_DATA_RATE;   //数据速率
         join->joinFrameSnd.powerLevel   = RSI_POWER_LEVEL;
         join->joinFrameSnd.join_feature_bitmap = RSI_JOIN_FEAT_BIT_MAP;
-        join->joinFrameSnd.ssid_len     = (sizeof(RSI_JOIN_SSID) - 1);  //要加入的ssid长度
+        join->joinFrameSnd.ssid_len     = strlen((c8 *)RSI_JOIN_SSID);  //要加入的ssid长度
         rsi_uint32_to_4bytes(join->joinFrameSnd.listen_interval, RSI_LISTEN_INTERVAL);
 
         if(SEND_PSK_IN_JOIN)
         {
-          strcpy((char *)join->joinFrameSnd.psk, RSI_PSK);//PSK共享密钥
+          strcpy((char *)join->joinFrameSnd.psk, (c8 *)RSI_PSK);//PSK共享密钥
         }
 #if RSI_CONCURRENT_MODE   //concurrent模式
         if(vap_id == 1)
@@ -235,10 +235,10 @@ uint8* rsi_fill_parameters(uint32 type, uint8 *buffer)
           join->joinFrameSnd.vap_id = vap_id;
         }
         else{
-          strcpy((char *)join->joinFrameSnd.ssid, RSI_JOIN_SSID);
+          strcpy((char *)join->joinFrameSnd.ssid, (c8*)RSI_JOIN_SSID);
         }
 #else
-        strcpy((char *)join->joinFrameSnd.ssid, RSI_JOIN_SSID);
+        strcpy((char *)join->joinFrameSnd.ssid, (c8*)RSI_JOIN_SSID);
 #endif
         rsi_ascii_mac_address_to_6bytes((uint8 *)join->joinFrameSnd.join_bssid, (int8 *)RSI_AP_BSSID);
       }
@@ -295,12 +295,12 @@ uint8* rsi_fill_parameters(uint32 type, uint8 *buffer)
         }
         else if(RSI_PSK_TYPE == RSI_GENERATE_PMK)
         {
-          strcpy((char *)psk_key->PskFrameSnd.psk_or_pmk, RSI_PSK);
-          strcpy((char *)psk_key->PskFrameSnd.ap_ssid, RSI_JOIN_SSID);
+          strcpy((char *)psk_key->PskFrameSnd.psk_or_pmk, (c8 *)RSI_PSK);
+          strcpy((char *)psk_key->PskFrameSnd.ap_ssid, (c8 *)RSI_JOIN_SSID);
         }
         else if(RSI_PSK_TYPE == RSI_PSK_FROM_HOST)
         {
-          strcpy((char *)psk_key->PskFrameSnd.psk_or_pmk, RSI_PSK);
+          strcpy((char *)psk_key->PskFrameSnd.psk_or_pmk, (c8 *)RSI_PSK);
         }
         else
         {
@@ -473,7 +473,7 @@ uint8* rsi_fill_parameters(uint32 type, uint8 *buffer)
         rsi_uint16_to_2bytes(p2p->configP2pFrameSnd.operChannel, P2P_OPER_CHANNEL);
         strcpy((char *)p2p->configP2pFrameSnd.deviceName, P2P_DEVICE_NAME);
         strcpy((char *)p2p->configP2pFrameSnd.ssidPostFix, POST_FIX_SSID);
-        strcpy((char *)p2p->configP2pFrameSnd.psk, RSI_PSK);
+        strcpy((char *)p2p->configP2pFrameSnd.psk, (c8 *)RSI_PSK);
 
       }
       break;
@@ -492,8 +492,8 @@ uint8* rsi_fill_parameters(uint32 type, uint8 *buffer)
         strcpy((char *)ap->ssid,RSI_CONCURRENT_AP_JOIN_SSID);		
         strcpy((char *)ap->psk,RSI_CONCURRENT_AP_PSK);		
 #else
-        strcpy((char *)ap->ssid,RSI_JOIN_SSID);
-        strcpy((char *)ap->psk,RSI_PSK);
+        strcpy((char *)ap->ssid,(c8 *)RSI_JOIN_SSID);
+        strcpy((char *)ap->psk,(c8 *)RSI_PSK);
 #endif
         ap->security_type = RSI_SECURITY_TYPE;
         ap->ap_keepalive_type = AP_KEEPALIVE_TYPE;

@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\SPI;..\FWLIB\inc;..\HARDWARE\LCD;..\host\binary\apis\hal\include;..\host\binary\apis\intf\spi\include;..\host\binary\apis\wlan\core\include;..\host\binary\apis\wlan\ref_apps\include;..\HARDWARE\IIC;..\HARDWARE\CAN;..\HARDWARE\QUEUE;..\HARDWARE\TIMER;..\HARDWARE\WIFI;..\HARDWARE\ADC</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\SPI;..\FWLIB\inc;..\HARDWARE\LCD;..\host\binary\apis\hal\include;..\host\binary\apis\intf\spi\include;..\host\binary\apis\wlan\core\include;..\host\binary\apis\wlan\ref_apps\include;..\HARDWARE\IIC;..\HARDWARE\CAN;..\HARDWARE\QUEUE;..\HARDWARE\TIMER;..\HARDWARE\WIFI;..\HARDWARE\ADC;..\HARDWARE\FLASH;..\TOOLS\CRC;..\TOOLS\TypeTrans</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -423,6 +423,11 @@
               <FileType>1</FileType>
               <FilePath>.\system_stm32f4xx.c</FilePath>
             </File>
+            <File>
+              <FileName>config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -472,6 +477,11 @@
               <FileName>wificonf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\WIFI\wificonf.c</FilePath>
+            </File>
+            <File>
+              <FileName>stmflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\FLASH\stmflash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -572,6 +582,11 @@
               <FileName>stm32f4xx_can.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FWLIB\src\stm32f4xx_can.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\src\stm32f4xx_flash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1177,6 +1192,21 @@
               <FileName>README.md</FileName>
               <FileType>5</FileType>
               <FilePath>..\REAMDE\README.md</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>TOOLS</GroupName>
+          <Files>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TOOLS\CRC\crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>typetrans.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TOOLS\TypeTrans\typetrans.c</FilePath>
             </File>
           </Files>
         </Group>

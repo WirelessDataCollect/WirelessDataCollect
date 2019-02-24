@@ -11,8 +11,12 @@
 #include "timer.h"
 #include "adc.h"
 
+#include "stmflash.h" 
+#include "config.h"
+
 #include "rsi_global.h"
 #include "rsi_app.h"
+#include "crc.h"
 
 /*
 优先级
@@ -53,11 +57,12 @@ void Initialization (void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	GP_IO_Init();
-	//uart_init(115200);		
+//	uart_init(115200);		
 	delay_init(168); 
-	WIFI_SPI_Conf();	
-	WIFI_BOOT();
-	WIFI_Conf();
+	printf("System Initing...!\r\n");
+//	loadParaAndCheck(catPara,FLASH_SAVE_ADDR_MAIN);//下载参数
+	InitWiFi();
+	
 	queue_init(&adc_queue);
 	delay_ms(1000);
 	ADC_CTRL_Conf();//ADC相关引脚初始化
@@ -65,6 +70,7 @@ void Initialization (void)
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	TIM3_Int_Init(999,83); //1000us
 	TIM4_Int_Init(4,83); //5us
+	printf("System Inited Successfully!\r\n");
 }
 
 u8 Status=1;
@@ -73,19 +79,12 @@ int main(void)
 {     
 
 	Initialization();//初始化系统
-	DATA_AUTO_CHECK_EN= 0;
-	#ifdef SEND_WITH_UDP
-		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
-	#else
-		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-	//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
-	#endif
-	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
-	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
-  DATA_AUTO_CHECK_EN= 1;
 	
 	while(1)
 	{
+
+//		dealCmdMsg(&CMD_RX_BUF);
+//		delay_ms(1000);delay_ms(1500);
 	//	receive_udp_package();
 		
 		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号

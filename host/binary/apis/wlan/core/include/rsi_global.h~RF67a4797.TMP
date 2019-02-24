@@ -191,17 +191,8 @@
 #define RSI_RXDATA_OFFSET_UDP_V4            14     //@ required Rx data offset value for UDP_V4, 14
 #define RSI_RXDATA_OFFSET_UDP_V6            34     //@ required Rx data offset value for UDP_V6, 34
 #define RSI_TXDATA_OFFSET_LUDP              16     //@ required Rx data offset value for LUDP, 26
-#ifdef RSI_JOIN_SSID_MAX_LENGTH
-    #define RSI_PSK_LEN                         RSI_JOIN_SSID_MAX_LENGTH     //@ maximum length of PSK    ，原来是64
-#else
-	#define RSI_PSK_LEN                         64     //@ maximum length of PSK    ，原来是64
-#endif
-#ifdef RSI_PSK_MAX_LENGTH
-	#define RSI_SSID_LEN                        RSI_PSK_MAX_LENGTH     //@ maximum length of SSID
-#else
-	#define RSI_SSID_LEN                        34     //@ maximum length of SSID
-#endif
-
+#define RSI_PSK_LEN                         64     //@ maximum length of PSK
+#define RSI_SSID_LEN                        34     //@ maximum length of SSID
 #define RSI_BSSID_LEN                       6      //@ BSSID length
 #define RSI_IP_ADD_LEN                      4 
 #define RSI_MAC_ADD_LEN                     6
@@ -475,6 +466,7 @@ typedef union {
     uint8    uJoinBuf[RSI_SSID_LEN + RSI_PSK_LEN + 8];            
     //@ byte format to send to the spi interface, 106 (0x6A) bytes
 } rsi_uJoin;
+
 /*===============================================*/
 /**
  * Stations Connected structure
@@ -495,7 +487,6 @@ typedef union {
   } PskFrameSnd;
   uint8 uPskBuf[1 + RSI_PSK_LEN + RSI_SSID_LEN];
 } rsi_uPsk;
-
 
 
 /*===============================================*/
@@ -1784,6 +1775,7 @@ typedef struct {
     uint8   ap_keepalive_period;
     uint8   max_sta_support[2]; // it can be configured from 1 to 4
 }rsi_apconfig;
+
 /*===================================================*/
 /**
  * HTTP Credentials command 

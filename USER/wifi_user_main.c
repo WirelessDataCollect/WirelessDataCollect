@@ -289,7 +289,7 @@ int16 rsi_per_cont_wave_mode(rsi_uPerMode *uPerModeFrame, int8 per_cw_mode_state
 
 int RspCode =0,retval,tmp=0;
 
-char WIFI_Conf(void)
+u8 WIFI_Conf(void)
 {
 
 	/*opermode配置指令 */					//this is command
@@ -319,6 +319,7 @@ char WIFI_Conf(void)
 //	);//打印mac地址
 
 	/*选择天线 和增益*/
+	//0：内部天线；1：外部天线
 	retval = rsi_select_antenna(0,8,8);                  //init
 	RspCode=Read_PKT();
 
@@ -420,7 +421,7 @@ RSI_WIFI_OPER_MODE 0
 }
 
 //#include <WyzBee_Ext.h>
-char WIFI_BOOT(void)
+u8 WIFI_BOOT(void)
 {
 	/*清除Buff数据*/
 	rsi_app_cb.pkt_pending=0;

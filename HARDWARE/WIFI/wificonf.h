@@ -48,15 +48,15 @@ u8 WIFI_SPIx_TxRx(u8 TxData);
 void WIFI_EXTI_Conf(void) ;
 void WIFI_SPI_Conf(void);
 void WIFI_NVIC_Config(void);
-char WIFI_Conf(void);
-char WIFI_BOOT(void);
+u8 WIFI_Conf(void);
+u8 WIFI_BOOT(void);
 
 
 //wifi_user_main.cµÄ·½·¨
 void OpenSocket(u8 *destIP,unsigned short destSocket,unsigned short moduleSocket,unsigned short polo );
 int Read_PKT(void);
 int Check_PKT(void);
-
+void InitWiFi(void);
 
 #endif
 

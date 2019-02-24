@@ -2,6 +2,9 @@
 #define __SYS_H	 
 #include "stm32f4xx.h" 
 
+//指针常量：指针地址不可改变，指针指向的数值可以改
+//restrict：必须通过该指针修改数值
+typedef const char c8; 
 
 //0,不支持ucos
 //1,支持ucos
