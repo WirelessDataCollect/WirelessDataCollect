@@ -126,21 +126,21 @@ void InitWiFi(void){
 	status = WIFI_BOOT();
 	if(status!=0){//说明有问题
 		#if PRINT_UART_LOG
-		printf("WiFi Boot ERROR!");
+		printf("WiFi Boot ERROR!\r\n");
 		#endif
 	}else if(status == 0){
 		#if PRINT_UART_LOG
-		printf("WiFi Boot Successfully!");
+		printf("WiFi Boot Successfully!\r\n");
 		#endif	
 	}
 	status = WIFI_Conf();
 	if(status!=0){//说明有问题
 		#if PRINT_UART_LOG
-		printf("WiFi Config ERROR!");
+		printf("WiFi Config ERROR!\r\n");
 		#endif
 	}else if(status == 0){
 		#if PRINT_UART_LOG
-		printf("WiFi Config Successfully!");
+		printf("WiFi Config Successfully!\r\n");
 		#endif	
 	}
 	delay_ms(1000);

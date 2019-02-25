@@ -436,11 +436,27 @@ static void SystemReset(void){
 	__DSB();                                                     /* Ensure completion of memory access */
 	while(1);  
 }
+
+//输出帮助文件
+void getHelp(void){
+#if PRINT_UART_LOG
+	printf("\r\n ============  Help Document  ============ \r\n\r\n");
+	//CMD + VAL
+	printf("- SET_RSI_JOIN_SSID    : Set RSI_JOIN_SSID\r\n  EG. SET_RSI_JOIN_SSID SORL_WIFI\r\n\r\n");
+	printf("- SET_RSI_PSK          : Set RSI_PSK\r\n  EG. SET_RSI_PSK 123456\r\n\r\n");
+	//CMD
+	printf("- HELP                 : Print Help Document\r\n  EG. HELP\r\n\r\n");
+	printf("- SAVE_ALL_PARA        : Save All Parameters in Flash\r\n  EG. SAVE_ALL_PARA\r\n\r\n");
+	printf("- RESET_SYSTEM         : Reboot MCU\r\n  EG. RESET_SYSTEM\r\n\r\n");
+#endif
+}
 void handleCmd(c8 * cmd){
 #if PRINT_UART_LOG
 	printf("Received CMD:\r\n  %s\r\n",cmd);
 #endif
-	if(strcmp(cmd,CMD_SAVE_ALL_PARA) == 0){//保存所有数据到flash
+	if(strcmp(cmd,CMD_HELP) == 0){//帮助文件
+		getHelp();
+	}else if(strcmp(cmd,CMD_SAVE_ALL_PARA) == 0){//保存所有数据到flash
 #if PRINT_UART_LOG
 		printf("Saving All Paras\r\n");
 #endif

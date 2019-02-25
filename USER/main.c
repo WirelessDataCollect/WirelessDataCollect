@@ -60,9 +60,8 @@ void Initialization (void)
 //	uart_init(115200);		
 	delay_init(168); 
 	printf("System Initing...!\r\n");
-//	loadParaAndCheck(catPara,FLASH_SAVE_ADDR_MAIN);//下载参数
-	InitWiFi();
-	
+	loadParaAndCheck(catPara,FLASH_SAVE_ADDR_MAIN);//下载参数
+	InitWiFi();//初始化wifi
 	queue_init(&adc_queue);
 	delay_ms(1000);
 	ADC_CTRL_Conf();//ADC相关引脚初始化
@@ -71,6 +70,7 @@ void Initialization (void)
 	TIM3_Int_Init(999,83); //1000us
 	TIM4_Int_Init(4,83); //5us
 	printf("System Inited Successfully!\r\n");
+	getHelp();
 }
 
 u8 Status=1;

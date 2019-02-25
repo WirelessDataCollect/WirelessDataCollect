@@ -44,12 +44,18 @@ flash内存储数据的各种符号，包括分割、结束
 
 //*************************
 //定义指令
+//
 //*************************
+//  !!!!! 注意：每次添加新的指令都要到getHelp函数中添加说明文档
+#define CMD_SET_JOIN_SSID      "SET_RSI_JOIN_SSID"  //设置SSID
+#define CMD_SET_PSK            "SET_RSI_PSK"  //设置PSK
 
-#define CMD_SET_JOIN_SSID      "SET_RSI_JOIN_SSID"
-#define CMD_SET_PSK            "SET_RSI_PSK"
-#define CMD_SAVE_ALL_PARA      "SAVE_ALL_PARA"
-#define CMD_RESET_SYSTEM        "RESET_SYSTEM"
+#define CMD_HELP               "HELP"//输出帮助
+#define CMD_SAVE_ALL_PARA      "SAVE_ALL_PARA"//保存所有参数
+#define CMD_RESET_SYSTEM       "RESET_SYSTEM"  //系统重启
+
+
+
 
 #define RSI_JOIN_SSID_MAX_LENGTH   64  //最长支持的wifi名称byte位数
 #define RSI_PSK_MAX_LENGTH         34  //最长支持的wifi名称byte位数
@@ -101,5 +107,6 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue);
 u8 dealCmdMsg(volatile CMD_QUEUE * pQueue);
 u8 loadParaAndCheck(u8 * catPara,u32 startAddr);//读取并校验数据
 u8 updateFrameParas(void);//更新数据帧内的参数
+void getHelp(void);
 #endif
 
