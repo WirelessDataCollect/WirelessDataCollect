@@ -9,8 +9,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-u8 RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "418_L";
-u8 RSI_PSK[RSI_PSK_MAX_LENGTH] = "518518518"; 
+u8 RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "418_Lab_5G";
+u8 RSI_PSK[RSI_PSK_MAX_LENGTH]             = "518518518"; 
+u8 nodeId                          = 1;//1,2,3,4，不要超过255
+u32 RSI_WIFI_OPER_MODE             = RSI_WIFI_CLIENT_MODE_VAL; //RSI_WIFI_CLIENT_MODE_VAL
 
 u8 catPara[PARA_CAT_CH_MAX_LENGTH]={0};//存储连接后的数据
 
@@ -54,6 +56,7 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 //	}
 	memset(catPara,0,PARA_CAT_CH_MAX_LENGTH);//全部赋值0
 	STMFLASH_ReadBytes(startAddr,catPara,catParaChLen);//读取main区中所有数据
+	//CRC校验
 	#if PRINT_UART_LOG
 	printf("Checking CRC...\r\n");
 	#endif
@@ -89,19 +92,26 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	u32 paraStartAddr =(u32) (catPara + FLASH_HEAD_LENGTH_BYTES);//数据存储开始的位置，在数组中的下标
 	/**SSID*/
 	u32 splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
-	memcpy((u8 *)RSI_JOIN_SSID,(u8 *)paraStartAddr,splitAddr - paraStartAddr);
+	memcpy((u8 *)RSI_JOIN_SSID,(u8 *)paraStartAddr,splitAddr - paraStartAddr);*(RSI_JOIN_SSID+splitAddr - paraStartAddr) = 0;//最后放一个0
 	paraStartAddr = splitAddr+1;//开始下一个数据
 	#if PRINT_UART_LOG
 	printf("RSI_JOIN_SSID : %s\r\n",RSI_JOIN_SSID);
 	#endif
 	/*PSK*/
 	splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
-	memcpy((u8 *)RSI_PSK,(u8 *)paraStartAddr,splitAddr - paraStartAddr);
+	memcpy((u8 *)RSI_PSK,(u8 *)paraStartAddr,splitAddr - paraStartAddr);*(RSI_PSK+splitAddr - paraStartAddr) = 0;//最后放一个0
 	paraStartAddr = splitAddr+1;//开始下一个数据
 	#if PRINT_UART_LOG
 	printf("RSI_PSK : %s\r\n",RSI_PSK);
 	#endif
-//	free(catPara);//释放
+	/*nodeId*/
+	splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
+	u8 strTemp[NODE_ID_2STR_MAX_LEN+1]={0};memcpy(&strTemp,(u8 *)paraStartAddr,splitAddr - paraStartAddr); //拷贝到strTemp空间
+	nodeId =(u8)atoi((c8 *)strTemp);
+	paraStartAddr = splitAddr+1;//开始下一个数据
+	#if PRINT_UART_LOG
+	printf("nodeId : %d\r\n",nodeId);
+	#endif
 	return LOAD_PARA_SUCCESS;
 }
 
@@ -212,6 +222,8 @@ u32 getParaLen(){
 	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
 	catChLen += strlen((c8*)RSI_PSK);
 	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	catChLen += strlen((c8 *)itoa(nodeId));  //NodeId转化为字符串后的长度，如23->"23"，则为长度2
+	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
 	catChLen += FLASH_CRC_BYTE_LENGTH;//加入一个CRC校验
 
 	catChLen += sizeof(FLASH_LABLE_TYPE); //结束符号占用1byte
@@ -237,13 +249,21 @@ u32 getCatPara(void){
 //		return 0;
 //	}	
 	u32 i=0;
-	for(;i<FLASH_HEAD_LENGTH_BYTES;i++){//存chLen
+	//存chLen
+	for(;i<FLASH_HEAD_LENGTH_BYTES;i++){
 		*(catPara+i) = (u8)(catParaLen>>(8*i));
 	}
-	memcpy(catPara+i,RSI_JOIN_SSID,strlen((c8*)RSI_JOIN_SSID));i += strlen((c8*)RSI_JOIN_SSID);//存ssid
+	//存ssid
+	memcpy(catPara+i,RSI_JOIN_SSID,strlen((c8*)RSI_JOIN_SSID));i += strlen((c8*)RSI_JOIN_SSID);
 	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
-	memcpy(catPara+i,RSI_PSK,strlen((c8*)RSI_PSK));i += strlen((c8*)RSI_PSK);//PSK
+	//存PSK
+	memcpy(catPara+i,RSI_PSK,strlen((c8*)RSI_PSK));i += strlen((c8*)RSI_PSK);
 	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
+	//存nodeId
+	u8 nodeIdStr[NODE_ID_2STR_MAX_LEN+1] = {0};strcpy((char *)nodeIdStr,(c8 *)itoa(nodeId));//转化为Str
+	memcpy((char *)(catPara+i),(c8 *)nodeIdStr,strlen((c8*)nodeIdStr));i += strlen((c8*)nodeIdStr);//拷贝
+	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
+	//存crc
 	CRC_TYPE crc = CalCrc(0, (c8 *)catPara,catParaLen- FLASH_CRC_BYTE_LENGTH - sizeof(FLASH_LABLE_TYPE),0x8005);//得到crc,把结束符号和crc位都去掉
 	#if PRINT_UART_LOG
 	printf("GET CRC VAL : %d\r\n",crc);
@@ -287,39 +307,39 @@ void writeSectorPara(void){
 	FLASH_Status status =FLASH_EraseSector(FLASH_SAVE_SECTOR_MAIN,VoltageRange_3);//擦除掉变量主存储区的所有数据
 	if(status != FLASH_COMPLETE){//未成功擦除数据，保存失败
 	#if PRINT_UART_LOG
-		printf("\r\nMain flash Erased Unsuccessfully!\r\n");
+		printf("Main flash Erased Unsuccessfully!\r\n");
 	#endif
 	}else{
 	#if PRINT_UART_LOG
-		printf("\r\nMain flash Erased Successfully!\r\n");
+		printf("Main flash Erased Successfully!\r\n");
 	#endif
 	}
 	if(writeFlashByte(catPara,FLASH_SAVE_ADDR_MAIN,catParaLen) == WRITE_PARA_FAILED){ //失败
 	#if PRINT_UART_LOG
-		printf("\r\nMain flash Writen Unsuccessfully!\r\n");
+		printf("Main flash Writen Unsuccessfully!\r\n");
 	#endif
 	}else{
 	#if PRINT_UART_LOG
-		printf("\r\nMain flash Writen Successfully!\r\n\r\n");
+		printf("Main flash Writen Successfully!\r\n\r\n");
 	#endif
 	}
 	status = FLASH_EraseSector(FLASH_SAVE_SECTOR_BACKUP,VoltageRange_3);//擦除掉变量主存储区的所有数据
 	if(status != FLASH_COMPLETE){//未成功擦除数据，保存失败
 	#if PRINT_UART_LOG
-		printf("\r\nBackup flash Erased Unsuccessfully!\r\n");
+		printf("Backup flash Erased Unsuccessfully!\r\n");
 	#endif
 	}else{
 	#if PRINT_UART_LOG
-		printf("\r\nBackup flash Erased Successfully!\r\n");
+		printf("Backup flash Erased Successfully!\r\n");
 	#endif
 	}
 	if(writeFlashByte(catPara,FLASH_SAVE_ADDR_BACKUP,catParaLen) == WRITE_PARA_FAILED){
 	#if PRINT_UART_LOG
-		printf("\r\nBackup flash Writen Unsuccessfully!\r\n");
+		printf("Backup flash Writen Unsuccessfully!\r\n");
 	#endif
 	}else{
 	#if PRINT_UART_LOG
-		printf("\r\nBackup flash Writen Successfully!\r\n");
+		printf("Backup flash Writen Successfully!\r\n");
 	#endif
 	}
 }
@@ -351,16 +371,28 @@ u8 getSplitCmdFunReturn(u8* pCmd,u8 * pValue){
 	}
 }
 
-
+/*************************************************
+//函数作用：专门为函数splitCmd的清理变量方法
+*************************************************/
+static void clearPara4SplitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue,u16 i_cmd,u16 i_val){
+		uart_queue_clear(pQueue);
+		putZero(pValue,i_val);
+		putZero(pCmd,i_cmd);	
+}
+//分割出cmd和value
 u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 {
 	u16 i_cmd=0,i_val=0;
 	u8 SplitFlag = CMD_VALUE_NOT_SPLIT_STA;
 	u8 uart_data;
-	u16 length = uart_queue_length(pQueue); //得到长度
+	u16 length = uart_queue_length(pQueue); //得到长度	
 	for(u16 forNum = 0;pQueue->CmdCompleteFlag==CMD_COMPLETED;)//一次cmd完成了
-	{
+	{		
 		if(forNum >= length){//超过了数据个数
+			clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
+			#if PRINT_UART_LOG
+				printf("CMD Has No \\r\\n!\r\n");
+			#endif			
 			return CMD_VALUE_SPLIT_ERROR;
 		}
 		uart_data = uart_queue_pop(pQueue);
@@ -372,14 +404,15 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 		}
 		else //不是分隔符
 		{
+			printf("%c",uart_data);
 			if(uart_data != '\r')
 			{
 				if(uart_data == '\n') //前面没有'\r'直接出现了\n
 				{
-					uart_queue_clear(pQueue);
-					putZero(pValue,i_val);
-					putZero(pCmd,i_cmd);
-					
+					clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
+					#if PRINT_UART_LOG
+						printf("CMD Has No \\r!\r\n");
+					#endif
 					return CMD_VALUE_SPLIT_ERROR;
 				}		
 				if(SplitFlag == CMD_VALUE_NOT_SPLIT_STA) //还没有到分隔符，也就是还在获取cmd
@@ -396,25 +429,21 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 			}
 			else if(uart_data == '\r' && uart_queue_pop(pQueue) == '\n')  //\r\n   结束符号
 			{
-				uart_queue_clear(pQueue);
-				putZero(pValue,i_val);
-				putZero(pCmd,i_cmd);
+				clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
 				return getSplitCmdFunReturn(pCmd,pValue);//正常停止时，需要判断是cmd还是cmd+val
 			}	
 			else if(uart_data == '\r' && uart_queue_pop(pQueue) != '\n') //出现了"\r" "非\n"的情况
 			{
-				uart_queue_clear(pQueue);
-				putZero(pValue,i_val);
-				putZero(pCmd,i_cmd);
+				clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
+				#if PRINT_UART_LOG
+					printf("CMD Has No \\n!\r\n");
+				#endif
 				return CMD_VALUE_SPLIT_ERROR;
 			}
 		}
 
 	}
-	
-	uart_queue_clear(pQueue);
-	putZero(pValue,i_val);
-	putZero(pCmd,i_cmd);
+	clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
 	return NONE_CMD_VALUE_MSG;
 	
 }
@@ -439,16 +468,17 @@ static void SystemReset(void){
 
 //输出帮助文件
 void getHelp(void){
-#if PRINT_UART_LOG
-	printf("\r\n ============  Help Document  ============ \r\n\r\n");
-	//CMD + VAL
-	printf("- SET_RSI_JOIN_SSID    : Set RSI_JOIN_SSID\r\n  EG. SET_RSI_JOIN_SSID SORL_WIFI\r\n\r\n");
-	printf("- SET_RSI_PSK          : Set RSI_PSK\r\n  EG. SET_RSI_PSK 123456\r\n\r\n");
-	//CMD
-	printf("- HELP                 : Print Help Document\r\n  EG. HELP\r\n\r\n");
-	printf("- SAVE_ALL_PARA        : Save All Parameters in Flash\r\n  EG. SAVE_ALL_PARA\r\n\r\n");
-	printf("- RESET_SYSTEM         : Reboot MCU\r\n  EG. RESET_SYSTEM\r\n\r\n");
-#endif
+	#if PRINT_UART_LOG
+		printf("\r\n ============  Help Document  ============ \r\n\r\n");
+		//CMD + VAL
+		printf("- SET_RSI_JOIN_SSID    : Set RSI_JOIN_SSID\r\n  E.G. SET_RSI_JOIN_SSID SORL_WIFI\r\n\r\n");
+		printf("- SET_RSI_PSK          : Set RSI_PSK\r\n  E.G. SET_RSI_PSK 123456\r\n\r\n");
+	    printf("- SET_NODE_ID          : Set Id of the Node\r\n  E.G. SET_NODE_ID 1\r\n\r\n");
+		//CMD
+		printf("- HELP                 : Print Help Document\r\n  E.G. HELP\r\n\r\n");
+		printf("- SAVE_ALL_PARA        : Save All Parameters in Flash\r\n  E.G. SAVE_ALL_PARA\r\n\r\n");
+		printf("- RESET_SYSTEM         : Reboot MCU\r\n  E.G. RESET_SYSTEM\r\n\r\n");
+	#endif
 }
 void handleCmd(c8 * cmd){
 #if PRINT_UART_LOG
@@ -494,15 +524,33 @@ void setStrVal(c8 * val,c8 * obj,c8 * objName){//设置string value
 #endif
 }
 
+//设置整数类型的数据
+//obj：对象
+//val：数值
+void setU8Val(u8 * val,u8 * obj,c8 * objName){//设置string value
+#if PRINT_UART_LOG	
+	printf("Setting %s...\r\n",objName);
+#endif
+	u8 valU8 = atoi((c8*)val);
+	memcpy((u8 *)obj,&valU8,sizeof(u8));
+#if PRINT_UART_LOG
+	printf("Now %s = %d\r\n",objName,*obj);
+	printf("Setted %s OK\r\n",objName);
+	printf("To Save Flash.Send \"%s\"\r\n",CMD_SAVE_ALL_PARA);	
+#endif
+}
+
 //总的cmd+Val命令处理
 void handleCmdVal(c8 * cmd,c8 * val){
 #if PRINT_UART_LOG
 	printf("RECEIVED\r\n  CMD : %s \r\n  VAL : %s\r\n",cmd,val);
 #endif
-	if(!strcmp(cmd,CMD_SET_JOIN_SSID)){
+	if(!strcmp(cmd,CMD_SET_JOIN_SSID)){  //设置ssid
 		setStrVal(val,(c8*)RSI_JOIN_SSID,RSI_JOIN_SSID_STRNAME);
-	}else if(!strcmp(cmd,CMD_SET_PSK)){
+	}else if(!strcmp(cmd,CMD_SET_PSK)){  //设置psk
 		setStrVal(val,(c8*)RSI_PSK,RSI_PSK_STRNAME);
+	}else if(!strcmp(cmd,CMD_SET_NODE_ID)){  //设置节点id
+		setU8Val((u8 *)val,&nodeId,NODE_ID_STRNAME);
 	}
 	
 
@@ -514,10 +562,11 @@ void handleCmdVal(c8 * cmd,c8 * val){
 //*************************
 u8 handleSplitError(){
 	//TODO
+	return 0;
 }
 
 
-u8 dealCmdMsg(volatile CMD_QUEUE * pQueue){
+void dealCmdMsg(volatile CMD_QUEUE * pQueue){
 	u8 cmd[USART_REC_CMD_LEN];
 	u8 val[USART_REC_VAL_LEN];
 	u8 SplitSta = splitCmd(&CMD_RX_BUF,cmd,val);
@@ -543,6 +592,16 @@ u8 dealCmdMsg(volatile CMD_QUEUE * pQueue){
 	}
 }
 
+
+//出厂设置，在flash中写入信息
+//放在delay_init后面
+void setFactory(void){
+	FLASH_Unlock();//解锁 
+	FLASH_DataCacheCmd(DISABLE);//FLASH擦除期间,必须禁止数据缓存	
+	writeSectorPara();	
+	FLASH_DataCacheCmd(ENABLE);	//FLASH擦除结束,开启数据缓存
+	FLASH_Lock();//上锁	
+}
 
 
 

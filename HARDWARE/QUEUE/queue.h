@@ -21,7 +21,7 @@ typedef struct{
 void queue_init(volatile Queue * pQueue);
 u8 queue_get(volatile Queue * pQueue);
 void queue_put(volatile Queue * pQueue, u8 ch);
-void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 wifi_client_id, u8 IO_input1, u8 IO_input2);
+void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2);
 void queue_oversize(volatile Queue * pQueue,u32 length);
 void queue_clear(volatile Queue * pQueue);
 int queue_empty(volatile Queue queue);

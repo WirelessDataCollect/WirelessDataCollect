@@ -2,6 +2,7 @@
 #include "rsi_global.h"
 #include "rsi_app.h"
 #include "userwifi.h"
+#include "typetrans.h"
 //时钟配置
 
 
@@ -114,11 +115,80 @@ void EXTI4_IRQHandler(void)
 {
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
-	if(DATA_AUTO_CHECK_EN)
+	if((DATA_AUTO_CHECK_EN)&&(RSI_REQ_CONNECTION_STATUS == RSI_WIFI_CLIENT_MODE_VAL))//处于Clien模式，而且要使能自动check
 	{
 		receive_udp_package();
 	}
 }
+
+//检查模组连接状态
+void checkModelSta(void){
+	u8 RspCode;u8 status;
+	/*STA模式才使用的指令.才有效*/	
+	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+		
+		rsi_query_conn_status();
+		RspCode=Read_PKT();
+		//如果没有连接，需要自行开启AP，作为AP用于 别人的连接
+		if(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.conStatusFrameRcv.state[0] == 0){//没有连接
+			#if PRINT_UART_LOG
+			printf("Module Connected Ap Unsuccessfully!\r\n");//0:未连接
+			#endif
+			
+			//reset模组
+			do{
+				#if PRINT_UART_LOG
+				printf("Soft Resetting Module ...\r\n");
+				#endif
+				rsi_module_soft_reset();
+				delay_ms(1500);
+//				#if PRINT_UART_LOG
+//				printf("Module Return %d\r\n",RspCode);
+//				#endif
+				RspCode = Read_PKT();
+			}while(RspCode != RSI_RSP_CONNECTION_STATUS);//这里是为什么，只能返回0x48
+			#if PRINT_UART_LOG
+			printf("Soft Reset Module Successfully!\r\n");
+			#endif
+			
+			
+			#if PRINT_UART_LOG
+			printf("Setting Module As Ap...\r\n");//0:未连接
+			#endif
+			//设置为AP模式
+			RSI_WIFI_OPER_MODE = RSI_WIFI_AP_MODE_VAL;
+			
+			WIFI_BOOT();
+			WIFI_Conf();
+			#if PRINT_UART_LOG
+			printf("Setted Module As Ap Successfully!\r\n");//0:未连接
+			#endif
+			
+		}else{ //如果已经连接AP
+			#if PRINT_UART_LOG
+			printf("Module Connected Ap Successfully!\r\n");//1:连接
+			#endif
+		
+			/*查询net参数 [成功链接之后]*/
+			RspCode=rsi_query_net_parms();         		//this is command
+			RspCode=Read_PKT();
+			if(RSI_RSP_NETWORK_PARAMS == RspCode){
+				u8 * ip = rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryNetParmsFrameRcv.ipaddr;
+				#if PRINT_UART_LOG
+				printf("Module Ip : %d:%d:%d:%d\r\n",ip[0],ip[1],ip[2],ip[3]);//0:未连接	
+				#endif
+			}
+			
+			/*查询RSSI [成功链接之后]*/
+			RspCode=rsi_query_rssi();          			//this is command
+			RspCode=Read_PKT();
+			#if PRINT_UART_LOG
+			printf("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
+			#endif
+		}
+	}
+}
+
 
 void InitWiFi(void){
 	WIFI_SPI_Conf();
@@ -126,7 +196,8 @@ void InitWiFi(void){
 	status = WIFI_BOOT();
 	if(status!=0){//说明有问题
 		#if PRINT_UART_LOG
-		printf("WiFi Boot ERROR!\r\n");
+		printf("WiFi Boot Unsuccessfully!\r\n");
+		return;//boot有问题，直接返回
 		#endif
 	}else if(status == 0){
 		#if PRINT_UART_LOG
@@ -136,22 +207,30 @@ void InitWiFi(void){
 	status = WIFI_Conf();
 	if(status!=0){//说明有问题
 		#if PRINT_UART_LOG
-		printf("WiFi Config ERROR!\r\n");
+		printf("WiFi Config Unsuccessfully!\r\n");
 		#endif
 	}else if(status == 0){
 		#if PRINT_UART_LOG
 		printf("WiFi Config Successfully!\r\n");
 		#endif	
 	}
-	delay_ms(1000);
+}
+
+void openAllSocket(void){
+	u8 status;
 	DATA_AUTO_CHECK_EN= 0;
 	#ifdef SEND_WITH_UDP
-		OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
+		status = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
+		if(status != 0){//有问题
+			printf("WiFi Data-UDP Connect Unsuccessfully!\r\n");
+		}else if(status == 0){
+			printf("WiFi Data-UDP Connect Successfully!\r\n");
+		}
 	#else
 		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-	//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+		//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
-	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
-	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket
-  DATA_AUTO_CHECK_EN= 1;
+		OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
+		OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket	
+	DATA_AUTO_CHECK_EN= 1;
 }

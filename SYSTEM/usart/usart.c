@@ -120,6 +120,12 @@ void uart_queue_put(volatile CMD_QUEUE * pQueue, u8 ch)
     pQueue->buff[pQueue->tail] = ch;
 	pQueue->tail = (pQueue->tail + 1) % USART_REC_LEN;
 }
+void uart_queue_put_many(volatile CMD_QUEUE * pQueue, u8 * ch,u16 len)
+{
+	for(u16 i=0;i<len;i++){;
+		 uart_queue_put(pQueue,*(ch+i));
+	}
+}
 //pop
 u8 uart_queue_pop(volatile CMD_QUEUE * pQueue)
 {

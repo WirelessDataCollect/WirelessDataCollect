@@ -184,8 +184,8 @@ uint8* rsi_fill_parameters(uint32 type, uint8 *buffer)
         //! Scan Parameters
         rsi_uScan *scan = (rsi_uScan *)buffer;
 
-        scan->scanFrameSnd.channel[0] = RSI_SCAN_CHANNEL;
-        strcpy((char *)scan->scanFrameSnd.ssid, RSI_SCAN_SSID);
+        scan->scanFrameSnd.channel[0] = RSI_SCAN_CHANNEL;//0所有
+        strcpy((char *)scan->scanFrameSnd.ssid, RSI_SCAN_SSID);//""所有
         if(RSI_BAND == RSI_DUAL_BAND)
         {
           rsi_uint16_to_2bytes(scan->scanFrameSnd.channel_bit_map_2_4, RSI_SCAN_CHANNEL_BIT_MAP_2_4);

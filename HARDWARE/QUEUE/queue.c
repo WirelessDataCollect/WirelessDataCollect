@@ -25,7 +25,7 @@ void queue_clear(volatile Queue * pQueue)
 	
 	pQueue->head = pQueue->tail;
 }
-void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 wifi_client_id, u8 IO_input1, u8 IO_input2)
+void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2)
 {
 	pQueue->head = (pQueue->head-PACKAGE_HEAD_FRAME_LENGTH + QUEUE_SIZE)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
 	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
@@ -44,7 +44,7 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 wifi_client_id, 
 	pQueue->arr[(pQueue->head+11)% QUEUE_SIZE] = (u8)(count>>24);
 	
 	
-	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = wifi_client_id;
+	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = nodeId;
 	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1;
 	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = IO_input2;
 	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//校验位

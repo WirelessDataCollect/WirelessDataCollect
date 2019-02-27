@@ -99,8 +99,8 @@
 #define RSI_AUTO_JOIN_KEY_TYPE     1
 #define RSI_AUTO_JOIN_KEY          "03cafbe7d1671947dc649af44d0219e6f7f62d4c26e5f6e0aa614e11b33ed24d"
 #endif
-#define RSI_ENABLE_UPGRADATION_FROM_HOST DISBLE
-#define RSI_BAND                   RSI_DUAL_BAND             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
+#define RSI_ENABLE_UPGRADATION_FROM_HOST 0//Disable
+#define RSI_BAND                   RSI_BAND_2P4GHZ             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
 #define RSI_CONFIGURE_ANTENNA      0                           //@ 0 for internal antenna 1 for external antenna
 #define RSI_ANTENNA_GAIN_2G        0                           //@ antenna gain for 2.4 GHz band
 #define RSI_ANTENNA_GAIN_5G        0                           //@ antenna gain for 5 GHz band
@@ -108,7 +108,8 @@
 #define RSI_POWER_LEVEL            RSI_POWER_LEVEL_HIGH        //@ RSI_POWER_LEVEL_LOW or RSI_POWER_LEVEL_MEDIUM or RSI_POWER_LEVEL_HIGH
 #define RSI_STORE_CONFIG          0// DISABLE                     //@ ENABLE or0// DISABLE store configuration
 
-#define RSI_WIFI_OPER_MODE             0                       //@ 0-For legacy client , 1-P2p mode , 2-Enterprise security mode, 6- AP mode, 8-per mode 
+
+//#define RSI_WIFI_OPER_MODE             0                       //@ 0-For legacy client , 1-P2p mode , 2-Enterprise security mode, 6- AP mode, 8-per mode 
 #define RSI_COEX_MODE                  0                       //@ 0-wlan only, 3- wlan+zigbee coex 5- wlan+bt coex  13- wlan+btle coex
 #define RSI_OPERMODE               (RSI_WIFI_OPER_MODE | ( RSI_COEX_MODE << 16))            
 #define RSI_FEATURE_BIT_MAP        FEAT_SECURITY_OPEN          //@ To set wlan feature select bit map
@@ -214,15 +215,18 @@
 #define RSI_MULTICAST_MAC_CMD_TYPE     RSI_MULTICAST_MAC_SET_ALL //@ RSI_MULTICAST_MAC_ADD_BIT or RSI_MULTICAST_MAC_CLEAR_BIT or RSI_MULTICAST_MAC_CLEAR_ALL or RSI_MULTICAST_MAC_SET_ALL
 #define RSI_MULTICAST_MAC_ADDRESS      "01:00:5E:7F:FF:FA"       //@ MAC address used to calculate hash value for multicast filtering
 
-#define CLIENT_MODE                    (RSI_WIFI_OPER_MODE == 0)
-#define P2P_MODE                       (RSI_WIFI_OPER_MODE == 1)
-#define ENTERPRISE_MODE                (RSI_WIFI_OPER_MODE == 2)
-#define AP_MODE                        (RSI_WIFI_OPER_MODE == 6)
-#define PER_MODE                       (RSI_WIFI_OPER_MODE == 8)
-#define RSI_CONCURRENT_MODE            (RSI_WIFI_OPER_MODE == 9)
+
+//本系统当前只支持客户端模式和AP模式
+#define CLIENT_MODE                    1//(RSI_WIFI_OPER_MODE == 0)
+#define P2P_MODE                       0//(RSI_WIFI_OPER_MODE == 1)
+#define ENTERPRISE_MODE                0//(RSI_WIFI_OPER_MODE == 2)
+#define AP_MODE                        1//(RSI_WIFI_OPER_MODE == 6)
+#define PER_MODE                       0//(RSI_WIFI_OPER_MODE == 8)
+#define RSI_CONCURRENT_MODE            0//(RSI_WIFI_OPER_MODE == 9)
 
 
-#if (RSI_WIFI_OPER_MODE == 0|| RSI_WIFI_OPER_MODE == 2)
+//#if (RSI_WIFI_OPER_MODE == 0|| RSI_WIFI_OPER_MODE == 2)
+#if 0 //不支持region
 //Set region parameters
 #define SET_REGION_SUPPORT            0// DISABLE                 //@ ENABLE or0// DISABLE set region
 #define SET_REGION_FROM_USER_OR_BEACON 1                       //@ IF 1:region configurations taken from user ;0:region configurations taken from beacon
@@ -230,7 +234,9 @@
 #define MODULE_TYPE                    1                       //@ Module type from host, 0- Without onboard antenna, 1- With onboard antenna
 #endif
 
-#if(RSI_WIFI_OPER_MODE == 6)
+//#if (RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL)
+#if 0 //不支持region
+//region:不用管理用户，DHCP或是限速、限流量能等功能都交由上级路由器负责
 #define SET_REGION_AP_SUPPORT         0// DISABLE                 //@ ENABLE or0// DISABLE set region AP
 #define SET_REGION_AP_FROM_USER       0// DISABLE                 //@ IF 1:region configurations taken from user ;0:region configurations taken from firmware
 #define RSI_COUNTRY_CODE               "US "                   //@ "US" or "EU" or "JP" or other region codes
@@ -293,9 +299,9 @@
 
 /* TCP/IP configurations */
 //@ Module IP Parameters
-#define RSI_IP_CFG_MODE                RSI_DHCP_IP_MODE        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
+#define RSI_IP_CFG_MODE                RSI_STATIC_IP_MODE        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
                                                                //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
-#define RSI_DHCP_HOST_NAME             "dhcp_lient"           //@ DHCP HOST NAME
+#define RSI_DHCP_HOST_NAME             "dhcp_client"           //@ DHCP HOST NAME
 
 #define RSI_IPV6_CFG_MODE              RSI_STATIC_IP_MODE      //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE.static or DHCPV6 mode for IPv6
 #define IPV6_SUPPORT                  0// DISABLE                 //@ ENABLE or0// DISABLE IPV6 support
@@ -558,7 +564,7 @@
 //! Tcp ip stack used
 #define  USER_CFG_TCP_STACK_USED             1                       //@ 1 - ipv4, 2 - ipv6, 3 - BOTH
 //! Join parameters
-#define  USER_CFG_JOIN_SSID                  "REDPINE_AP"                //@ SSid to join in station mode
+#define  USER_CFG_JOIN_SSID                  "SORL_NODE"                //@ SSid to join in station mode
 #define  USER_CFG_URATE                      RSI_DATA_RATE_AUTO      //@ join data rate
 #define  USER_CFG_UTX_POWER                  RSI_POWER_LEVEL_HIGH    //@ Join @power level
 #define  USER_CFG_CHANNEL_SECURITY_MODE      SECURITY_MODE_OPEN      //@ Type of security 
@@ -573,7 +579,7 @@
 #endif
 
 #if (USER_CFG_WLAN_OPERMODE == 0 ||USER_CFG_WLAN_OPERMODE == 2)
-#define  USER_CFG_SCAN_SSID                  "REDPINE_AP"                //@ Scan ssid
+#define  USER_CFG_SCAN_SSID                  "SORL_WNODE"                //@ Scan ssid
 #define  USER_CFG_SCAN_CHANN_NUM             1                       //@ Scan channel number
 #define  USER_CFG_SCAN_FEAT_BITMAP           0                         //@ scan_feature_bitmap ,valid only if specific channel and ssid are given
 #define  USER_CFG_SCAN_CHAN_BITMAP_STORED_2_4_GHZ      31        	 //@ Scan channel bitmap for 2.4ghz
@@ -609,7 +615,7 @@
 #if (USER_CFG_WLAN_OPERMODE == 6)
 //! AP configuration parameters
 #define  USER_CFG_APCONFIG_CHANNEL_NUM       1                       //@ AP configuration channel number
-#define  USER_CFG_APCONFIG_SSID              "REDPINE_AP"                //@ SSID of Access point
+#define  USER_CFG_APCONFIG_SSID              "SORL"                //@ SSID of Access point
 #define  USER_CFG_APCONFIG_SECURITY_TYPE     RSI_SECURITY_NONE       //@ Security mode of AP
 #define  USER_CFG_APCONFIG_ENCRYP_MODE       RSI_ENCRYPTION_NONE     //@ Encryption mode of AP
 #define  USER_CFG_APCONFIG_PSK               ""                      //@ PSK of AP

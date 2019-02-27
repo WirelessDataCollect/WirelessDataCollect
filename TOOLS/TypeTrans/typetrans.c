@@ -17,7 +17,7 @@ u8 *reverse(char *s)
         *p++ = *q;
         *q-- = temp;
     }
-    return s;
+    return (u8*)s;
 }
 //ÕûÊı×ª×Ö·û´®
 u8 *itoa(u32 n)

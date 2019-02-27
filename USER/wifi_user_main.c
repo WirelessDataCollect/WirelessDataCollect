@@ -21,6 +21,7 @@
  */ 
  #include "wificonf.h"
  #include "userwifi.h"
+ #include "typetrans.h"
  extern u8 DATA_AUTO_CHECK_EN;
 #include "rsi_global.h"
 #include "rsi_config.h"
@@ -285,13 +286,10 @@ void  rsi_receive_data_packet(uint8 *payloadPtr);
 int16 rsi_per_cont_wave_mode(rsi_uPerMode *uPerModeFrame, int8 per_cw_mode_state);
 
 
-
-
 int RspCode =0,retval,tmp=0;
 
 u8 WIFI_Conf(void)
 {
-
 	/*opermode配置指令 */					//this is command
 	retval = rsi_oper_mode((rsi_uOperMode *)rsi_fill_parameters(RSI_REQ_OPERMODE,&rsi_app_cb.send_buffer[0]));
 	RspCode=Read_PKT();
@@ -326,97 +324,122 @@ u8 WIFI_Conf(void)
 	/*查询固件版本*/
  	RspCode=rsi_query_fw_version();          //this is command
 	RspCode=Read_PKT();
-	//OLED_ShowStr(0,2,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion,2);	
-//	LOGS("FWversion:%s\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion);
+	#if PRINT_UART_LOG
+	printf("FWversion:%s\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryFwversionFrameRcv.fwversion);
+	#endif
+	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL)	{			
+	//STATION
+	/*WIFI模块为station 模式
+	RSI_WIFI_OPER_MODE 0
 
-#if 1										/**MDOE MDOE MDOE MDOE MDOE MDOE MDOEMDOE*///***********************	
-//STA 1
-/*WIFI模块为station 模式
-RSI_WIFI_OPER_MODE 0
+	#define RSI_TCP_IP_FEATURE_BIT_MAP (TCP_IP_FEAT_DHCPV4_CLIENT | TCP_IP_FEAT_DHCPV4_SERVER|TCP_IP_FEAT_HTTP_SERVER)
 
-#define RSI_TCP_IP_FEATURE_BIT_MAP (TCP_IP_FEAT_DHCPV4_CLIENT | TCP_IP_FEAT_DHCPV4_SERVER|TCP_IP_FEAT_HTTP_SERVER)
-
-*/ 	
-	/*scan扫描指令*/							//this is command
-	RspCode = rsi_scan((rsi_uScan *)rsi_fill_parameters(RSI_REQ_SCAN,&rsi_app_cb.send_buffer[0]));  //??
-	RspCode=Read_PKT();	                //Join  0x14 
-	if(RspCode!=RSI_REQ_SCAN||rsi_app_cb.error_code!=0)
-	{
-		return 1;
-	}else{
-		tmp=0;
-//		LOGS("scan num:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]);
-		while(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]--)
+	*/ 	
+		/*scan扫描指令*/							//this is command
+		RspCode = rsi_scan((rsi_uScan *)rsi_fill_parameters(RSI_REQ_SCAN,&rsi_app_cb.send_buffer[0]));  //??
+		RspCode=Read_PKT();	                //Join  0x14 
+		if(RspCode!=RSI_REQ_SCAN||rsi_app_cb.error_code!=0)
 		{
+			return 1;
+		}else{
+			tmp=0;
+			#if PRINT_UART_LOG
+			printf("scan num:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]);
+			#endif
+			while(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.scanCount[0]--)
+			{
+//				#if PRINT_UART_LOG
+//				LOGS("%d.SSID:%s",tmp,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].ssid);
+//				LOGS("  securityMode:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].securityMode);
+//				LOGS("  rfChannel:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rfChannel);
+//				LOGS("  rssiVal:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rssiVal);
+//				LOGS("  uNetworkType:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].uNetworkType);
+//				#endif
+				tmp++;
+			}
 			
-//			LOGS("%d.SSID:%s",tmp,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].ssid);
-//			LOGS("  securityMode:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].securityMode);
-//			LOGS("  rfChannel:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rfChannel);
-//			LOGS("  rssiVal:%d",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].rssiVal);
-//			LOGS("  uNetworkType:%d\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.scanResponse.strScanInfo[tmp].uNetworkType);
-			tmp++;
+		}
+		/*加入命令*/								//this is command
+		RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));      //??
+		RspCode=Read_PKT();	                //Join  0x14 
+
+		/*配置IP DHCP*/								//this is command			
+		RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
+		RspCode=Read_PKT();	
+	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
+	//AP	0//   AP   AP   AP   AP   AP   AP   AP   AP   AP   AP
+	/*WIFI模块AP热点,模式 注意下细节*/
+		/*配置AP IP必须静态*/						//this is command	
+		//这里面会把所有参数包括ssid都加入到数据包中
+		u8 * nodeIdStr = itoa(nodeId);//包括最后一个0
+		strcpy((char*)RSI_JOIN_SSID,NODE_AP_NAME_HEAD);strcpy((char*)(RSI_JOIN_SSID+strlen(NODE_AP_NAME_HEAD)),(c8*)nodeIdStr);//AP的名称，后面会有一个0，作为结束
+		RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
+		RspCode=Read_PKT();
+		if(RspCode!=RSI_REQ_IPPARAM_CONFIG||rsi_app_cb.error_code!=0)
+		{
+			while(1){//设置参数失败
+				#if PRINT_UART_LOG
+				printf("Module AP Paras Filled Unsuccessfully!\r\n");
+				#endif
+				dealCmdMsg(&CMD_RX_BUF);
+				delay_ms(1000);
+			};
+		}else{
+			#if PRINT_UART_LOG
+			printf("Module AP Para Filled Successfully!\r\n");
+			#endif		
+		}
+
+		/*配置AP参数*/								//this is command
+		RspCode = rsi_set_ap_config((rsi_apconfig *)rsi_fill_parameters(RSI_REQ_APCONFIG,&rsi_app_cb.send_buffer[0]));
+		RspCode=Read_PKT();
+
+		if(RspCode!=RSI_REQ_APCONFIG||rsi_app_cb.error_code!=0)
+		{
+			while(1){//设置参数失败
+				#if PRINT_UART_LOG
+				printf("Module AP Paras Config Unsuccessfully!\r\n");
+				#endif
+				dealCmdMsg(&CMD_RX_BUF);
+				delay_ms(1000);
+			};
+		}else{
+			#if PRINT_UART_LOG
+			printf("Module AP Para Config Successfully!\r\n");
+			#endif		
 		}
 		
+		/*加入AP 并启动*/							//this is command
+		RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));      //??
+		RspCode=Read_PKT();
+
+		#if PRINT_UART_LOG
+		printf("Module AP Created(Func:rsi_join) Successfully!\r\n");
+		#endif		
 	}
-	/*加入命令*/								//this is command
-	RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));      //??
-	RspCode=Read_PKT();	                //Join  0x14 
 
-	/*配置IP DHCP*/								//this is command			
-	RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
-	RspCode=Read_PKT();	
-	
-	
-	
-#else
-//AP	0//   AP   AP   AP   AP   AP   AP   AP   AP   AP   AP
-///*WIFI模块AP热点,模式 注意下细节*/
-//	/*配置AP IP必须静态*/						//this is command	
-//	RspCode = rsi_ip_param_set((rsi_uIpparam *)rsi_fill_parameters(RSI_REQ_IPPARAM_CONFIG,&rsi_app_cb.send_buffer[0]));         //DHCP or ??
-//	RspCode=Read_PKT();
-//	if(RspCode!=RSI_REQ_IPPARAM_CONFIG||rsi_app_cb.error_code!=0)
-//	{
-//	
-//		while(1);
-//	}else{
-//	
-//	}
+		
+	#if RSI_MULTICAST_SUPPORT //如果支持组播
+		rsi_multicast((rsi_uMulticast *)rsi_fill_parameters(RSI_REQ_MULTICAST,&rsi_app_cb.send_buffer[0]));
+		#if RSI_MULTICAST_FILTER_ENABLE//设置滤波
+			rsi_multicast_mac_filter(RSI_MULTICAST_MAC_CMD_TYPE,RSI_MULTICAST_MAC_ADDRESS);
+		#endif
 
-//	/*配置AP参数*/								//this is command
-//	RspCode = rsi_set_ap_config((rsi_apconfig *)rsi_fill_parameters(RSI_REQ_APCONFIG,&rsi_app_cb.send_buffer[0]));
-//	RspCode=Read_PKT();
-
-//	/*加入AP 并启动*/							//this is command
-//	RspCode = rsi_join((rsi_uJoin *)rsi_fill_parameters(RSI_REQ_JOIN,&rsi_app_cb.send_buffer[0]));      //??
-//	RspCode=Read_PKT();
-
-#endif	////end apapapapapapapapapapap	
-
-	
-#if RSI_MULTICAST_SUPPORT //如果支持组播
-	rsi_multicast((rsi_uMulticast *)rsi_fill_parameters(RSI_REQ_MULTICAST,&rsi_app_cb.send_buffer[0]));
-	#if RSI_MULTICAST_FILTER_ENABLE//设置滤波
-		rsi_multicast_mac_filter(RSI_MULTICAST_MAC_CMD_TYPE,RSI_MULTICAST_MAC_ADDRESS);
 	#endif
-
-#endif
-	
-	
-	
-/*STA模式才使用的指令.才有效*/	
-#if !RSI_WIFI_OPER_MODE
-	/*查询net参数 [成功链接之后]*/
- 	RspCode=rsi_query_net_parms();         		//this is command
-	RspCode=Read_PKT();
-	
-	/*查询RSSI [成功链接之后]*/
-	RspCode=rsi_query_rssi();          			//this is command
-	RspCode=Read_PKT();
-//	LOGS("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
-
-#endif	
+		
+	/*STA模式才使用的指令.才有效*/	
+	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+		/*查询net参数 [成功链接之后]*/
+		RspCode=rsi_query_net_parms();         		//this is command
+		RspCode=Read_PKT();
+		
+		/*查询RSSI [成功链接之后]*/
+		RspCode=rsi_query_rssi();          			//this is command
+		RspCode=Read_PKT();
+	//	LOGS("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
+	}
 	RspCode=RspCode+1;
-	
+		
 	return 0;
 }
 
@@ -431,6 +454,7 @@ u8 WIFI_BOOT(void)
 	RspCode = rsi_sys_init();
 	if(RspCode != 0)
 	{
+		printf("Module Sys Inited Unsuccessfully!\r\n");
 		return 1;
 	}
 	/*加载BOOT*/
@@ -441,8 +465,10 @@ u8 WIFI_BOOT(void)
 	}while(RspCode == -3);
 	/*选择固件*/
 	RspCode = rsi_select_option(RSI_HOST_BOOTUP_OPTION);
-	if(RspCode < 0)
+	if(RspCode < 0){
+		printf("Module Selected FW Unsuccessfully!\r\n");
 		return 1;
+	}
 	/*等待card read  Rsp=0x89*/
 	RspCode=Read_PKT();
 	if(RspCode!=0x89||rsi_app_cb.error_code!=0)

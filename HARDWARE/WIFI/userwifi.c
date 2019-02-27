@@ -21,6 +21,8 @@ Queue adc_queue;	 //adc接收缓存
 
 extern u8 test_name[MAX_TEST_NAME_LENGTH];//测试名称
 
+
+//客户端模式的一些参数
 //wifi_main 
 u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
 //u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
@@ -32,6 +34,7 @@ unsigned short destSocket_sync= 5003;//这里要一样
 unsigned short moduleSocket_sync=5003;
 unsigned short localDestSocket_txrx= 5004;//局域网的远程IP
 unsigned short localModuleSocket_txrx=5005;
+
 
 unsigned short socketDescriptor_txrx=0;
 unsigned short socketDescriptor_sync=1;
@@ -54,7 +57,7 @@ void receive_udp_package()
 	
 	switch (RspCode)
 	{
-		case 0x00:
+		case RSI_RSP_DATA_RECEIVE:  //接收到数据
 			data_recv = (rsi_recvFrameUdp *)&(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad);
 		    recvSocket = rsi_bytes2R_to_uint16(data_recv->recvSocket);
 		    if(recvSocket ==socketDescriptor_sync)//命令或者时钟同步信息
@@ -63,13 +66,13 @@ void receive_udp_package()
 				{
 					AnalRsp[0] = RETURN_INFO;//表示这是返回信息
 					AnalRsp[1] = data_recv->recvDataBuf[0];//返回传过来的命令
-					AnalRsp[2] = WIFI_CLIENT_ID;
+					AnalRsp[2] = nodeId;
 					rsi_send_ludp_data(socketDescriptor_sync,AnalRsp ,ANAL_RSP_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
 				}
 			}
 			
 			break;
-		case 0x59:
+		case RSI_FWUP_RSP://无线更新固件（RS9113的）
 			rsi_wireless_fwupgrade();
 			break;
 		default:
@@ -90,14 +93,18 @@ void wifi_send_package_test()
 	}
 
 	Length = queue_length(adc_queue);
-	queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);
+	queue_addtime_addIO(&adc_queue,Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2);
 	if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 	Head = adc_queue.head;
 	adc_queue.head = adc_queue.tail; 
 
 	DATA_AUTO_CHECK_EN = 0;
-	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+	//局域网
+	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16+32, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	receive_udp_package();
+	delay_ms(1000);
+	//远程服务器
+	rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16+32, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 	DATA_AUTO_CHECK_EN = temp;
 	
 }
@@ -116,7 +123,7 @@ u8 wifi_send_package()
 	{
 		Length = queue_length(adc_queue);
 		
-		queue_addtime_addIO(&adc_queue,Length, WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; //
+		queue_addtime_addIO(&adc_queue,Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; //
 		
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
@@ -155,7 +162,7 @@ u8 wifi_send_package()
 		
 		Length = queue_length(adc_queue);
 		
-		queue_addtime_addIO(&adc_queue,Length,WIFI_CLIENT_ID, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
+		queue_addtime_addIO(&adc_queue,Length,nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
 		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
@@ -223,7 +230,7 @@ u8 order_anay(u8 arr[])
 		case GET_WIFI_SEND_EN:
 			Wifi_Send_EN =1;  //wifi开始发送
 //			//如果启动了本设备
-//			if(arr[1]==WIFI_CLIENT_ID){
+//			if(arr[1]==nodeId){
 //				Wifi_Send_EN =1;  //wifi开始发送
 //			}
 //			else{
@@ -232,7 +239,7 @@ u8 order_anay(u8 arr[])
 			break;
 		case GET_WIFI_SEND_DISABLE:        
 			Wifi_Send_EN =0;//wifi停止发送			
-//			if(arr[1]==WIFI_CLIENT_ID){
+//			if(arr[1]==nodeId){
 //				Wifi_Send_EN =0;//wifi停止发送
 //			}
 //			else{
@@ -240,7 +247,7 @@ u8 order_anay(u8 arr[])
 //			}
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择
-			if(arr[1]==WIFI_CLIENT_ID)//如果命令指定了本ID
+			if(arr[1]==nodeId)//如果命令指定了本ID
 				Channel_model(&arr[2]);
 			else  //如果命令不是给本设备的，则返回0，表示不需要返回ack
 				return 0;

@@ -26,6 +26,7 @@ void uart_init(u32 bound);
 
 //uart队列处理
 void uart_queue_put(volatile CMD_QUEUE * pQueue, u8 ch);
+void uart_queue_put_many(volatile CMD_QUEUE * pQueue, u8 * ch,u16 len);//put多个
 u8 uart_queue_pop(volatile CMD_QUEUE * pQueue);
 u16 uart_queue_length(volatile CMD_QUEUE * pQueue);
 void uart_queue_clear(volatile CMD_QUEUE * pQueue);
