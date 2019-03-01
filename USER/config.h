@@ -121,5 +121,6 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr);//读取并校验数据
 u8 updateFrameParas(void);//更新数据帧内的参数
 void getHelp(void);
 void setFactory(void);
+void loadParafromMainOrBackupFlash(void);
 #endif
 

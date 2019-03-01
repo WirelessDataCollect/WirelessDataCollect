@@ -36,9 +36,6 @@ u32 getCatParaChLenInFlash(u32 startAddr){
 }
 //下载一个扇区的数据，包括校验
 u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
-	#if PRINT_UART_LOG
-	printf("Loading Paras...\r\n");
-	#endif
 	//先读出长度
 	u32 catParaChLen = getCatParaChLenInFlash(startAddr);
 	#if PRINT_UART_LOG
@@ -47,13 +44,6 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	if(catParaChLen>=PARA_CAT_CH_MAX_LENGTH){
 		return LOAD_PARA_TOO_LONG_ERROR;
 	}
-//	catPara = (u8 * )calloc(1,(catParaChLen+1)*sizeof(u8));  //多一位，该段空间全部为0
-//	catPara = (u8 * )malloc((catParaChLen+1)*sizeof(u8));  //多一位，该段空间全部为0
-//	if(catPara == NULL){//没有分配成功
-//		printf("Load Para Calloc Error!\r\n");
-//		free(catPara);//释放
-//		return LOAD_PARA_SPACE_ALLO_ERROR;
-//	}
 	memset(catPara,0,PARA_CAT_CH_MAX_LENGTH);//全部赋值0
 	STMFLASH_ReadBytes(startAddr,catPara,catParaChLen);//读取main区中所有数据
 	//CRC校验
@@ -80,11 +70,6 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 		printf("CRC Check Correct!\r\n");
 		#endif
 	}
-//	if(CalCrc(0, (c8 *)catPara,catParaChLen- sizeof(u8),0x8005)!=0){//得到尾部加入crc后的crc，如果正确一定等于0
-//		printf("CRC Check Error!\r\n");
-////		free(catPara);//释放
-//		return LOAD_PARA_CRC_ERROR;
-//	}
 	#if PRINT_UART_LOG
 	printf("Paras Unzipping...\r\n");
 	#endif
@@ -114,6 +99,44 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	#endif
 	return LOAD_PARA_SUCCESS;
 }
+
+//**************************************************/
+//函数作用：利用loadParaAndCheck得到主存储区或者备份存储区的数据
+//函数参数：无
+/**************************************************/
+/*=========================================================================*/
+/**
+ * @fn          void loadParafromMainOrBackupFlash(void)
+ * @brief       利用loadParaAndCheck得到主存储区或者备份存储区的数据
+ * @param[in]   none
+ * @return      none
+ * @section description 
+ * 利用loadParaAndCheck得到主存储区或者备份存储区的数据 
+ */
+void loadParafromMainOrBackupFlash(void){
+	#if PRINT_UART_LOG
+	printf("Load Paras Start ...\r\n");
+	printf("Loading Main Flash Paras...\r\n");
+	#endif
+	if(loadParaAndCheck(catPara,FLASH_SAVE_ADDR_MAIN) != LOAD_PARA_SUCCESS){//下载参数不成功
+		#if PRINT_UART_LOG
+		printf("Loading Main Flash Paras Unsuccessfully!\r\n");
+		printf("Loading Backup Flash Paras...\r\n");
+		#endif
+		if(loadParaAndCheck(catPara,FLASH_SAVE_ADDR_BACKUP) != LOAD_PARA_SUCCESS){
+			#if PRINT_UART_LOG
+			printf("Loading Backup Flash Paras Unsuccessfully!\r\n");
+			#endif			
+		}else{
+			#if PRINT_UART_LOG
+			printf("Loading Main Flash Paras Successfully!\r\n");
+			#endif				
+		}
+	}else{
+		printf("Loading Main Flash Paras Successfully!\r\n");
+	}
+}
+
 
 //**********************
 //函数作用：保存参数

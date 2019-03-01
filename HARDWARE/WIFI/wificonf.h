@@ -14,26 +14,26 @@
 #define WIFI_SPIx_AF GPIO_AF_SPI1
 //***中断***/
 //新版本
-//#define WIFI_INTR_PORT GPIOA
-//#define WIFI_INTR_PIN GPIO_Pin_4
-//旧版本
-#define WIFI_INTR_PORT GPIOC
+#define WIFI_INTR_PORT GPIOA
 #define WIFI_INTR_PIN GPIO_Pin_4
+////旧版本
+//#define WIFI_INTR_PORT GPIOC
+//#define WIFI_INTR_PIN GPIO_Pin_4
 //新版本
-//#define WIFI_INTR_EXTI_PORTSOURCE EXTI_PortSourceGPIOA
-//#define WIFI_INTR_EXTI_PINSOURCE GPIO_PinSource4
-//旧版本
-#define WIFI_INTR_EXTI_PORTSOURCE EXTI_PortSourceGPIOC
+#define WIFI_INTR_EXTI_PORTSOURCE EXTI_PortSourceGPIOA
 #define WIFI_INTR_EXTI_PINSOURCE GPIO_PinSource4
+////旧版本
+//#define WIFI_INTR_EXTI_PORTSOURCE EXTI_PortSourceGPIOC
+//#define WIFI_INTR_EXTI_PINSOURCE GPIO_PinSource4
 #define WIFI_INTR_EXTI_LINE EXTI_Line4//中断线
 #define WIFI_INTR_EXTI_CH EXTI4_IRQn//中断入口
 //时钟
 //新版本
-//#define WIFI_CLK_PORT GPIOA
-//#define WIFI_CLK_PIN GPIO_Pin_5
-//旧版本
 #define WIFI_CLK_PORT GPIOA
 #define WIFI_CLK_PIN GPIO_Pin_5
+////旧版本
+//#define WIFI_CLK_PORT GPIOA
+//#define WIFI_CLK_PIN GPIO_Pin_5
 
 #define WIFI_CLK_AF_PINSOURCE GPIO_PinSource5
 //MISO
@@ -49,19 +49,19 @@
 //CS
 #define WIFI_CS_PORT GPIOC
 //新版本
-//#define WIFI_CS_PIN GPIO_Pin_14
-//旧版本
-#define WIFI_CS_PIN GPIO_Pin_5
+#define WIFI_CS_PIN GPIO_Pin_4
+////旧版本
+//#define WIFI_CS_PIN GPIO_Pin_5
 
 #define WIFI_CS_H() GPIO_SetBits(WIFI_CS_PORT,WIFI_CS_PIN)
 #define WIFI_CS_L() GPIO_ResetBits(WIFI_CS_PORT,WIFI_CS_PIN)
 //RESET
 //新版本
-//#define WIFI_RST_PORT GPIOC
-//#define WIFI_RST_PIN GPIO_Pin_5
-//旧版本
-#define WIFI_RST_PORT GPIOB
-#define WIFI_RST_PIN GPIO_Pin_0
+#define WIFI_RST_PORT GPIOC
+#define WIFI_RST_PIN GPIO_Pin_5
+////旧版本
+//#define WIFI_RST_PORT GPIOB
+//#define WIFI_RST_PIN GPIO_Pin_0
 #define WIFI_RST_H()	GPIO_SetBits(WIFI_RST_PORT,WIFI_RST_PIN)
 #define WIFI_RST_L()	GPIO_ResetBits(WIFI_RST_PORT,WIFI_RST_PIN)
 

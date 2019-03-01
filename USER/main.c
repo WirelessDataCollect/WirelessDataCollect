@@ -56,7 +56,7 @@ u8 can_send_package(void);
 void Initialization (void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-//	GP_IO_Init();
+	GP_IO_Init();
 	uart_init(115200);		
 	delay_init(168); 
 //	//出厂设置，一般运行不需要。
@@ -64,7 +64,7 @@ void Initialization (void)
 	#if PRINT_UART_LOG
 	printf("System Initing...!\r\n");
 	#endif
-	loadParaAndCheck(catPara,FLASH_SAVE_ADDR_MAIN);//下载参数
+	loadParafromMainOrBackupFlash();
 	InitWiFi();//初始化wifi,默认client模式
 
 	checkModelSta();//如果没有连接AP，则自己的模式将变为AP模式
@@ -107,7 +107,8 @@ int main(void)
 //			}
 			wifi_send_package_test();
 			delay_ms(1000);
-
+			LED1_CONV();
+			LED2_CONV();
 			#if IAM_MASTER_CLOCK
 				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{
