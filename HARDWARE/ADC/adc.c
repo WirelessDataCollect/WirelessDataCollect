@@ -10,7 +10,7 @@ void ADC_RCC_Config(void)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能时钟
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//使能时钟
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);//使能时钟
-	RCC_APB2PeriphClockCmd(ADC_SPIx_PERIPH, ENABLE);
+	RCC_APB1PeriphClockCmd(ADC_SPIx_PERIPH, ENABLE);
 
 }
 
@@ -27,9 +27,11 @@ void ADC_CTRL_Conf(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(ADC_CS_PORT, &GPIO_InitStructure);
+	ADC_CS_L();
 	//CONV
 	GPIO_InitStructure.GPIO_Pin = ADC_CONV_PIN;
 	GPIO_Init(ADC_CONV_PORT, &GPIO_InitStructure);
+	ADC_CONV_H();
 	//RAGE:5V or 10V
 	GPIO_InitStructure.GPIO_Pin = ADC_RAGE_PIN;
 	GPIO_Init(ADC_RAGE_PORT, &GPIO_InitStructure);
@@ -37,7 +39,7 @@ void ADC_CTRL_Conf(void)
 	//RST
 	GPIO_InitStructure.GPIO_Pin = ADC_RST_PIN;
 	GPIO_Init(ADC_RST_PORT, &GPIO_InitStructure);
-	ADC_RST_L();delay_ms(1);ADC_RST_H();//复位
+	ADC_RST_L();delay_ms(1);ADC_RST_H();delay_ms(1);ADC_RST_L();//复位
 	//OS1/2/3
 	GPIO_InitStructure.GPIO_Pin = ADC_OS1_PIN;
 	GPIO_Init(ADC_OS1_PORT, &GPIO_InitStructure);
@@ -87,16 +89,15 @@ void ADC_CTRL_Conf(void)
 }
 //读取ADC数据，最多8个通道，16bytes数据
 //如果使用AD7606-4则只有4个通道，8bytes数据
-u8 AD7606_Data_Temp[16]={0,0};
+u8 AD7606_Data_Temp[ADC_MAX_BYTES]={0,0};
 u8 * ADC_Read(u16 NumByteToRead)
 {
  	u16 i;    												    
-	ADC_CS_L();   //片选    
+	ADC_CS_L();   //片选   
 	//4四个通道的数据全部保存
     for(i=0;i<NumByteToRead;i++)
 	{ 
 		AD7606_Data_Temp[i] = ADC_SPIx_ReadWriteByte(0XFF);//循环读数   
-			
     }
 	ADC_CS_H();                            //取消片选 
 	return AD7606_Data_Temp;

@@ -5,10 +5,10 @@
 #include "stm32f4xx.h"
 
 //====定义ADC相关的引脚
-#define ADC_MAX_BYTES 8//ADC一次最多读取的bytes数，2*通道数
-#define ADC_SPIx SPI2
-#define ADC_SPIx_AF GPIO_AF_SPI2
-#define ADC_SPIx_PERIPH RCC_APB1Periph_SPI2
+#define ADC_MAX_BYTES        8//ADC一次最多读取的bytes数，2*通道数
+#define ADC_SPIx             SPI2
+#define ADC_SPIx_AF          GPIO_AF_SPI2
+#define ADC_SPIx_PERIPH      RCC_APB1Periph_SPI2
 //BUSY
 #define ADC_BUSY_PORT GPIOA
 #define ADC_BUSY_PIN GPIO_Pin_2
@@ -16,8 +16,8 @@
 //CONV
 #define ADC_CONV_PORT GPIOC
 #define ADC_CONV_PIN GPIO_Pin_7
-#define ADC_CONV_H GPIO_SetBits(ADC_CONV_PORT,ADC_CONV_PIN)
-#define ADC_CONV_L GPIO_ResetBits(ADC_CONV_PORT,ADC_CONV_PIN)
+#define ADC_CONV_H() GPIO_SetBits(ADC_CONV_PORT,ADC_CONV_PIN)
+#define ADC_CONV_L() GPIO_ResetBits(ADC_CONV_PORT,ADC_CONV_PIN)
 //RAGE:10V or 5V
 #define ADC_RAGE_PORT GPIOC
 #define ADC_RAGE_PIN GPIO_Pin_6

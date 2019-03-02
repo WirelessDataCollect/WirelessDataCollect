@@ -64,9 +64,10 @@ void Initialization (void)
 	#if PRINT_UART_LOG
 	printf("System Initing...!\r\n");
 	#endif
+	/*下载参数*/
 	loadParafromMainOrBackupFlash();
+	/*设置wifi*/
 	setClientModePara();InitWiFi();//初始化wifi,默认client模式
-
 	checkModelSta();//如果没有连接AP，则自己的模式将变为AP模式
 	//客户端模式时，开启所有需要的UDP端口
 	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
@@ -76,12 +77,14 @@ void Initialization (void)
 		Read_PKT();
 		printf("Open TCP Socket!\r\n");
 	}
+	/*队列配置*/
 	queue_init(&adc_queue);
 	delay_ms(1000);
-//	ADC_CTRL_Conf();//ADC相关引脚初始化
+	
+	ADC_CTRL_Conf();//ADC相关引脚初始化
 //	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 //	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
-//	TIM3_Int_Init(999,83); //1000us
+	TIM3_Int_Init(999,83); //1000us
 	TIM4_Int_Init(999,83); //1000us
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
@@ -100,13 +103,21 @@ int main(void)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			
-//			wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+			wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 			
 //			if(SYSTEMTIME%1000 == 0){
 //				rsi_send_ludp_data(localSocketDescriptor_txrx, "GET IN",6, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 //			}
-			wifi_send_package_test();
-			delay_ms(1000);
+//			wifi_send_package_test();
+
+//			printf("%.4f ",((float)AdcTemp[0]*256+(float)AdcTemp[1])*5.0/32768.0);
+//			ch1Val = ((float)AdcTemp[0]*256+(float)AdcTemp[1])*5.0/32768.0;
+//			ch2Val = ((float)AdcTemp[2]*256+(float)AdcTemp[3])*5.0/32768.0;
+//			ch3Val = ((float)AdcTemp[4]*256+(float)AdcTemp[5])*5.0/32768.0;
+//			ch4Val = ((float)AdcTemp[6]*256+(float)AdcTemp[7])*5.0/32768.0;
+//			printf("Adc Val : %.4f   %.4f   %.4f   %.4f\r\n",ch1Val,ch2Val,ch3Val,ch4Val);
+//			delay_ms(5);
+//			LED1_CONV();
 			#if IAM_MASTER_CLOCK
 				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{
@@ -114,7 +125,7 @@ int main(void)
 					sync_interval_time = 0;
 					Send_Sync_Time();//时钟同步一下
 				}
-			#endif	
+			#endif
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
 			delay_ms(10);
 			RspCode =Check_PKT();
@@ -190,7 +201,18 @@ u8 can_send_package()
 	return 1;
 }
 
-
+//测试ADC
+void testAdc(void){
+	u8 * AdcTemp;float ch1Val,ch2Val,ch3Val,ch4Val;
+	ADC_CONV_H();
+	delay_us(50);
+	ADC_CONV_L();
+	delay_us(50);
+	ADC_CONV_H();
+	delay_us(200);
+	AdcTemp = ADC_Read(ADC_MAX_BYTES);
+	printf("%d ",AdcTemp[0]*256+AdcTemp[1]);	
+}
 
 
 

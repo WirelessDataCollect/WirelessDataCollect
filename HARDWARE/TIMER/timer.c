@@ -5,6 +5,7 @@
 #include "string.h"
 #include "userwifi.h"
 #include "config.h"
+#include "adc.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //定时器溢出时间计算方法:Tout=((arr+1)*(psc+1))/Ft us.
 //Ft=定时器工作频率,单位:Mhz  84M
@@ -100,6 +101,7 @@ volatile u16 sync_interval_time = 0;
 //volatile u32 AckFlag = 0;//用于测试是否出现没有接收到Ack的情况，次数
 void TIM3_IRQHandler(void)
 {
+	u8 * adcTamp;
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
 #if IAM_MASTER_CLOCK
@@ -112,8 +114,19 @@ void TIM3_IRQHandler(void)
 			}
 			if(Wifi_Send_EN)//开始发数据了再开始采集
 			{
-				ADS8266_read();
-
+				ADC_CONV_H();
+				delay_us(50);
+				ADC_CONV_L();
+				delay_us(50);
+				ADC_CONV_H();
+				delay_us(200);
+				adcTamp = ADC_Read(ADC_MAX_BYTES);
+				//读八个数据
+				for(int i=0;i<8;i++)
+				{
+					queue_put(&adc_queue, *(adcTamp+i));
+						
+				}
 			}
 #endif		
 	 }

@@ -63,7 +63,7 @@ static void queue_add_name(volatile Queue * pQueue, volatile u8 testname[MAX_TES
 	{
 		//从时间、IO等帧头后面开始加入测试名称
 		//如时间、IO的长度为16，则从第16个开始给队列赋值testname
-		pQueue->arr[(pQueue->head+PACKAGE_TIME_IO_LENGTH+i)% QUEUE_SIZE] = testname[i];
+		pQueue->arr[(pQueue->head+PACKAGE_TIME_IO_LENGTH+i-1)% QUEUE_SIZE] = testname[i-1];
 	}
 }
 
