@@ -65,7 +65,7 @@ void Initialization (void)
 	printf("System Initing...!\r\n");
 	#endif
 	loadParafromMainOrBackupFlash();
-	InitWiFi();//初始化wifi,默认client模式
+	setClientModePara();InitWiFi();//初始化wifi,默认client模式
 
 	checkModelSta();//如果没有连接AP，则自己的模式将变为AP模式
 	//客户端模式时，开启所有需要的UDP端口
@@ -82,7 +82,7 @@ void Initialization (void)
 //	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 //	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 //	TIM3_Int_Init(999,83); //1000us
-	TIM4_Int_Init(4,83); //5us
+	TIM4_Int_Init(999,83); //1000us
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
 	#endif
@@ -99,7 +99,7 @@ int main(void)
 	while(1)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-			DATA_AUTO_CHECK_EN= 1;
+			
 //			wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 			
 //			if(SYSTEMTIME%1000 == 0){
@@ -107,8 +107,6 @@ int main(void)
 //			}
 			wifi_send_package_test();
 			delay_ms(1000);
-			LED1_CONV();
-			LED2_CONV();
 			#if IAM_MASTER_CLOCK
 				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{

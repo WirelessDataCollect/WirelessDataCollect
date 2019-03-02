@@ -113,6 +113,8 @@ typedef enum
 
 extern u8 catPara[PARA_CAT_CH_MAX_LENGTH];
 extern u8 nodeId;
+extern u8 RSI_IP_CFG_MODE;
+extern u8 RSI_BAND;
 
 void writeSectorPara(void);//±£´æ²ÎÊý
 u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue);

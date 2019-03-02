@@ -100,7 +100,7 @@
 #define RSI_AUTO_JOIN_KEY          "03cafbe7d1671947dc649af44d0219e6f7f62d4c26e5f6e0aa614e11b33ed24d"
 #endif
 #define RSI_ENABLE_UPGRADATION_FROM_HOST 0//Disable
-//#define RSI_BAND                   RSI_BAND_5GHZ             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
+#define RSI_BAND                   RSI_BAND_2P4GHZ             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
 #define RSI_CONFIGURE_ANTENNA      0                           //@ 0 for internal antenna 1 for external antenna
 #define RSI_ANTENNA_GAIN_2G        0                           //@ antenna gain for 2.4 GHz band
 #define RSI_ANTENNA_GAIN_5G        0                           //@ antenna gain for 5 GHz band
@@ -299,8 +299,8 @@
 
 /* TCP/IP configurations */
 //@ Module IP Parameters
-//#define RSI_IP_CFG_MODE                RSI_DHCP_IP_MODE        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
-//                                                               //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
+#define RSI_IP_CFG_MODE                RSI_STATIC_IP_MODE        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
+                                                               //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
 #define RSI_DHCP_HOST_NAME             "dhcp_client"           //@ DHCP HOST NAME
 
 #define RSI_IPV6_CFG_MODE              RSI_STATIC_IP_MODE      //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE.static or DHCPV6 mode for IPv6

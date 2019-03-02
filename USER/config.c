@@ -6,6 +6,7 @@
 #include "typetrans.h"
 #include "userwifi.h"
 #include "core_cm4.h"
+#include "rsi_api.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -13,6 +14,10 @@ u8 RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "418_Lab_5G";
 u8 RSI_PSK[RSI_PSK_MAX_LENGTH]             = "518518518"; 
 u8 nodeId                          = 1;//1,2,3,4，不要超过255
 u32 RSI_WIFI_OPER_MODE             = RSI_WIFI_CLIENT_MODE_VAL; //RSI_WIFI_CLIENT_MODE_VAL
+u8 RSI_IP_CFG_MODE                 = RSI_DHCP_IP_MODE;        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
+                                                               //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
+u8 RSI_BAND                        = RSI_DUAL_BAND;             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
+
 
 u8 catPara[PARA_CAT_CH_MAX_LENGTH]={0};//存储连接后的数据
 
@@ -464,9 +469,7 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 				return CMD_VALUE_SPLIT_ERROR;
 			}
 		}
-
 	}
-	clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
 	return NONE_CMD_VALUE_MSG;
 	
 }

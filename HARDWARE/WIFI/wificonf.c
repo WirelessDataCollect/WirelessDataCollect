@@ -3,6 +3,7 @@
 #include "rsi_app.h"
 #include "userwifi.h"
 #include "typetrans.h"
+#include "config.h"
 //时钟配置
 
 
@@ -120,16 +121,79 @@ void EXTI4_IRQHandler(void)
 		receive_udp_package();
 	}
 }
+/**********************************
+//函数作用：设置为AP模式前需要设置参数
+//
+**********************************/
+void setApModePara(void){
+	RSI_IP_CFG_MODE    = RSI_STATIC_IP_MODE;//设置为静态地址
+	RSI_WIFI_OPER_MODE = RSI_WIFI_AP_MODE_VAL;//设置为AP模式
+	RSI_BAND           = RSI_BAND_2P4GHZ;//AP模式只支持2.4G
+}
+/**********************************
+//函数作用：设置为Client模式前需要设置参数
+//
+**********************************/
+void setClientModePara(void){
+	RSI_IP_CFG_MODE     = RSI_DHCP_IP_MODE;//设置为静态地址
+	RSI_WIFI_OPER_MODE  = RSI_WIFI_CLIENT_MODE_VAL;//设置为客户端模式
+	RSI_BAND            = RSI_DUAL_BAND ;//客户端模式支持双频
+}
 
-//检查模组连接状态
+//检查模组连接状态,如何没有成功连接多次，则设置为AP模式
 void checkModelSta(void){
 	u8 RspCode;u8 status;
+	u8 resetNum=6;//最多重启的次数
 	/*STA模式才使用的指令.才有效*/	
 	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-		
+		//获取当前的连接状态
 		rsi_query_conn_status();
-		RspCode=Read_PKT();
-		//如果没有连接，需要自行开启AP，作为AP用于 别人的连接
+		RspCode=Read_PKT();		
+		//如果没有连接则多次启动
+		while(resetNum-- > 0 ){
+			if(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.conStatusFrameRcv.state[0] != 0){//如果连接
+				#if PRINT_UART_LOG
+				printf("Module Connected Ap Successfully!\r\n");//1:连接
+				#endif
+			
+				/*查询net参数 [成功链接之后]*/
+				RspCode=rsi_query_net_parms();         		//this is command
+				RspCode=Read_PKT();
+				if(RSI_RSP_NETWORK_PARAMS == RspCode){
+					u8 * ip = rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryNetParmsFrameRcv.ipaddr;
+					#if PRINT_UART_LOG
+					printf("Module Ip : %d:%d:%d:%d\r\n",ip[0],ip[1],ip[2],ip[3]);//0:未连接	
+					#endif
+				}
+				
+				/*查询RSSI [成功链接之后]*/
+				RspCode=rsi_query_rssi();          			//this is command
+				RspCode=Read_PKT();
+				#if PRINT_UART_LOG
+				printf("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
+				#endif	
+				return;	//如果连接了则直接返回			
+			}else{//如果没有连接
+				#if PRINT_UART_LOG
+				printf("Module Connected Ap Unsuccessfully!\r\n");//1:连接
+				printf("Soft Resetting Module ...\r\n");//重启
+				#endif
+				rsi_module_soft_reset();//软件重启
+				delay_ms(1000);
+				#if PRINT_UART_LOG
+				printf("Soft Reset Module Successfully!\r\n");//重启
+				printf("\r\n");//设置为Client
+				#endif
+				setClientModePara();//设置为client模式参数
+				WIFI_BOOT();//boot
+				WIFI_Conf();//conf	
+				delay_ms(500);
+				rsi_query_conn_status();//查看当前的连接状态
+				RspCode=Read_PKT();					
+			}
+		
+		};
+		//说明重启多次失败了，设置为AP模式
 		if(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.conStatusFrameRcv.state[0] == 0){//没有连接
 			#if PRINT_UART_LOG
 			printf("Module Connected Ap Unsuccessfully!\r\n");//0:未连接
@@ -156,36 +220,15 @@ void checkModelSta(void){
 			printf("Setting Module As Ap...\r\n");//0:未连接
 			#endif
 			//设置为AP模式
-			RSI_WIFI_OPER_MODE = RSI_WIFI_AP_MODE_VAL;
+			setApModePara();
 			
 			WIFI_BOOT();
 			WIFI_Conf();
 			#if PRINT_UART_LOG
 			printf("Setted Module As Ap Successfully!\r\n");//0:未连接
 			#endif
-			
-		}else{ //如果已经连接AP
-			#if PRINT_UART_LOG
-			printf("Module Connected Ap Successfully!\r\n");//1:连接
-			#endif
-		
-			/*查询net参数 [成功链接之后]*/
-			RspCode=rsi_query_net_parms();         		//this is command
-			RspCode=Read_PKT();
-			if(RSI_RSP_NETWORK_PARAMS == RspCode){
-				u8 * ip = rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryNetParmsFrameRcv.ipaddr;
-				#if PRINT_UART_LOG
-				printf("Module Ip : %d:%d:%d:%d\r\n",ip[0],ip[1],ip[2],ip[3]);//0:未连接	
-				#endif
-			}
-			
-			/*查询RSSI [成功链接之后]*/
-			RspCode=rsi_query_rssi();          			//this is command
-			RspCode=Read_PKT();
-			#if PRINT_UART_LOG
-			printf("RSSI:0x%0.2X\r\n",rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.rssiFrameRcv.rssiVal[0]);	
-			#endif
 		}
+
 	}
 }
 
@@ -214,6 +257,7 @@ void InitWiFi(void){
 		printf("WiFi Config Successfully!\r\n");
 		#endif	
 	}
+	delay_ms(1000);
 }
 
 void openAllSocket(void){

@@ -25,8 +25,8 @@ extern u8 test_name[MAX_TEST_NAME_LENGTH];//测试名称
 //客户端模式的一些参数
 //wifi_main 
 u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
-u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
-//u8 destIp_txrx[4]={115,159,154,160};    //服务器远程数据收发
+//u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
+u8 destIp_txrx[4]={115,159,154,160};    //服务器远程数据收发
 u8 destIp_sync[4]={255,255,255,255};  //同步
 unsigned short destSocket_txrx= 5001;
 unsigned short moduleSocket_txrx=5002;
@@ -100,11 +100,11 @@ void wifi_send_package_test()
 
 	DATA_AUTO_CHECK_EN = 0;
 	//局域网
-	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16+32, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 	receive_udp_package();
 	delay_ms(1000);
 	//远程服务器
-	rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16+32, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+	rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 	DATA_AUTO_CHECK_EN = temp;
 	
 }
@@ -133,10 +133,10 @@ u8 wifi_send_package()
 		DATA_AUTO_CHECK_EN = 0;
 		//发送到远程服务器
 	#ifdef SEND_WITH_UDP
-			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 	    
 		#else
-			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
+			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+PACKAGE_HEAD_FRAME_LENGTH,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
 		DATA_AUTO_CHECK_EN = temp;
 		
@@ -152,7 +152,7 @@ u8 wifi_send_package()
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		//发送到局域网
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
@@ -170,12 +170,12 @@ u8 wifi_send_package()
 		u8 temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 #ifdef SEND_WITH_UDP
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 #else
 		while(TcpStatus!=0&&TcpCount <100)
 		{
 			TcpCount++;
-			TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + 16),RSI_PROTOCOL_TCP_V4,&bytes_sent);
+			TcpStatus = rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head],(uint32)(Length + PACKAGE_HEAD_FRAME_LENGTH),RSI_PROTOCOL_TCP_V4,&bytes_sent);
 		}
 		TcpCount=0;
 		TcpStatus=-1;
@@ -192,7 +192,7 @@ u8 wifi_send_package()
 		//发送到局域网
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+16, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
 	}
 	return 1;
@@ -339,8 +339,6 @@ void Send_Sync_Time(void)
 	//rsi_send_data(socketDescriptor_sync, time, SYNC_TIME_BYTES,RSI_PROTOCOL_UDP_V4,&bytes_sent);
 }
 #endif
-
-
 
 //void EXTI15_10_IRQHandler(void)
 //{

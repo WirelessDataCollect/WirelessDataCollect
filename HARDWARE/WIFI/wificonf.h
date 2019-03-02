@@ -82,6 +82,8 @@ int Check_PKT(void);
 void InitWiFi(void);
 void checkModelSta(void);
 void openAllSocket(void);
+void setClientModePara(void);
+void setApModePara(void);
 
 #endif
 

@@ -61,7 +61,7 @@ void GP_IO_Init(void)
 	GPIO_Init(LED3_PORT, &GPIO_InitStructure);//初始化
 	GPIO_InitStructure.GPIO_Pin = LED4_PIN;
 	GPIO_Init(LED4_PORT, &GPIO_InitStructure);//初始化
-	LED3_OFF(0);LED4_OFF(1);//关灯
+	LED3_OFF(1);LED4_OFF(1);//关灯
 	//电源的通断，低电平有效(关电源)
 	GPIO_InitStructure.GPIO_Pin = V5V_SHUTOWN_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
