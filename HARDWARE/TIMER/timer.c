@@ -51,10 +51,8 @@ void TIM4_IRQHandler(void)
 #if LED_SHINE_IN_TIMER	
 		if(SYSTEMTIME%500==0)
 		{
-			LED1_CONV();
-			LED2_CONV();//DS2·­×ª
+			LED1_CONV();//Ö÷¿Ø°åDS1
 			LED3_CONV();//DS3·­×ª
-			LED4_CONV();
 		}
 #endif
 		if(SYSTEMTIME%1000 == 0){

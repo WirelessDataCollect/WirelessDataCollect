@@ -107,7 +107,8 @@ int main(void)
 			#if IAM_MASTER_CLOCK
 				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{
-					LED2 = !LED2;//用来表示在更新时钟
+					LED2_CONV();//DS2翻转
+					LED4_CONV();
 					sync_interval_time = 0;
 					Send_Sync_Time();//时钟同步一下
 				}
@@ -147,10 +148,10 @@ int main(void)
 						#endif						
 					}
 					break;
-				case 0x59:
-					rsi_wireless_fwupgrade();
-					while(1);
-					break;
+//				case 0x59:
+//					rsi_wireless_fwupgrade();
+//					while(1);
+//					break;
 				default:
 					break;
 			}

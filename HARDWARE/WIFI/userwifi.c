@@ -221,7 +221,8 @@ u8 order_anay(u8 arr[])
 		 // GPIO_SetBits(GPIOA, GPIO_Pin_9);
 //		  PAout(9) = ~PAout(9);
 //		   PAout(10) = ~PAout(10);
-			LED2 = ~LED2;
+			LED2_CONV();
+			LED4_CONV();
 			return 0;				
 		case RETURN_INFO://返回了回复信号
 			return 0;//表示不需要返回信息
