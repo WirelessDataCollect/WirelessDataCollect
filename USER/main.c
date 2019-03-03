@@ -79,17 +79,16 @@ void Initialization (void)
 	}
 	/*队列配置*/
 	queue_init(&adc_queue);
-	delay_ms(1000);
-	
-	ADC_CTRL_Conf();//ADC相关引脚初始化
+	/*ADC相关引脚初始化*/
+	ADC_CTRL_Conf();
 //	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 //	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	TIM3_Int_Init(999,83); //1000us
 	TIM4_Int_Init(999,83); //1000us
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
-	#endif
 	getHelp();
+	#endif
 }
 
 u8 Status=1;
@@ -190,7 +189,7 @@ u8 can_send_package()
 
 //测试ADC
 void testAdc(void){
-	u8 * AdcTemp;float ch1Val,ch2Val,ch3Val,ch4Val;
+	u8 * AdcTemp;
 	ADC_CONV_H();
 	delay_us(50);
 	ADC_CONV_L();

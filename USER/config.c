@@ -502,8 +502,36 @@ void getHelp(void){
 	    printf("- SET_NODE_ID          : Set Id of the Node\r\n  E.G. SET_NODE_ID 1\r\n\r\n");
 		//CMD
 		printf("- HELP                 : Print Help Document\r\n  E.G. HELP\r\n\r\n");
+		printf("- GET_PARA         : Print Parameters List\r\n  E.G. GET_PARA\r\n\r\n");
 		printf("- SAVE_ALL_PARA        : Save All Parameters in Flash\r\n  E.G. SAVE_ALL_PARA\r\n\r\n");
 		printf("- RESET_SYSTEM         : Reboot MCU\r\n  E.G. RESET_SYSTEM\r\n\r\n");
+	#endif
+}
+
+//输出参数到串口
+void getPara(void){
+	#if PRINT_UART_LOG
+			printf("\r\n ============  Parameter List  ============ \r\n\r\n");
+			printf("RSI_JOIN_SSID     :      %s\r\n",RSI_JOIN_SSID);
+			printf("RSI_PSK           :      %s\r\n",RSI_PSK);
+			printf("nodeId            :      %d\r\n",nodeId);
+		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+			printf("Module Mode       :      CLIENT\r\n");
+		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
+			printf("Module Mode       :      AP\r\n");
+		}
+		if(RSI_IP_CFG_MODE == RSI_DHCP_IP_MODE){
+			printf("Module Ip Mode    :      DHCP\r\n");
+		}else if(RSI_IP_CFG_MODE == RSI_WIFI_AP_MODE_VAL){
+			printf("Module Ip Mode    :      STATIC\r\n");
+		}
+		if(RSI_BAND == RSI_DUAL_BAND){
+			printf("Frequency Band    :      DUAL BAND(2.4/5GHz)\r\n");
+		}else if(RSI_BAND == RSI_BAND_5GHZ){
+			printf("Frequency Band    :      5GHz\r\n");
+		}else if(RSI_BAND == RSI_BAND_2P4GHZ){
+			printf("Frequency Band    :      2.4GHz\r\n");
+		}			
 	#endif
 }
 void handleCmd(c8 * cmd){
@@ -512,6 +540,10 @@ void handleCmd(c8 * cmd){
 #endif
 	if(strcmp(cmd,CMD_HELP) == 0){//帮助文件
 		getHelp();
+	}else if(strcmp(cmd,CMD_GET_PARA) == 0){
+#if PRINT_UART_LOG
+		getPara();
+#endif		
 	}else if(strcmp(cmd,CMD_SAVE_ALL_PARA) == 0){//保存所有数据到flash
 #if PRINT_UART_LOG
 		printf("Saving All Paras\r\n");

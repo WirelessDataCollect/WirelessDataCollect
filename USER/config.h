@@ -52,6 +52,7 @@ flash内存储数据的各种符号，包括分割、结束
 #define CMD_SET_NODE_ID        "SET_NODE_ID"  //设置节点id
 
 #define CMD_HELP               "HELP"//输出帮助
+#define CMD_GET_PARA           "GET_PARA"//输出参数情况
 #define CMD_SAVE_ALL_PARA      "SAVE_ALL_PARA"//保存所有参数
 #define CMD_RESET_SYSTEM       "RESET_SYSTEM"  //系统重启
 

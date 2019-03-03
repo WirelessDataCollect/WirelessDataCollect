@@ -31,7 +31,7 @@ void ADC_CTRL_Conf(void)
 	//CONV
 	GPIO_InitStructure.GPIO_Pin = ADC_CONV_PIN;
 	GPIO_Init(ADC_CONV_PORT, &GPIO_InitStructure);
-	ADC_CONV_H();
+	ADC_CONV_H();//默认从拉高开始
 	//RAGE:5V or 10V
 	GPIO_InitStructure.GPIO_Pin = ADC_RAGE_PIN;
 	GPIO_Init(ADC_RAGE_PORT, &GPIO_InitStructure);
