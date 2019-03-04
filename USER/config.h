@@ -33,6 +33,18 @@ typedef enum
 	
 	WRITE_FRAME_SUCCESS
 }FRAME_Write_Status;
+
+/*
+板子运行的状态
+*/
+typedef enum
+{ 
+    BOARD_INITING = 0,
+	BOARD_INITED,
+	BOARD_RUNNING,  
+}BOARD_Status;
+
+
 /*
 flash内存储数据的各种符号，包括分割、结束
 */
@@ -116,6 +128,7 @@ extern u8 catPara[PARA_CAT_CH_MAX_LENGTH];
 extern u8 nodeId;
 extern u8 RSI_IP_CFG_MODE;
 extern u8 RSI_BAND;
+extern u8 BOARD_STA;
 
 void writeSectorPara(void);//保存参数
 u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue);
@@ -126,5 +139,6 @@ void getHelp(void);
 void getPara(void);
 void setFactory(void);
 void loadParafromMainOrBackupFlash(void);
+void setBoardSta(u8 sta);
 #endif
 

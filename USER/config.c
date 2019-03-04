@@ -18,9 +18,20 @@ u8 RSI_IP_CFG_MODE                 = RSI_DHCP_IP_MODE;        //@ RSI_DHCP_IP_MO
                                                                //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
 u8 RSI_BAND                        = RSI_DUAL_BAND;             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
 
+u8 BOARD_STA                       = BOARD_INITING;//板子的状态
+
 
 u8 catPara[PARA_CAT_CH_MAX_LENGTH]={0};//存储连接后的数据
 
+
+//设置board的状态
+/*
+    BOARD_INITING = 0,
+	BOARD_RUNNING,  
+*/
+void setBoardSta(u8 sta){
+	BOARD_STA  = sta;
+}
 
 //**********************
 //函数作用：下载系统运行所需的参数

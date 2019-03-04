@@ -97,14 +97,15 @@ extern u32 bytes_sent;
 void testAdc();
 int main(void)
 {     
-
-	Initialization();//初始化系统
+	setBoardSta(BOARD_INITING);Initialization();setBoardSta(BOARD_INITED);//初始化系统
+	setBoardSta(BOARD_RUNNING);//运行中
 	u8 RspCode;u16 tcpRecvBuffLen;u8 * pRecvData;
 	while(1)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 //			testAdc();
+//			receive_udp_package();
 			#if IAM_MASTER_CLOCK
 				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{

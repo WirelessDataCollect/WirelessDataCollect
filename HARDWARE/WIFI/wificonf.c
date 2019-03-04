@@ -116,10 +116,13 @@ void EXTI4_IRQHandler(void)
 {
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
-	if((DATA_AUTO_CHECK_EN)&&(RSI_REQ_CONNECTION_STATUS == RSI_WIFI_CLIENT_MODE_VAL))//处于Clien模式，而且要使能自动check
-	{
-		receive_udp_package();
+	if( BOARD_STA == BOARD_RUNNING){//运行中，初始化的时候不能进行这一步
+		if((DATA_AUTO_CHECK_EN)&&(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL))//处于Clien模式，而且要使能自动check
+		{
+			receive_udp_package();
+		}		
 	}
+
 }
 /**********************************
 //函数作用：设置为AP模式前需要设置参数
@@ -130,12 +133,14 @@ void setApModePara(void){
 	RSI_WIFI_OPER_MODE = RSI_WIFI_AP_MODE_VAL;//设置为AP模式
 	RSI_BAND           = RSI_BAND_2P4GHZ;//AP模式只支持2.4G
 }
+
+
 /**********************************
 //函数作用：设置为Client模式前需要设置参数
 //
 **********************************/
 void setClientModePara(void){
-	RSI_IP_CFG_MODE     = RSI_DHCP_IP_MODE;//设置为静态地址
+	RSI_IP_CFG_MODE     = RSI_DHCP_IP_MODE;//设置为DHCP地址
 	RSI_WIFI_OPER_MODE  = RSI_WIFI_CLIENT_MODE_VAL;//设置为客户端模式
 	RSI_BAND            = RSI_DUAL_BAND ;//客户端模式支持双频
 }
