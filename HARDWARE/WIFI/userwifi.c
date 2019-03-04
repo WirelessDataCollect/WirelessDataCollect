@@ -7,7 +7,7 @@
 extern rsi_app_cb_t rsi_app_cb;
 /* Gloab  data*/
 
-u8 DATA_AUTO_CHECK_EN = 0;	
+u8 DATA_AUTO_CHECK_EN = 1;	
 
 //timer 
 u32 SYSTEMTIME=0;

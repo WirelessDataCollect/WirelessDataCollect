@@ -318,7 +318,7 @@ u8 WIFI_Conf(void)
 
 	/*选择天线 和增益*/
 	//0：内部天线；1：外部天线
-	retval = rsi_select_antenna(0,8,8);                  //init
+	retval = rsi_select_antenna(1,8,8);                  //init
 	RspCode=Read_PKT();
 
 	/*查询固件版本*/

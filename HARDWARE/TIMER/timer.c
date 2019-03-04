@@ -49,13 +49,22 @@ void TIM4_IRQHandler(void)
 			}
 #endif
 #if LED_SHINE_IN_TIMER	
-		if(SYSTEMTIME%500==0)
-		{
-			LED1_CONV();//主控板DS1
-			LED3_CONV();//DS3翻转
+		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+			if(SYSTEMTIME%1000==0)
+			{
+				LED1_CONV();//主控板DS1
+				LED3_CONV();//DS3翻转
+			}			
+		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){//AP模式下快速闪烁
+			if(SYSTEMTIME%200==0)
+			{
+				LED1_CONV();//主控板DS1
+				LED3_CONV();//DS3翻转
+			}				
 		}
+
 #endif
-		if(SYSTEMTIME%1000 == 0){
+		if(SYSTEMTIME%500 == 0){
 			dealCmdMsg(&CMD_RX_BUF);
 		}
 	}

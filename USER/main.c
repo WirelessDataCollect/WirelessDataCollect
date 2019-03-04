@@ -88,11 +88,13 @@ void Initialization (void)
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
 	getHelp();
+	getPara();
 	#endif
 }
 
 u8 Status=1;
 extern u32 bytes_sent;
+void testAdc();
 int main(void)
 {     
 
@@ -101,9 +103,8 @@ int main(void)
 	while(1)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-			
 			wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
-		
+//			testAdc();
 			#if IAM_MASTER_CLOCK
 				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{
@@ -198,7 +199,13 @@ void testAdc(void){
 	ADC_CONV_H();
 	delay_us(200);
 	AdcTemp = ADC_Read(ADC_MAX_BYTES);
-	printf("%d ",AdcTemp[0]*256+AdcTemp[1]);	
+	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
+//	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
+//	printf("%.3f   ",(float)(AdcTemp[2]*256+AdcTemp[3])*5.0/32768.0);	
+//	printf("%.3f   ",(float)(AdcTemp[4]*256+AdcTemp[5])*5.0/32768.0);	
+//	printf("%.3f   ",(float)(AdcTemp[6]*256+AdcTemp[7])*5.0/32768.0);	
+//	printf("\r\n");
+//	delay_ms(1000);
 }
 
 

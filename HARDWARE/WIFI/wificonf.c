@@ -146,6 +146,7 @@ void checkModelSta(void){
 	u8 resetNum=6;//最多重启的次数
 	/*STA模式才使用的指令.才有效*/	
 	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+		delay_ms(1000);delay_ms(1000);//等待一段时间
 		//获取当前的连接状态
 		rsi_query_conn_status();
 		RspCode=Read_PKT();		

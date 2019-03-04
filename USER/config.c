@@ -495,14 +495,14 @@ static void SystemReset(void){
 //输出帮助文件
 void getHelp(void){
 	#if PRINT_UART_LOG
-		printf("\r\n ============  Help Document  ============ \r\n\r\n");
+		printf("\r\n============  Help Document  ============ \r\n\r\n");
 		//CMD + VAL
 		printf("- SET_RSI_JOIN_SSID    : Set RSI_JOIN_SSID\r\n  E.G. SET_RSI_JOIN_SSID SORL_WIFI\r\n\r\n");
 		printf("- SET_RSI_PSK          : Set RSI_PSK\r\n  E.G. SET_RSI_PSK 123456\r\n\r\n");
 	    printf("- SET_NODE_ID          : Set Id of the Node\r\n  E.G. SET_NODE_ID 1\r\n\r\n");
 		//CMD
 		printf("- HELP                 : Print Help Document\r\n  E.G. HELP\r\n\r\n");
-		printf("- GET_PARA         : Print Parameters List\r\n  E.G. GET_PARA\r\n\r\n");
+		printf("- GET_PARA             : Print Parameters List\r\n  E.G. GET_PARA\r\n\r\n");
 		printf("- SAVE_ALL_PARA        : Save All Parameters in Flash\r\n  E.G. SAVE_ALL_PARA\r\n\r\n");
 		printf("- RESET_SYSTEM         : Reboot MCU\r\n  E.G. RESET_SYSTEM\r\n\r\n");
 	#endif
@@ -511,7 +511,7 @@ void getHelp(void){
 //输出参数到串口
 void getPara(void){
 	#if PRINT_UART_LOG
-			printf("\r\n ============  Parameter List  ============ \r\n\r\n");
+			printf("\r\n============  Parameter List  ============ \r\n\r\n");
 			printf("RSI_JOIN_SSID     :      %s\r\n",RSI_JOIN_SSID);
 			printf("RSI_PSK           :      %s\r\n",RSI_PSK);
 			printf("nodeId            :      %d\r\n",nodeId);
