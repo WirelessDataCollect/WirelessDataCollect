@@ -20,7 +20,7 @@
 
 #define  GET_TIME_SYNC_PC          0xa1
 #define  RETURN_INFO			0xa2
-#define  GET_TEST         0xa3
+#define  GET_TEST_NAME         0xa3//获取测试名称
 #define  GET_TIME_SYNC_MAIN_CLOCK   0xa4  //来自主机的同步信号
 #define  GET_WIFI_SEND_EN       0xa5
 #define  GET_WIFI_SEND_DISABLE  0xa6
@@ -28,7 +28,6 @@
 #define  GET_CAN_SEND_EN        0xa8
 #define  GET_REMOTE_IP_PORT     0xa9
 #define  PAGING     0xaa  //寻呼信号
-#define  GET_TEST_NAME     0xab  //获取测试名称
 
 extern u32 SYSTEMTIME;
 extern u32  YYMMDD;

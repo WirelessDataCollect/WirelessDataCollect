@@ -226,26 +226,24 @@ u8 order_anay(u8 arr[])
 			return 0;				
 		case RETURN_INFO://返回了回复信号
 			return 0;//表示不需要返回信息
-		case GET_TEST:
-			break;
 		case GET_WIFI_SEND_EN:
-			Wifi_Send_EN =1;  //wifi开始发送
-//			//如果启动了本设备
-//			if(arr[1]==nodeId){
-//				Wifi_Send_EN =1;  //wifi开始发送
-//			}
-//			else{
-//				return 0;
-//			}
+//			Wifi_Send_EN =1;  //wifi开始发送
+			//如果启动了本设备
+			if(arr[1]==nodeId){
+				Wifi_Send_EN =1;  //wifi开始发送
+			}
+			else{
+				return 0;
+			}
 			break;
 		case GET_WIFI_SEND_DISABLE:        
-			Wifi_Send_EN =0;//wifi停止发送			
-//			if(arr[1]==nodeId){
-//				Wifi_Send_EN =0;//wifi停止发送
-//			}
-//			else{
-//				return 0;
-//			}
+//			Wifi_Send_EN =0;//wifi停止发送			
+			if(arr[1]==nodeId){
+				Wifi_Send_EN =0;//wifi停止发送
+			}
+			else{
+				return 0;
+			}
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择
 			if(arr[1]==nodeId)//如果命令指定了本ID
@@ -254,24 +252,29 @@ u8 order_anay(u8 arr[])
 				return 0;
 			break;
 		case GET_CAN_SEND_EN:
-			CAN_Send_EN = 1; // CAN转发数据，时间+2路IO+4路AD
+//			CAN_Send_EN = 1; // CAN转发数据，时间+2路IO+4路AD
+			if(arr[1]==nodeId){
+				CAN_Send_EN =1;//wifi停止发送
+			}
+			else{
+				return 0;
+			}
 			break;
 		case GET_REMOTE_IP_PORT:            //主机地址
 			memcpy(destIp_txrx,&arr[1],4);
-		  memcpy(&destSocket_txrx,&arr[5],2);
-		  
+			memcpy(&destSocket_txrx,&arr[5],2);
 			rsi_socket_close(socketDescriptor_txrx, moduleSocket_txrx);//关闭掉原来的远程服务器的socket
-#ifdef SEND_WITH_UDP
+			#ifdef SEND_WITH_UDP
 			OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);
-#else
+			#else
 			OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-#endif
+			#endif
 			break;
-		case PAGING://寻呼信号
-			break;
-		case GET_TEST_NAME://获取测试名称
+		case GET_TEST_NAME://获取测试名称	
 			memset(&test_name,0,MAX_TEST_NAME_LENGTH);//全部reset为0
 			memcpy(&test_name,&(arr[1]),MAX_TEST_NAME_LENGTH);
+			break;	
+		case PAGING://寻呼信号
 			break;		
 		default:
 			return 0;
