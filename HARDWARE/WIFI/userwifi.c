@@ -3,7 +3,7 @@
 #include "rsi_global.h"
 #include "led.h"
 #include "rsi_app.h"
-
+#include "config.h"
 extern rsi_app_cb_t rsi_app_cb;
 /* Gloab  data*/
 
