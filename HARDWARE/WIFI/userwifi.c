@@ -43,15 +43,14 @@ unsigned short localSocketDescriptor_txrx=2;
 u32 bytes_sent=0;
 
 
-
-
-
+ 
+#define ANAL_RSP_LENGTH 3
+u8 AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回wifi信息
 void receive_udp_package()
 {
 	rsi_recvFrameUdp *data_recv=NULL;
-	u8 ANAL_RSP_LENGTH = 3;
+
 	u8 RspCode;
-	u8 AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回wifi信息
 	unsigned short  recvSocket;
 	RspCode = Check_PKT();
 	
