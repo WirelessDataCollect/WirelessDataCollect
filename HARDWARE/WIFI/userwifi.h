@@ -37,9 +37,13 @@ extern u8 CAN_Send_EN;
 
 extern Queue adc_queue;	 //adc接收缓存
 
-extern u8 destIp_txrx[4];    //数据收发 IP
-extern u8 destIp_sync[4];  //同步    IP
-extern u8 localDestIp_txrx[4];    //数据收发 IP
+#define IPV4_LENGTH                 4  //IPV4的byte长度
+#define IPV4_STR_LENGTH            15  //IPV4的转化为字符串占用的byte个数，如192.169.0.1->"192.168.0.1"，占用11位,最多15位
+#define IPV4_1GROUP_STR_LENGTH      3  //IPV4的一个组的转化为字符串占用的byte个数，如192"192"，占用3位
+
+extern u8 destIp_txrx[IPV4_LENGTH];    //数据收发 IP
+extern u8 destIp_sync[IPV4_LENGTH];  //同步    IP
+extern u8 localDestIp_txrx[IPV4_LENGTH];    //数据收发 IP
 
 extern unsigned short destSocket_txrx;
 extern unsigned short moduleSocket_txrx;

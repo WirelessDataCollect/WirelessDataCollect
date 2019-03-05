@@ -48,10 +48,10 @@ typedef enum
 /*
 flash内存储数据的各种符号，包括分割、结束
 */
-#define FLASH_LABLE_TYPE      u8
-#define	FLASH_LABEL_END      ('\r')//结束标志
-#define	FLASH_LABEL_SPLIT    ('\n')//分割
-
+#define FLASH_LABLE_TYPE              u8
+#define	FLASH_LABEL_END               ('\r')//结束标志
+#define	FLASH_LABEL_SPLIT             ('\n')//分割两个数据、IP
+#define	IP_GROUP_SPLIT                ('.')//分割两个IP的小组192.168.0.1。在flash中仍然使用\n
 
 
 //*************************
@@ -62,6 +62,8 @@ flash内存储数据的各种符号，包括分割、结束
 #define CMD_SET_JOIN_SSID      "SET_RSI_JOIN_SSID"  //设置SSID
 #define CMD_SET_PSK            "SET_RSI_PSK"  //设置PSK
 #define CMD_SET_NODE_ID        "SET_NODE_ID"  //设置节点id
+#define CMD_SET_SERVER_IP       "SET_SERVER_IP"  //设置服务器IP
+
 
 #define CMD_HELP               "HELP"//输出帮助
 #define CMD_GET_PARA           "GET_PARA"//输出参数情况
@@ -82,6 +84,8 @@ extern u8 RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH];  //要加入的ssid
 extern u8 RSI_PSK[RSI_PSK_MAX_LENGTH];  //要加入的ssid的psk@ PSK.If we are using WPA2, this is the key, In open mode NULL
 #define NODE_ID_STRNAME       "nodeId"
 extern u8 nodeId;  //需要对应修改NODE_ID_2STR_MAX_LEN
+
+#define SERVER_IP_STRNAME       "destIp_txrx"
 
 #define FLASH_HEAD_LENGTH_BYTES        4   //flash头部存储的数据字节长          
 #define FLASH_SAVE_ADDR_MAIN           ADDR_FLASH_SECTOR_5  //数据保存的开始地址(主)128KB，给程序留了4*16KB+64KB（扇区0-4）

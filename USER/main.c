@@ -65,7 +65,7 @@ void Initialization (void)
 	printf("System Initing...!\r\n");
 	#endif
 	/*下载参数*/
-	loadParafromMainOrBackupFlash();
+	loadParafromMainOrBackupFlash();//getPara();
 	/*设置wifi*/
 	setClientModePara();InitWiFi();//初始化wifi,默认client模式
 	checkModelSta();//如果没有连接AP，则自己的模式将变为AP模式

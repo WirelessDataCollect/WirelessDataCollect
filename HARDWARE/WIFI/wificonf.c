@@ -269,7 +269,7 @@ void InitWiFi(void){
 void openAllSocket(void){
 	u8 status;
 	DATA_AUTO_CHECK_EN= 0;
-	#ifdef SEND_WITH_UDP
+	#if SEND_WITH_UDP
 		status = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
 		if(status != 0){//有问题
 			printf("WiFi Data-UDP Connect Unsuccessfully!\r\n");

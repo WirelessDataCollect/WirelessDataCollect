@@ -20,9 +20,9 @@ u8 RSI_BAND                        = RSI_DUAL_BAND;             //@ RSI_BAND_2P4
 
 u8 BOARD_STA                       = BOARD_INITING;//板子的状态
 
-
 u8 catPara[PARA_CAT_CH_MAX_LENGTH]={0};//存储连接后的数据
 
+extern u8 destIp_txrx[IPV4_LENGTH];//远程私有云服务器IP
 
 //设置board的状态
 /*
@@ -107,11 +107,23 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	#endif
 	/*nodeId*/
 	splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
-	u8 strTemp[NODE_ID_2STR_MAX_LEN+1]={0};memcpy(&strTemp,(u8 *)paraStartAddr,splitAddr - paraStartAddr); //拷贝到strTemp空间
-	nodeId =(u8)atoi((c8 *)strTemp);
+	u8 nodeIdStrTemp[NODE_ID_2STR_MAX_LEN+1]={0};memcpy(nodeIdStrTemp,(u8 *)paraStartAddr,splitAddr - paraStartAddr); //拷贝到strTemp空间
+	nodeId =(u8)atoi((c8 *)nodeIdStrTemp);
 	paraStartAddr = splitAddr+1;//开始下一个数据
 	#if PRINT_UART_LOG
 	printf("nodeId : %d\r\n",nodeId);
+	#endif	
+	/*Server Ip  （destIp_txrx）*/
+	u8 ipStrTemp[IPV4_1GROUP_STR_LENGTH+1]={0};
+	for(u8 i = 0;i<4;i++){
+		splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
+		memset(ipStrTemp,0,IPV4_1GROUP_STR_LENGTH+1);//清零
+		memcpy(ipStrTemp,(u8 *)paraStartAddr,splitAddr - paraStartAddr); //拷贝到strTemp空间
+		destIp_txrx[i] =(u8)atoi((c8 *)ipStrTemp);
+		paraStartAddr = splitAddr+1;//开始下一个
+	}
+	#if PRINT_UART_LOG
+	printf("destIp_txrx : %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
 	#endif
 	return LOAD_PARA_SUCCESS;
 }
@@ -263,6 +275,16 @@ u32 getParaLen(){
 	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
 	catChLen += strlen((c8 *)itoa(nodeId));  //NodeId转化为字符串后的长度，如23->"23"，则为长度2
 	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	//IP
+	catChLen += strlen((c8 *)itoa(destIp_txrx[0]));//IP第1位
+	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	catChLen += strlen((c8 *)itoa(destIp_txrx[1]));//IP第2位
+	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	catChLen += strlen((c8 *)itoa(destIp_txrx[2]));//IP第3位
+	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	catChLen += strlen((c8 *)itoa(destIp_txrx[3]));//IP第4位
+	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	//CRC校验
 	catChLen += FLASH_CRC_BYTE_LENGTH;//加入一个CRC校验
 
 	catChLen += sizeof(FLASH_LABLE_TYPE); //结束符号占用1byte
@@ -301,6 +323,21 @@ u32 getCatPara(void){
 	//存nodeId
 	u8 nodeIdStr[NODE_ID_2STR_MAX_LEN+1] = {0};strcpy((char *)nodeIdStr,(c8 *)itoa(nodeId));//转化为Str
 	memcpy((char *)(catPara+i),(c8 *)nodeIdStr,strlen((c8*)nodeIdStr));i += strlen((c8*)nodeIdStr);//拷贝
+	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
+	//存IP，包括四个byte"IP1\nIP2\nIP3\nIP4"，IPV4_STR_LENGTH = 15,包括中间的分割符
+	//1.创建,注：由于itoa指向一个地址，所以不能用4个指针同时指向，会造成指向最有一个ip组
+	u8 ip1[IPV4_1GROUP_STR_LENGTH+1]={0};strcpy((char *)ip1,(c8 *)itoa(destIp_txrx[0]));
+	u8 ip2[IPV4_1GROUP_STR_LENGTH+1]={0};strcpy((char *)ip2,(c8 *)itoa(destIp_txrx[1]));
+	u8 ip3[IPV4_1GROUP_STR_LENGTH+1]={0};strcpy((char *)ip3,(c8 *)itoa(destIp_txrx[2]));
+	u8 ip4[IPV4_1GROUP_STR_LENGTH+1]={0};strcpy((char *)ip4,(c8 *)itoa(destIp_txrx[3]));
+	//2.写入数组
+	memcpy((char *)(catPara+i),ip1,strlen((c8 *)ip1));i += strlen((c8 *)ip1);
+	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
+	memcpy((char *)(catPara+i),ip2,strlen((c8 *)ip2));i += strlen((c8 *)ip2);
+	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte	
+	memcpy((char *)(catPara+i),ip3,strlen((c8 *)ip3));i += strlen((c8 *)ip3);
+	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
+	memcpy((char *)(catPara+i),ip4,strlen((c8 *)ip4));i += strlen((c8 *)ip4);
 	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
 	//存crc
 	CRC_TYPE crc = CalCrc(0, (c8 *)catPara,catParaLen- FLASH_CRC_BYTE_LENGTH - sizeof(FLASH_LABLE_TYPE),0x8005);//得到crc,把结束符号和crc位都去掉
@@ -511,6 +548,7 @@ void getHelp(void){
 		printf("- SET_RSI_JOIN_SSID    : Set RSI_JOIN_SSID\r\n  E.G. SET_RSI_JOIN_SSID SORL_WIFI\r\n\r\n");
 		printf("- SET_RSI_PSK          : Set RSI_PSK\r\n  E.G. SET_RSI_PSK 123456\r\n\r\n");
 	    printf("- SET_NODE_ID          : Set Id of the Node\r\n  E.G. SET_NODE_ID 1\r\n\r\n");
+		printf("- SET_SERVER_IP        : Set IP of the Server\r\n  E.G. SET_SERVER_IP 115.159.154.160\r\n\r\n");
 		//CMD
 		printf("- HELP                 : Print Help Document\r\n  E.G. HELP\r\n\r\n");
 		printf("- GET_PARA             : Print Parameters List\r\n  E.G. GET_PARA\r\n\r\n");
@@ -526,6 +564,8 @@ void getPara(void){
 			printf("RSI_JOIN_SSID     :      %s\r\n",RSI_JOIN_SSID);
 			printf("RSI_PSK           :      %s\r\n",RSI_PSK);
 			printf("nodeId            :      %d\r\n",nodeId);
+			printf("destIp_txrx       :      %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
+	
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			printf("Module Mode       :      CLIENT\r\n");
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
@@ -609,6 +649,31 @@ void setU8Val(u8 * val,u8 * obj,c8 * objName){//设置string value
 #endif
 }
 
+//设置整数类型的数据
+//obj：对象
+//val：数值
+void setIpVal(u8 * val,u8 * obj,c8 * objName){//设置string value
+#if PRINT_UART_LOG	
+	printf("Setting %s...\r\n",objName);
+#endif
+	u32 startAddr = (u32)(val);//起始地址
+	u32 splitAddr;//分割出来的分隔符地址
+	u8 ip_n[IPV4_1GROUP_STR_LENGTH+1] = {0};//存储IP内一个小组
+	for(u8 i = 0;i<3;i++){//前三个
+		splitAddr = (u32)strchr((c8 *)startAddr,IP_GROUP_SPLIT);//得到第一个分隔符地址
+		memcpy(ip_n,(u8 *)startAddr,splitAddr - startAddr);destIp_txrx[i] = (u8)atoi((c8 *)ip_n);
+		memset(ip_n,0,IPV4_1GROUP_STR_LENGTH+1);//清零	
+		startAddr = splitAddr+1;//开始下一个
+	}
+	//第四个
+	strcpy((char *)ip_n,(c8*)startAddr);destIp_txrx[3] = (u8)atoi((c8 *)ip_n);
+#if PRINT_UART_LOG
+	printf("Now %s = %d.%d.%d.%d\r\n",objName,destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
+	printf("Setted %s OK\r\n",objName);
+	printf("To Save Flash.Send \"%s\"\r\n",CMD_SAVE_ALL_PARA);	
+#endif
+}
+
 //总的cmd+Val命令处理
 void handleCmdVal(c8 * cmd,c8 * val){
 #if PRINT_UART_LOG
@@ -620,6 +685,8 @@ void handleCmdVal(c8 * cmd,c8 * val){
 		setStrVal(val,(c8*)RSI_PSK,RSI_PSK_STRNAME);
 	}else if(!strcmp(cmd,CMD_SET_NODE_ID)){  //设置节点id
 		setU8Val((u8 *)val,&nodeId,NODE_ID_STRNAME);
+	}else if(!strcmp(cmd,CMD_SET_SERVER_IP)){//设置服务器IP
+		setIpVal((u8 * )val,(u8 * )destIp_txrx,SERVER_IP_STRNAME);
 	}
 	
 
