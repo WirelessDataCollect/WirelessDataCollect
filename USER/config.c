@@ -218,51 +218,6 @@ u8 writeFlashByte(u8 * pBuff,u32 WriteAddr,u16 u8Len){
 	}
 	return WRITE_PARA_SUCCESS;
 }
-////********************
-////下面是保存数据的位置顺序
-////********************
-////0、保存数据个数的信息，单位是word（4bytes）
-//u8 saveParaByteLenIncAddr(u32 * LastWriteAddr){
-//	u32 WriteAddr = FLASH_SAVE_ADDR_MAIN;
-//	u32 ParaByteLen = *LastWriteAddr - FLASH_SAVE_ADDR_MAIN;
-//	return writeFlashWordsIncAddr(&ParaByteLen,& WriteAddr,1);
-//}
-
-////1、RSI_JOIN_SSID
-//u8 saveJoinSSID(u32 * WriteAddr){
-//	u16 len = strlen(RSI_JOIN_SSID);
-//	return writeFlashByteIncAddr((u8 *)RSI_JOIN_SSID,WriteAddr,len);
-//}
-////2、RSI_PSK
-//u8 savePSK(u32 * WriteAddr){
-//	u16 len = strlen(RSI_PSK);
-//	return writeFlashByteIncAddr((u8 *)RSI_PSK,WriteAddr,len);
-//}
-
-//u8 writePara(void){
-//	u32 WriteByte = FLASH_SAVE_ADDR_MAIN + FLASH_HEAD_LENGTH_BYTES;//从这里开始写数据
-//	FLASH_Unlock();//解锁 
-//	FLASH_DataCacheCmd(DISABLE);//FLASH擦除期间,必须禁止数据缓存
-//	FLASH_Status status = status=FLASH_EraseSector(FLASH_SAVE_SECTOR_BACKUP,VoltageRange_3);//擦除掉变量主存储区的所有数据
-//	if(status != FLASH_COMPLETE){//未成功擦除数据，保存失败
-//		return WRITE_PARA_FAILED;
-//	}else{//擦除成功
-//		//存储JoinSSID，把所有所有数据的长度位数先空出来		
-//		if(saveJoinSSID(&WriteByte) != FLASH_COMPLETE ){
-//			return WRITE_PARA_FAILED;
-//		}
-//		//存储PSK
-//		if(savePSK(&WriteByte) != FLASH_COMPLETE ){
-//			return WRITE_PARA_FAILED;
-//		}
-//		if(saveParaByteLenIncAddr(&WriteByte) != FLASH_COMPLETE){
-//			return WRITE_PARA_FAILED;
-//		}
-//	}
-//	FLASH_DataCacheCmd(ENABLE);	//FLASH擦除结束,开启数据缓存
-//	FLASH_Lock();//上锁	
-//	return 0;
-//}
 
 //获取保存所有数据所需的空间
 //包括数据长度、分隔符、数据、结束符
@@ -302,13 +257,7 @@ u32 getCatPara(void){
 	u32 catParaLen = getParaLen();
 	#if PRINT_UART_LOG
 	printf("catParaLen = %d\r\n",catParaLen);
-	#endif
-//	free(catPara);//每次都要释放掉以前的catCh内存
-//	catPara = (u8 *)calloc(1,(catParaLen+1)*sizeof(u8));//多了一位，用于最后放结束符号'\0'
-//	if(catPara == NULL){//没有分配成功
-//		free(catPara);
-//		return 0;
-//	}	
+	#endif	
 	u32 i=0;
 	//存chLen
 	for(;i<FLASH_HEAD_LENGTH_BYTES;i++){
@@ -480,7 +429,7 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 		}
 		else //不是分隔符
 		{
-			printf("%c",uart_data);
+//			printf("%c",uart_data);
 			if(uart_data != '\r')
 			{
 				if(uart_data == '\n') //前面没有'\r'直接出现了\n

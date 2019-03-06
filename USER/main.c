@@ -194,11 +194,11 @@ u8 can_send_package()
 void testAdc(void){
 	u8 * AdcTemp;
 	ADC_CONV_H();
-	delay_us(50);
+	delay_us(5);
 	ADC_CONV_L();
-	delay_us(50);
+	delay_us(5);
 	ADC_CONV_H();
-	delay_us(200);
+	delay_us(100);
 	AdcTemp = ADC_Read(ADC_MAX_BYTES);
 	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
 //	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
