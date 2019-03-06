@@ -97,7 +97,7 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 }
 
 #if IAM_MASTER_CLOCK
-volatile u16 sync_interval_time = 0;
+volatile u32 sync_interval_time = 0;
 #endif
 //short int time_inter=0;
 //volatile u32 time1 = 0;
@@ -111,9 +111,9 @@ void TIM3_IRQHandler(void)
 	u8 * adcTamp;
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
-#if IAM_MASTER_CLOCK
+	#if IAM_MASTER_CLOCK
 			sync_interval_time++;
-#else
+	#else
 
 			if(queue_empty(adc_queue)) //如果队列空了
 			{
