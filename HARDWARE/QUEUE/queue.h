@@ -11,6 +11,8 @@
 #define PACKAGE_TIME_IO_LENGTH 16
 #define PACKAGE_HEAD_FRAME_LENGTH (MAX_TEST_NAME_LENGTH+PACKAGE_TIME_IO_LENGTH)
 
+extern volatile u8 test_name[MAX_TEST_NAME_LENGTH];
+
 typedef struct{
     u8 arr[ARR_SIZE];
 	u32 YYYY_MM_DD;

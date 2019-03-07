@@ -19,8 +19,6 @@ u8 CAN_Send_EN = 0;
 //IIC
 Queue adc_queue;	 //adc接收缓存
 
-extern u8 test_name[MAX_TEST_NAME_LENGTH];//测试名称
-
 
 //客户端模式的一些参数
 //wifi_main 
@@ -270,8 +268,11 @@ u8 order_anay(u8 arr[])
 			#endif
 			break;
 		case GET_TEST_NAME://获取测试名称	
-			memset(&test_name,0,MAX_TEST_NAME_LENGTH);//全部reset为0
-			memcpy(&test_name,&(arr[1]),MAX_TEST_NAME_LENGTH);
+			if(strlen((c8*)(arr+1)) < MAX_TEST_NAME_LENGTH){
+				memset((u8 *)test_name,0,MAX_TEST_NAME_LENGTH);//全部reset为0
+				strcpy((char *)test_name,(c8*)(arr+1));
+				printf("\r\nGet Test Name : \"%s\"(UTF-8)\r\n",(arr+1));//输出UTF-8中文
+			}
 			break;	
 		case PAGING://寻呼信号
 			break;		
