@@ -41,32 +41,7 @@ void TIM4_IRQHandler(void)
 	if(TIM_GetITStatus(TIM4,TIM_IT_Update)==SET) //溢出中断
 	{
 		SYSTEMTIME++;
-#if IO_SHINE_IN_TIMER
-			if(SYSTEMTIME%100==0)//50ms输出一个脉冲
-			{
-				PAout(9) = ~PAout(9);
-				PAout(10) = ~PAout(10);
-			}
-#endif
-#if LED_SHINE_IN_TIMER	
-		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-			if(SYSTEMTIME%1000==0)
-			{
-				LED1_CONV();//主控板DS1
-				LED3_CONV();//DS3翻转
-			}			
-		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){//AP模式下快速闪烁
-			if(SYSTEMTIME%200==0)
-			{
-				LED1_CONV();//主控板DS1
-				LED3_CONV();//DS3翻转
-			}				
-		}
 
-#endif
-		if(SYSTEMTIME%500 == 0){
-			dealCmdMsg(&CMD_RX_BUF);
-		}
 	}
 	TIM_ClearITPendingBit(TIM4,TIM_IT_Update);	//清除中断标志位
 }
@@ -99,6 +74,9 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 #if IAM_MASTER_CLOCK
 volatile u32 sync_interval_time = 0;
 #endif
+
+//ms时间
+u32 MS_TIME = 0;
 //short int time_inter=0;
 //volatile u32 time1 = 0;
 //volatile u32 time2 = 0;
@@ -109,34 +87,59 @@ volatile u32 sync_interval_time = 0;
 void TIM3_IRQHandler(void)
 {
 	u8 * adcTamp;
+	MS_TIME ++ ;
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //溢出中断
 	{
-	#if IAM_MASTER_CLOCK
+		#if IAM_MASTER_CLOCK
 			sync_interval_time++;
-	#else
-
-			if(queue_empty(adc_queue)) //如果队列空了
-			{
-				adc_queue.HeadTime = SYSTEMTIME;
+		#endif
+		
+		#if IO_SHINE_IN_TIMER
+			if(MS_TIME%20==0){//50ms输出一个脉冲
+				PAout(9) = ~PAout(9);
+				PAout(10) = ~PAout(10);
 			}
-			if(Wifi_Send_EN)//开始发数据了再开始采集
-			{
-				//  CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
-				ADC_CONV_L();//最短时间25ns
-				/**采集数据，顺便当做延时用*/
-				adcTamp = ADC_Read(ADC_MAX_BYTES);
-				//读八个数据
-				for(int i=0;i<8;i++)
-				{
-					queue_put(&adc_queue, *(adcTamp+i));
-						
+		#endif
+		#if LED_SHINE_IN_TIMER	
+			if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+				if(MS_TIME%1000==0){
+					LED1_CONV();//主控板DS1
+					LED3_CONV();//DS3翻转
 				}
-				//拉高开始下一次转换
-				ADC_CONV_H();//最短时间25ns
-				//转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
-				//AD7606-4,64 Sample ratio,T = 193
+			}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){//AP模式下快速闪烁
+				if(MS_TIME%200==0){
+					LED1_CONV();//主控板DS1
+					LED3_CONV();//DS3翻转
+				}				
 			}
-#endif		
+
+		#endif
+		//处理cmd命令
+		if(MS_TIME%500 == 0){
+			dealCmdMsg(&CMD_RX_BUF);
+		}
+		
+		if(queue_empty(adc_queue)) //如果队列空了
+		{
+			adc_queue.HeadTime = SYSTEMTIME;
+		}
+		if(Wifi_Send_EN)//开始发数据了再开始采集
+		{
+			//  CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
+			ADC_CONV_L();//最短时间25ns
+			/**采集数据，顺便当做延时用*/
+			adcTamp = ADC_Read(ADC_MAX_BYTES);
+			//读八个数据
+			for(int i=0;i<8;i++)
+			{
+				queue_put(&adc_queue, *(adcTamp+i));
+					
+			}
+			//拉高开始下一次转换
+			ADC_CONV_H();//最短时间25ns
+			//转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
+			//AD7606-4,64 Sample ratio,T = 193
+		}	
 	 }
 
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);	//清除中断标志位

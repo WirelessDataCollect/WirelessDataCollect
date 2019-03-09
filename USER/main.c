@@ -83,8 +83,10 @@ void Initialization (void)
 	ADC_CTRL_Conf();
 //	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 //	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
+	//ms时间
 	TIM3_Int_Init(999,83); //1000us
-	TIM4_Int_Init(999,83); //1000us
+	//系统时间
+	TIM4_Int_Init(99,83); //100us
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
 	getHelp();
@@ -107,7 +109,7 @@ int main(void)
 //			testAdc();
 //			receive_udp_package();
 			#if IAM_MASTER_CLOCK
-				if(sync_interval_time>=SYNC_INTERVAL_TIME&&Wifi_Send_EN)
+				if(sync_interval_time >= SYNC_INTERVAL_TIME&&Wifi_Send_EN)
 				{
 					LED2_CONV();//DS2翻转
 					LED4_CONV();

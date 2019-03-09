@@ -11,6 +11,7 @@ u8 DATA_AUTO_CHECK_EN = 1;
 
 //timer 
 u32 SYSTEMTIME=0;
+
 u32  YYMMDD =0;
 u8 Time_Sync_Flag = 0;//时钟同步信号
 u8 Wifi_Send_EN = 1;//发送数据的命令
