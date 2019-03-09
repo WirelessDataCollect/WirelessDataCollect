@@ -55,8 +55,8 @@
 #define DIG1_PIN       GPIO_Pin_1
 #define DIG2_PORT      GPIOA
 #define DIG2_PIN       GPIO_Pin_0
-#define DIGITAL_INPUT1 GPIO_ReadInputDataBit(DIG1_PORT,DIG1_PIN)
-#define DIGITAL_INPUT2 GPIO_ReadInputDataBit(DIG2_PORT,DIG2_PIN)
+#define DIGITAL_INPUT1 ((~GPIO_ReadInputDataBit(DIG1_PORT,DIG1_PIN)) & 0x01)//电路中会把高读取为0，低读取为1，故取反
+#define DIGITAL_INPUT2 ((~GPIO_ReadInputDataBit(DIG2_PORT,DIG2_PIN)) & 0x01)
 
 
 
