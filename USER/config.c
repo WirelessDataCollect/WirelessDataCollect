@@ -59,6 +59,8 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	#endif
 	if(catParaChLen>=PARA_CAT_CH_MAX_LENGTH){
 		return LOAD_PARA_TOO_LONG_ERROR;
+	}else if(catParaChLen != getParaLen()){
+		return LOAD_PARA_NUM_NOT_MATCH_ERROR;
 	}
 	memset(catPara,0,PARA_CAT_CH_MAX_LENGTH);//全部赋值0
 	STMFLASH_ReadBytes(startAddr,catPara,catParaChLen);//读取main区中所有数据
@@ -114,9 +116,14 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	printf("nodeId : %d\r\n",nodeId);
 	#endif	
 	/*Server Ip  （destIp_txrx）*/
-	u8 ipStrTemp[IPV4_1GROUP_STR_LENGTH+1]={0};
+	u8 ipStrTemp[IPV4_1GROUP_STR_LENGTH+1]={0};//缓存一个组，如"192\0"
 	for(u8 i = 0;i<4;i++){
 		splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
+		if(splitAddr == NULL){//防止出现找不到分隔符的问题
+			destIp_txrx[0]=DESTIP_TXRX_GROUP1;destIp_txrx[1]=DESTIP_TXRX_GROUP2;
+			destIp_txrx[2]=DESTIP_TXRX_GROUP3;destIp_txrx[3]=DESTIP_TXRX_GROUP4;
+			return LOAD_PARA_POINTER_NULL;
+		}
 		memset(ipStrTemp,0,IPV4_1GROUP_STR_LENGTH+1);//清零
 		memcpy(ipStrTemp,(u8 *)paraStartAddr,splitAddr - paraStartAddr); //拷贝到strTemp空间
 		destIp_txrx[i] =(u8)atoi((c8 *)ipStrTemp);
@@ -221,7 +228,7 @@ u8 writeFlashByte(u8 * pBuff,u32 WriteAddr,u16 u8Len){
 
 //获取保存所有数据所需的空间
 //包括数据长度、分隔符、数据、结束符
-u32 getParaLen(){
+u32 getParaLen(void){
 	u16 catChLen = 0;
 	catChLen += FLASH_HEAD_LENGTH_BYTES;//用于保存数据长度的byte数
 	catChLen += strlen((c8*)RSI_JOIN_SSID);

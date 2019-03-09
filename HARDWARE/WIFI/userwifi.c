@@ -27,7 +27,11 @@ extern u8 test_name[MAX_TEST_NAME_LENGTH];//测试名称
 //wifi_main 
 u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
 //u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
-u8 destIp_txrx[4]={115,159,154,160};    //服务器远程数据收发
+
+
+u8 destIp_txrx[4]={DESTIP_TXRX_GROUP1,DESTIP_TXRX_GROUP2,DESTIP_TXRX_GROUP3,DESTIP_TXRX_GROUP4};    //服务器远程数据收发
+
+
 u8 destIp_sync[4]={255,255,255,255};  //同步
 unsigned short destSocket_txrx= 5001;
 unsigned short moduleSocket_txrx=5002;

@@ -10,6 +10,13 @@
 //#define  SEND_WITH_TCP    //用tcp传
 #define SEND_WITH_UDP     1
 
+//远程服务器IP
+// 115.159.154.160
+#define DESTIP_TXRX_GROUP1 115
+#define DESTIP_TXRX_GROUP2 159
+#define DESTIP_TXRX_GROUP3 154
+#define DESTIP_TXRX_GROUP4 160
+
 //请修改				RSI_DHCP_HOST_NAME
 
 

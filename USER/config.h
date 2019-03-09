@@ -10,6 +10,8 @@ typedef enum
 { 
 	LOAD_PARA_CRC_ERROR = 0,
 	LOAD_PARA_TOO_LONG_ERROR, //太长
+	LOAD_PARA_NUM_NOT_MATCH_ERROR,//数据长度不匹配
+	LOAD_PARA_POINTER_NULL,//没有找到特定的地址
 	LOAD_PARA_SUCCESS
 	
 }FLASH_Load_Status;
@@ -144,5 +146,6 @@ void getPara(void);
 void setFactory(void);
 void loadParafromMainOrBackupFlash(void);
 void setBoardSta(u8 sta);
+u32 getParaLen(void);
 #endif
 
