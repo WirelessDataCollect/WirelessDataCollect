@@ -1,7 +1,7 @@
 #include "queue.h"
 #include <string.h>
 
-volatile u8 test_name[MAX_TEST_NAME_LENGTH] = "DefaultName_2019_03_09\0";
+volatile u8 test_name[MAX_TEST_NAME_LENGTH] = "DefaultName/2019-03-09\0";
 
 void queue_init(volatile Queue * pQueue)
 {

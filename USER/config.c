@@ -24,6 +24,8 @@ u8 catPara[PARA_CAT_CH_MAX_LENGTH]={0};//存储连接后的数据
 
 extern u8 destIp_txrx[IPV4_LENGTH];//远程私有云服务器IP
 
+u8 localhost[IPV4_LENGTH] = {0};//本地ip
+
 //设置board的状态
 /*
     BOARD_INITING = 0,
@@ -522,6 +524,7 @@ void getPara(void){
 		printf("RSI_PSK           :      %s\r\n",RSI_PSK);
 		printf("nodeId            :      %d\r\n",nodeId);
 		printf("destIp_txrx       :      %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
+		printf("localhost         :      %d.%d.%d.%d\r\n",localhost[0],localhost[1],localhost[2],localhost[3]);
 		printf("test_name         :      %s\r\n",test_name);
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			printf("Module Mode       :      CLIENT\r\n");

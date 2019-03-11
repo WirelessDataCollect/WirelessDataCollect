@@ -166,9 +166,9 @@ void checkModelSta(void){
 				RspCode=rsi_query_net_parms();         		//this is command
 				RspCode=Read_PKT();
 				if(RSI_RSP_NETWORK_PARAMS == RspCode){
-					u8 * ip = rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryNetParmsFrameRcv.ipaddr;
+					memcpy(localhost,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryNetParmsFrameRcv.ipaddr,IPV4_LENGTH);
 					#if PRINT_UART_LOG
-					printf("Module Ip : %d:%d:%d:%d\r\n",ip[0],ip[1],ip[2],ip[3]);//0:未连接	
+					printf("Module Ip : %d:%d:%d:%d\r\n",localhost[0],localhost[1],localhost[2],localhost[3]);//0:未连接	
 					#endif
 				}
 				

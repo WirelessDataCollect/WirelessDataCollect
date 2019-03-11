@@ -118,10 +118,10 @@ void TIM3_IRQHandler(void)
 		if(MS_TIME%500 == 0){
 			dealCmdMsg(&CMD_RX_BUF);
 		}
-		
 		if(queue_empty(adc_queue)) //如果队列空了
 		{
 			adc_queue.HeadTime = SYSTEMTIME;
+			adc_queue.YYYY_MM_DD = YYMMDD;
 		}
 		if(Wifi_Send_EN)//开始发数据了再开始采集
 		{

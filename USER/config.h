@@ -114,6 +114,11 @@ extern u32 RSI_WIFI_OPER_MODE;
 /***AP的一些设置**/
 #define NODE_AP_NAME_HEAD       "SORL_WIRELESS_NODE_"  //node作为AP的时候的名称前几位，后面加上nodeId
 
+/*IP*/
+#define IPV4_LENGTH                 4  //IPV4的byte长度
+#define IPV4_STR_LENGTH            15  //IPV4的转化为字符串占用的byte个数，如192.169.0.1->"192.168.0.1"，占用11位,最多15位
+#define IPV4_1GROUP_STR_LENGTH      3  //IPV4的一个组的转化为字符串占用的byte个数，如192"192"，占用3位
+
 typedef enum
 { 
     CMD_VALUE_SPLIT_ERROR = 0,//split失败
@@ -134,6 +139,7 @@ extern u8 nodeId;
 extern u8 RSI_IP_CFG_MODE;
 extern u8 RSI_BAND;
 extern u8 BOARD_STA;
+extern u8 localhost[IPV4_LENGTH];
 
 void writeSectorPara(void);//保存参数
 u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue);
