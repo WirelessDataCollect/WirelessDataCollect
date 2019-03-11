@@ -159,7 +159,7 @@ u8 wifi_send_package()
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
-	if(queue_length(adc_queue) >= UDP_SEND_SIZE - 16 )//我觉得>=比较好，万一没来得及发现==UDP_SEND_SIZE - 10的情况呢
+	if(queue_length(adc_queue) >= UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )//我觉得>=比较好，万一没来得及发现==UDP_SEND_SIZE - 10的情况呢
 	{
 		
 		Length = queue_length(adc_queue);
@@ -213,12 +213,15 @@ u8 order_anay(u8 arr[])
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
-			LED2 = ~LED2;
+			LED2_CONV();
+			LED4_CONV();
+//				printf("YYMMDD:%d  SYSTEMTIME:%d  ",YYMMDD,SYSTEMTIME);
 		  }
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
+//		printf("YYMMDD:%d  SYSTEMTIME:%d  ",YYMMDD,SYSTEMTIME);
 			Time_Sync_Flag = 1;
 		 // GPIO_SetBits(GPIOA, GPIO_Pin_9);
 //		  PAout(9) = ~PAout(9);

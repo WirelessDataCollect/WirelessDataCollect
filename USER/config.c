@@ -58,9 +58,10 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	printf("Para Array Length : %d\r\n",catParaChLen);
 	#endif
 	if(catParaChLen>=PARA_CAT_CH_MAX_LENGTH){
+//		#if PRINT_UART_LOG
+//		printf("Load Para Too Long Error!\r\n");
+//		#endif
 		return LOAD_PARA_TOO_LONG_ERROR;
-	}else if(catParaChLen != getParaLen()){
-		return LOAD_PARA_NUM_NOT_MATCH_ERROR;
 	}
 	memset(catPara,0,PARA_CAT_CH_MAX_LENGTH);//全部赋值0
 	STMFLASH_ReadBytes(startAddr,catPara,catParaChLen);//读取main区中所有数据
@@ -516,12 +517,12 @@ void getHelp(void){
 //输出参数到串口
 void getPara(void){
 	#if PRINT_UART_LOG
-			printf("\r\n============  Parameter List  ============ \r\n\r\n");
-			printf("RSI_JOIN_SSID     :      %s\r\n",RSI_JOIN_SSID);
-			printf("RSI_PSK           :      %s\r\n",RSI_PSK);
-			printf("nodeId            :      %d\r\n",nodeId);
-			printf("destIp_txrx       :      %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
-	
+		printf("\r\n============  Parameter List  ============ \r\n\r\n");
+		printf("RSI_JOIN_SSID     :      %s\r\n",RSI_JOIN_SSID);
+		printf("RSI_PSK           :      %s\r\n",RSI_PSK);
+		printf("nodeId            :      %d\r\n",nodeId);
+		printf("destIp_txrx       :      %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
+		printf("test_name         :      %s\r\n",test_name);
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			printf("Module Mode       :      CLIENT\r\n");
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
@@ -538,7 +539,8 @@ void getPara(void){
 			printf("Frequency Band    :      5GHz\r\n");
 		}else if(RSI_BAND == RSI_BAND_2P4GHZ){
 			printf("Frequency Band    :      2.4GHz\r\n");
-		}			
+		}		
+				
 	#endif
 }
 void handleCmd(c8 * cmd){
