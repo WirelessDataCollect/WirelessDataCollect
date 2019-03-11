@@ -64,12 +64,14 @@ void receive_udp_package()
 		    recvSocket = rsi_bytes2R_to_uint16(data_recv->recvSocket);
 		    if(recvSocket ==socketDescriptor_sync)//命令或者时钟同步信息
 			{ 
-				if(order_anay(data_recv->recvDataBuf))//如果返回了1说明，需要回复信息
+				if(order_anay(data_recv->recvDataBuf) == NEED_RETURN_INFO)//如果返回了1说明，需要回复信息
 				{
 					AnalRsp[0] = RETURN_INFO;//表示这是返回信息
 					AnalRsp[1] = data_recv->recvDataBuf[0];//返回传过来的命令
 					AnalRsp[2] = nodeId;
+					u8 temp = DATA_AUTO_CHECK_EN;DATA_AUTO_CHECK_EN = 0;
 					rsi_send_ludp_data(socketDescriptor_sync,AnalRsp ,ANAL_RSP_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
+					DATA_AUTO_CHECK_EN = temp;
 				}
 			}
 			
