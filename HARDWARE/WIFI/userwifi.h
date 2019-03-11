@@ -3,6 +3,11 @@
 #include "sys.h"
 #include "queue.h"
  
+typedef enum{
+	NOT_NEED_RETURN_INFO = 0,
+	NEED_RETURN_INFO
+}CMD_GetState;
+ 
 #define  UDP_SEND_SIZE          552  // 最好不要超过548    546 = 8 * 67 + 10
 
 #define  IAM_MASTER_CLOCK       0  //是不是主时钟设备

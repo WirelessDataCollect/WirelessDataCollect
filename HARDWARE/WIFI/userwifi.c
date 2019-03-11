@@ -215,54 +215,46 @@ u8 order_anay(u8 arr[])
 			Time_Sync_Flag = 1;
 			LED2_CONV();
 			LED4_CONV();
-//				printf("YYMMDD:%d  SYSTEMTIME:%d  ",YYMMDD,SYSTEMTIME);
 		  }
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
-//		printf("YYMMDD:%d  SYSTEMTIME:%d  ",YYMMDD,SYSTEMTIME);
 			Time_Sync_Flag = 1;
-		 // GPIO_SetBits(GPIOA, GPIO_Pin_9);
-//		  PAout(9) = ~PAout(9);
-//		   PAout(10) = ~PAout(10);
 			LED2_CONV();
 			LED4_CONV();
-			return 0;				
+			return NOT_NEED_RETURN_INFO;				
 		case RETURN_INFO://返回了回复信号
-			return 0;//表示不需要返回信息
+			return NOT_NEED_RETURN_INFO;//表示不需要返回信息
 		case GET_WIFI_SEND_EN:
-//			Wifi_Send_EN =1;  //wifi开始发送
 			//如果启动了本设备
 			if(arr[1]==nodeId){
 				Wifi_Send_EN =1;  //wifi开始发送
 			}
 			else{
-				return 0;
+				return NOT_NEED_RETURN_INFO;
 			}
 			break;
-		case GET_WIFI_SEND_DISABLE:        
-//			Wifi_Send_EN =0;//wifi停止发送			
+		case GET_WIFI_SEND_DISABLE:        		
 			if(arr[1]==nodeId){
 				Wifi_Send_EN =0;//wifi停止发送
 			}
 			else{
-				return 0;
+				return NOT_NEED_RETURN_INFO;
 			}
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择
 			if(arr[1]==nodeId)//如果命令指定了本ID
 				Channel_model(&arr[2]);
 			else  //如果命令不是给本设备的，则返回0，表示不需要返回ack
-				return 0;
+				return NOT_NEED_RETURN_INFO;
 			break;
 		case GET_CAN_SEND_EN:
-//			CAN_Send_EN = 1; // CAN转发数据，时间+2路IO+4路AD
 			if(arr[1]==nodeId){
 				CAN_Send_EN =1;//wifi停止发送
 			}
 			else{
-				return 0;
+				return NOT_NEED_RETURN_INFO;
 			}
 			break;
 		case GET_REMOTE_IP_PORT:            //主机地址
@@ -285,9 +277,9 @@ u8 order_anay(u8 arr[])
 		case PAGING://寻呼信号
 			break;		
 		default:
-			return 0;
+			return NOT_NEED_RETURN_INFO;
 	}
-	return 1;
+	return NEED_RETURN_INFO;
 	
 }
 
