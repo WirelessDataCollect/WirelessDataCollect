@@ -1,25 +1,33 @@
+/**
+  ******************************************************************************
+  * @file    gpio.c
+  * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   GPIO configuration functions   GPIO配置方法
+  ******************************************************************************
+  */
+
+//-------------include---------------//
 #include "gpio.h" 
 
+//!通道的状态，1：电压模式；0：电流模式
 s8 channel[4];
-   
-//LED IO初始化
-//LED1 PB4
-//LED2 PD2
-// Vin Iin modle choose  高电平为电压输入模式
-//EN1 PA15
-//EN2 PC10
-//EN3 PC11
-//EN4 PC12
+/**
+  * @brief  基本GPIO初始化
+  * @param  None
+  * @retval None
+  */
 void GP_IO_Init(void)
 {    	 
 	GPIO_InitTypeDef  GPIO_InitStructure;
-	//时钟使能
+	/*时钟使能*/
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);//使能GPIOA时钟
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能GPIOB时钟
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//使能GPIOC时钟
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);//使能GPIOD时钟
 	
-	//开关信号输入
+	/*开关信号输入*/
 	GPIO_InitStructure.GPIO_Pin = DIG1_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -27,7 +35,7 @@ void GP_IO_Init(void)
 	GPIO_Init(DIG1_PORT, &GPIO_InitStructure);//初始化
 	GPIO_InitStructure.GPIO_Pin = DIG2_PIN;
 	GPIO_Init(DIG2_PORT, &GPIO_InitStructure);//初始化	
-	//ADG711的开关通道
+	/*ADG711的开关通道*/
 	GPIO_InitStructure.GPIO_Pin = CH1_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
@@ -40,9 +48,10 @@ void GP_IO_Init(void)
 	GPIO_Init(CH3_PORT, &GPIO_InitStructure);//初始化	
 	GPIO_InitStructure.GPIO_Pin = CH4_PIN;
 	GPIO_Init(CH4_PORT, &GPIO_InitStructure);//初始化
-	//默认通道拉低
-	Channel1=0;Channel2=0;Channel3=1;Channel4=1;
-	//本版（母版）LED
+	/*默认通道拉低*/
+	Channel1=ADC_CURRENT_MODE;Channel2=ADC_CURRENT_MODE;
+	Channel3=ADC_CURRENT_MODE;Channel4=ADC_CURRENT_MODE;
+	/*本版（母版）LED*/
 	GPIO_InitStructure.GPIO_Pin = LED1_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
@@ -52,7 +61,7 @@ void GP_IO_Init(void)
 	GPIO_InitStructure.GPIO_Pin = LED2_PIN;
 	GPIO_Init(LED2_PORT, &GPIO_InitStructure);//初始化
 	LED1_OFF(1);LED2_OFF(1);//关灯
-	//子板LED
+	/*子板LED*/
 	GPIO_InitStructure.GPIO_Pin = LED3_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
@@ -62,7 +71,7 @@ void GP_IO_Init(void)
 	GPIO_InitStructure.GPIO_Pin = LED4_PIN;
 	GPIO_Init(LED4_PORT, &GPIO_InitStructure);//初始化
 	LED3_OFF(1);LED4_OFF(1);//关灯
-	//电源的通断，低电平有效(关电源)
+	/*电源的通断，低电平有效(关电源)*/
 	GPIO_InitStructure.GPIO_Pin = V5V_SHUTOWN_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
@@ -75,8 +84,12 @@ void GP_IO_Init(void)
 }
 
 
-
-void Channel_model(u8 modle[])
+/**
+  * @brief  设置通道模式
+  * @param  None
+  * @retval None
+  */
+void setAdcModel(u8 modle[])
 {		
 	Channel1 = modle[0];
 	channel[0] = modle[0];

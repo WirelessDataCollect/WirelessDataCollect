@@ -236,7 +236,7 @@ u8 order_anay(u8 arr[])
 			break;
 		case GET_CHANNEL_MODEL:         // 通道模式选择
 			if(arr[1]==nodeId)//如果命令指定了本ID
-				Channel_model(&arr[2]);
+				setAdcModel(&arr[2]);
 			else  //如果命令不是给本设备的，则返回0，表示不需要返回ack
 				return NOT_NEED_RETURN_INFO;
 			break;
