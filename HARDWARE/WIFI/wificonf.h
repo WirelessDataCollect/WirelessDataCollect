@@ -115,14 +115,14 @@
   * @{
   */
 /* RESET�°汾*/
-#define WIFI_RST_PORT GPIOC
-#define WIFI_RST_PIN GPIO_Pin_5
+#define WIFI_RST_PORT               GPIOC
+#define WIFI_RST_PIN                GPIO_Pin_5
 /* RESET�ɰ汾*/
-//#define WIFI_RST_PORT GPIOB
-//#define WIFI_RST_PIN GPIO_Pin_0
+//#define WIFI_RST_PORT               GPIOB
+//#define WIFI_RST_PIN                GPIO_Pin_0
 
-#define WIFI_RST_H()	GPIO_SetBits(WIFI_RST_PORT,WIFI_RST_PIN)
-#define WIFI_RST_L()	GPIO_ResetBits(WIFI_RST_PORT,WIFI_RST_PIN)
+#define WIFI_RST_H()	            GPIO_SetBits(WIFI_RST_PORT,WIFI_RST_PIN)
+#define WIFI_RST_L()	            GPIO_ResetBits(WIFI_RST_PORT,WIFI_RST_PIN)
 /**
   * @}
   */

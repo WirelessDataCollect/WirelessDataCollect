@@ -260,8 +260,8 @@ u8 order_anay(u8 arr[])
 			break;
 		case GET_TEST_NAME://获取测试名称	
 			if(strlen((c8*)(arr+1)) < MAX_TEST_NAME_LENGTH){
-				memset((u8 *)test_name,0,MAX_TEST_NAME_LENGTH);//全部reset为0
-				strcpy((char *)test_name,(c8*)(arr+1));
+				memset((u8 *)adc_queue.test_name,0,MAX_TEST_NAME_LENGTH);//全部reset为0
+				strcpy((char *)adc_queue.test_name,(c8*)(arr+1));
 				printf("\r\nGet Test Name : \"%s\"(UTF-8)\r\n",(arr+1));//输出UTF-8中文
 			}
 			break;	

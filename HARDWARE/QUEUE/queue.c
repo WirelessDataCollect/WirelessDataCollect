@@ -1,13 +1,22 @@
 #include "queue.h"
 #include <string.h>
 
-volatile u8 test_name[MAX_TEST_NAME_LENGTH] = "DefaultName/2019-03-09\0";
-
+/**
+  * @brief  队列清零
+  * @param  pQueue：队列
+  * @retval None
+  */
 void queue_init(volatile Queue * pQueue)
 {
     memset((void *)pQueue, 0, sizeof(Queue));
+	strcpy((void *)pQueue->test_name,DEFAULT_TEST_NAME);
 }
 
+/**
+  * @brief  获取队列头部数据
+  * @param  pQueue：队列
+  * @retval 队头字节数据
+  */
 u8 queue_get(volatile Queue * pQueue)
 {
     u8 data = pQueue->arr[pQueue->head];
@@ -15,16 +24,37 @@ u8 queue_get(volatile Queue * pQueue)
     return data;
 }
 
+/**
+  * @brief  u8数据加入队列
+  * @param  pQueue：队列
+  * @param  ch：要加入的u8数据
+  * @retval None
+  */
 void queue_put(volatile Queue * pQueue, u8 ch)
 {
     pQueue->arr[pQueue->tail] = ch;
 	pQueue->tail = (pQueue->tail + 1) % QUEUE_SIZE;
 }
+
+/**
+  * @brief  队列清空，tail=head
+  * @param  pQueue：队列
+  * @retval None
+  */
 void queue_clear(volatile Queue * pQueue)
 {
-	
 	pQueue->head = pQueue->tail;
 }
+
+/**
+  * @brief  队列添加帧头，包括年月日、计时器、ADC字节数据、节点数据长度、开关信号、测试名称
+  * @param  pQueue：队列
+  * @param  count：ADC字节格式
+  * @param  nodeId：节点ID号
+  * @param  IO_input1：开关信号1
+  * @param  IO_input2：开关信号2
+  * @retval None
+  */
 void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2)
 {
 	pQueue->head = (pQueue->head-PACKAGE_HEAD_FRAME_LENGTH + QUEUE_SIZE)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
@@ -49,14 +79,17 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_in
 	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = IO_input2;
 	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//校验位
 	
-	queue_add_name(pQueue,test_name);//添加本次实验的名称，长度为MAX_TEST_NAME_LENGTH
+	queue_add_name(pQueue,pQueue->test_name);//添加本次实验的名称，长度为MAX_TEST_NAME_LENGTH
 
 }
+
 /**
-* 函数作用：给某一个包添加本次实验的名称
-* 输入参数：pQueue：队列；testname：测试名称：长度为 MAX_TEST_NAME_LENGTH （bytes）
-* 备注：只能在本文件内使用
-*/
+  * @brief  给某一个包添加本次实验的名称
+  * @param  pQueue：队列
+  * @param  testname：测试名称
+  * @note   只能在本文件中使用
+  * @retval None
+  */
 static void queue_add_name(volatile Queue * pQueue, volatile u8 testname[MAX_TEST_NAME_LENGTH])
 {
 	for(int i = MAX_TEST_NAME_LENGTH;i>0;i--)
@@ -67,23 +100,45 @@ static void queue_add_name(volatile Queue * pQueue, volatile u8 testname[MAX_TES
 	}
 }
 
+/**
+  * @brief  给队列直接写入数据
+  * @param  pQueue：队列
+  * @param  length：数据长度
+  * @retval None
+  */
 void queue_oversize(volatile Queue * pQueue,u32 length)
 {
 	memcpy((u8 *)&pQueue->arr[QUEUE_SIZE],(u8 *)&pQueue->arr[0],length);
 }
-int queue_empty(volatile Queue queue)
+
+/**
+  * @brief  查看是否是空队列
+  * @param  queue：队列
+  * @retval 是否空队列（1：空队列；0：非空队列）
+  */
+u8 queue_empty(volatile Queue queue)
 {
     if(queue.head == queue.tail)
         return 1;
     return 0;
 }
 
+/**
+  * @brief  查看队列长度
+  * @param  queue：队列
+  * @retval 队列长度
+  */
 u32 queue_length(volatile Queue queue)
 {
 	return (queue.tail-queue.head+QUEUE_SIZE)%QUEUE_SIZE;
 }
 
-int queue_full(volatile Queue queue)
+/**
+  * @brief  查看队列是否满
+  * @param  queue：队列
+  * @retval 是否满队列（1：满队列；0：非满队列）
+  */
+u8 queue_full(volatile Queue queue)
 {
     if((queue.tail + 20) % QUEUE_SIZE >= queue.head)
         return 1;
