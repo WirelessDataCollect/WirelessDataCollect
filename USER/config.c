@@ -8,6 +8,7 @@
   ******************************************************************************
   */
 
+//-------------include---------------//
 #include "config.h"
 #include "stmflash.h"
 #include "usart.h"
@@ -29,7 +30,6 @@ u8   RSI_BAND                                = RSI_DUAL_BAND;            /*!< @ 
 u8   BOARD_STA                               = BOARD_INITING;            /*!< 板子的状态>*/
 u8   catPara[PARA_CAT_CH_MAX_LENGTH]         = {0};                      /*!< 存储连接后的数据>*/
 u8   localhost[IPV4_LENGTH]                  = {0};                      /*!< 本地ip>*/
-extern u8 destIp_txrx[IPV4_LENGTH];                                      /*!< 远程私有云服务器IP>*/
 
 
 /**

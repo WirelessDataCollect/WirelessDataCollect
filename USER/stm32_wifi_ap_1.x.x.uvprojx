@@ -434,11 +434,6 @@
           <GroupName>HARDWARE</GroupName>
           <Files>
             <File>
-              <FileName>myiic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\IIC\myiic.c</FilePath>
-            </File>
-            <File>
               <FileName>can.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\CAN\can.c</FilePath>

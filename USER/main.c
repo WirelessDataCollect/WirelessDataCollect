@@ -8,13 +8,13 @@
   ******************************************************************************
   */
 
+//-------------include---------------//
 #include "sys.h"
 #include "userwifi.h"
 #include "delay.h"  
 #include "usart.h"   
 #include "gpio.h"
 #include "wificonf.h"
-#include "myiic.h"
 #include "queue.h"
 #include "can.h"
 #include "can2.h"
@@ -138,15 +138,15 @@ void testAdc(void){
 	ADC_CONV_H();
 	delay_us(100);
 	AdcTemp = ADC_Read(ADC_MAX_BYTES);
-//	#if IAM_MASTER_CLOCK
-//	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
+	#if IAM_MASTER_CLOCK
+	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
 //	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
 //	printf("%.3f   ",(float)(AdcTemp[2]*256+AdcTemp[3])*5.0/32768.0);	
 //	printf("%.3f   ",(float)(AdcTemp[4]*256+AdcTemp[5])*5.0/32768.0);	
 //	printf("%.3f   ",(float)(AdcTemp[6]*256+AdcTemp[7])*5.0/32768.0);	
 //	printf("\r\n");
-//	delay_ms(1000);
-//	#endif
+	delay_ms(1000);
+	#endif
 }
 
 int main(void)

@@ -10,6 +10,8 @@
 
 #ifndef _USERWIFI_H_
 #define _USERWIFI_H_
+
+//-------------include---------------//
 #include "sys.h"
 #include "queue.h"
 #include "config.h"
@@ -131,6 +133,9 @@ extern unsigned short localDestSocket_txrx;
 extern unsigned short localModuleSocket_txrx;	
 //!节点模组-局域网上位机UDP网络接口的描述
 extern unsigned short localSocketDescriptor_txrx;
+
+//!是否在中断中自动check数据
+extern u8 DATA_AUTO_CHECK_EN;
 
 void receive_udp_package(void);
 void wifi_send_package_test(void);

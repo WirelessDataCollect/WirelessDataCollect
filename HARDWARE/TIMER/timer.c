@@ -1,6 +1,5 @@
 #include "timer.h"
 #include "gpio.h"
-#include "myiic.h"
 #include "queue.h"
 #include "string.h"
 #include "userwifi.h"

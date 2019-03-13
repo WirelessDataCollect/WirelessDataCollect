@@ -1,8 +1,15 @@
+/**
+  ******************************************************************************
+  * @file    myiic.c
+  * @author  zju.nesc.iotlab    浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   iic function   iic通信方法
+  ******************************************************************************
+  */
+  
 #include "myiic.h"
 #include "delay.h"
-
-// SCL PB6
-// SDA PB7
 
 u8 val;
 void IIC_Init(void)

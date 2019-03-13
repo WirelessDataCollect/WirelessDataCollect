@@ -10,6 +10,8 @@
 
 #ifndef __CRC_H
 #define __CRC_H
+
+//-------------include---------------//
 #include "sys.h"
 
 //!CRC最后输出的数据类型
