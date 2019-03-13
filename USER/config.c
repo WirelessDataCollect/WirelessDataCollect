@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    config.c
+  * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   parameters configuraton functions   参数配置方法
+  ******************************************************************************
+  */
+
 #include "config.h"
 #include "stmflash.h"
 #include "usart.h"

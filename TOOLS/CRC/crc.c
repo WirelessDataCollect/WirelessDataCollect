@@ -1,10 +1,23 @@
-#include "crc.h"
-//********************************
-//函数作用：计算Crc16数值
-//
-//hex：多项式码 0x8005  为 X^15+X^5+1
-//********************************
+/**
+  ******************************************************************************
+  * @file    crc.c
+  * @author  zju.nesc.iotlab    浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   crc functions   crc校验方法
+  ******************************************************************************
+  */
 
+#include "crc.h"
+
+/**
+  * @brief  计算果CRC_TYPE类型的CRC结果
+  * @param  CRCIn：CRC初始值
+  * @param  buf：需要CRC的数组
+  * @param  len：需要CRC的数组长度
+  * @param  polyHex：多项式码  0x8005
+  * @retval CRC最终结果CRC_TYPE
+  */
 CRC_TYPE CalCrc(u16 CRCIn, c8 * buf, u16 len,u16 polyHex)
 {
     u16 byte;

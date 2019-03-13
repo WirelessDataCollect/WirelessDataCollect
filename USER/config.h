@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    config.h
+  * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   parameters configuraton functions   参数配置方法
+  ******************************************************************************
+  */
+
 #ifndef __CONFIG_H__
 #define __CONFIG_H__ 
 #include "sys.h"

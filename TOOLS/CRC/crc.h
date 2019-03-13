@@ -1,9 +1,21 @@
+/**
+  ******************************************************************************
+  * @file    crc.h
+  * @author  zju.nesc.iotlab    浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   crc functions   crc校验方法
+  ******************************************************************************
+  */
+
 #ifndef __CRC_H
 #define __CRC_H
 #include "sys.h"
 
+//!CRC最后输出的数据类型
 #define CRC_TYPE                  u16
-#define FLASH_CRC_BYTE_LENGTH     5//CRC16 ,最大65535,5位数（转化为字符）
+//!CRC16转化为字符串后 ,最大65535,5位数
+#define FLASH_CRC_BYTE_LENGTH     5
 
 /*
 Example.

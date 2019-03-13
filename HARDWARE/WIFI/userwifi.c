@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    userwifi.c
+  * @author  zju.nesc.iotlab   浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   wifi application functions    WiFi模组应用方法
+  ******************************************************************************
+  */
+
 #include "userwifi.h"
 #include  "wificonf.h"
 #include "rsi_global.h"

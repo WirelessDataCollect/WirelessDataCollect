@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    main.c
+  * @author  zju.nesc.iotlab    浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   main function   主函数
+  ******************************************************************************
+  */
+
 #include "sys.h"
 #include "userwifi.h"
 #include "delay.h"  
