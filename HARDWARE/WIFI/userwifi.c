@@ -5,50 +5,32 @@
 #include "rsi_app.h"
 #include "config.h"
 extern rsi_app_cb_t rsi_app_cb;
-/* Gloab  data*/
-
-u8 DATA_AUTO_CHECK_EN = 1;	
-
-//timer 
-u32 SYSTEMTIME=0;
-
-u32  YYMMDD =0;   //年月日
-u8 Time_Sync_Flag = 0;//时钟同步信号
-u8 Wifi_Send_EN = 1;//发送数据的命令
-u8 CAN_Send_EN = 0;
-
-//IIC
-Queue adc_queue;	 //adc接收缓存
-
-
-//客户端模式的一些参数
-//wifi_main 
-u8 localDestIp_txrx[4]={255,255,255,255};    //局域网
-//u8 destIp_txrx[4]={255,255,255,255};    //服务器远程数据收发
-
-
-u8 destIp_txrx[4]={DESTIP_TXRX_GROUP1,DESTIP_TXRX_GROUP2,DESTIP_TXRX_GROUP3,DESTIP_TXRX_GROUP4};    //服务器远程数据收发
-
-
-u8 destIp_sync[4]={255,255,255,255};  //同步
-unsigned short destSocket_txrx= 5001;
-unsigned short moduleSocket_txrx=5002;
-unsigned short destSocket_sync= 5003;//这里要一样
-unsigned short moduleSocket_sync=5003;
-unsigned short localDestSocket_txrx= 5004;//局域网的远程IP
-unsigned short localModuleSocket_txrx=5005;
-
-
-unsigned short socketDescriptor_txrx=0;
-unsigned short socketDescriptor_sync=1;
-unsigned short localSocketDescriptor_txrx=2;
-
-u32 bytes_sent=0;
-
-
- 
-#define ANAL_RSP_LENGTH 3
-u8 AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回wifi信息
+u8     DATA_AUTO_CHECK_EN = 1;	//是否在中断中自动check数据
+u32    SYSTEMTIME = 0;//系统时间
+u32    YYMMDD =0;//年月日
+u8     Time_Sync_Flag = 0;//最近时钟是否同步
+u8     Wifi_Send_EN = 1;//数据发送和接受使能
+u8     CAN_Send_EN = 0;//CAN数据发送和接受使能
+Queue  adc_queue;//ADC数据存储
+u8     localDestIp_txrx[4] = {255,255,255,255};
+u8     destIp_txrx[4] = {DESTIP_TXRX_GROUP1,DESTIP_TXRX_GROUP2,DESTIP_TXRX_GROUP3,DESTIP_TXRX_GROUP4};
+u8     destIp_sync[4] = {255,255,255,255};  //同步
+u16    destSocket_txrx = 5001;
+u16    moduleSocket_txrx =5002;
+u16    destSocket_sync = 5003;
+u16    moduleSocket_sync = 5003;
+u16    localDestSocket_txrx = 5004;
+u16    localModuleSocket_txrx = 5005;
+u16    socketDescriptor_txrx = 0;
+u16    socketDescriptor_sync = 1;
+u16    localSocketDescriptor_txrx = 2;
+u32    bytes_sent=0;//字节数据发送个数
+u8     AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回状态信息
+/**
+  * @brief  接受UDP包并处理
+  * @param  None
+  * @retval None
+  */
 void receive_udp_package()
 {
 	rsi_recvFrameUdp *data_recv=NULL;
@@ -85,7 +67,11 @@ void receive_udp_package()
 	}
 }
 
-
+/**
+  * @brief  WiFi发送测试
+  * @param  None
+  * @retval None
+  */
 void wifi_send_package_test()
 {
 	int Head;
@@ -113,8 +99,13 @@ void wifi_send_package_test()
 	
 }
 
-int16 TcpStatus =-1;
-int TcpCount = 0;
+s16 TcpStatus = -1;
+s32 TcpCount = 0;
+/**
+  * @brief  发送ADC数据
+  * @param  None
+  * @retval 数据发送状态（发送完成：1；未开启发送：0）
+  */
 u8 wifi_send_package()
 {
 	int Head;
@@ -143,16 +134,8 @@ u8 wifi_send_package()
 			rsi_send_data(socketDescriptor_txrx,  &adc_queue.arr[Head], Length+PACKAGE_HEAD_FRAME_LENGTH,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
 		DATA_AUTO_CHECK_EN = temp;
-		
-		
-//		//延时保证两个udp发送正常
-//		delay_us(100);
-//		for(int n=0;n<20;n++){
-//			receive_udp_package();
-//			delay_us(100);
-//		}
+		//延时防止阻塞崩溃
 		delay_ms(5);
-		
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		//发送到局域网
@@ -185,13 +168,6 @@ u8 wifi_send_package()
 		TcpStatus=-1;
 #endif
 		DATA_AUTO_CHECK_EN = temp;
-		
-		//延时保证两个udp发送正常
-//		delay_us(100);
-//		for(int n=0;n<20;n++){
-//			receive_udp_package();
-//			delay_us(100);
-//		}
 		delay_ms(5);
 		//发送到局域网
 		temp = DATA_AUTO_CHECK_EN;
@@ -202,9 +178,11 @@ u8 wifi_send_package()
 	return 1;
 }
 
-//如果返回了1说明，需要回复信息
-//或者本次接收到的信息无用也返回0
-extern u8 txrx_refreshed;
+/**
+  * @brief  命令处理
+  * @param  接收到的命令首地址
+  * @retval 是否需要返回信息给上位机（NOT_NEED_RETURN_INFO 或 NEED_RETURN_INFO）
+  */
 u8 order_anay(u8 arr[])
 {
 	switch(arr[0])
@@ -285,7 +263,15 @@ u8 order_anay(u8 arr[])
 	
 }
 
-//打开udp
+
+/**
+  * @brief  打开UDP套接字
+  * @param  destIp：远程IP
+  * @param  destSocket：远程端口
+  * @param  moduleSocket：本设备模组端口
+  * @param  socketDescriptor：套接字描述
+  * @retval 打开UDP成功与否（1：不成功；0：成功）
+  */
 u8 OpenLudpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
 {
 	int RspCode;
@@ -304,7 +290,14 @@ u8 OpenLudpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSock
 	return 0;
 }
 
-//打开tcp
+/**
+  * @brief  打开TCP套接字
+  * @param  destIp：远程IP
+  * @param  destSocket：远程端口
+  * @param  moduleSocket：本设备模组端口
+  * @param  socketDescriptor：套接字描述
+  * @retval 打开UDP成功与否（1：不成功；0：成功）
+  */
 u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor)
 {
 	u8 temp= DATA_AUTO_CHECK_EN ;
@@ -323,8 +316,14 @@ u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocke
 	
 	return 0;
 }
+
 #if IAM_MASTER_CLOCK
 #define SYNC_TIME_BYTES   9   //同步时钟命令长度
+/**
+  * @brief  同步时钟模块发送同步时钟信号
+  * @param  None
+  * @retval None
+  */
 void Send_Sync_Time(void)
 {
 	uint8 time[SYNC_TIME_BYTES] = {0};//时间信息
@@ -342,13 +341,5 @@ void Send_Sync_Time(void)
 	rsi_send_ludp_data(socketDescriptor_sync,time ,SYNC_TIME_BYTES, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
 	receive_udp_package();
 	DATA_AUTO_CHECK_EN = temp;
-	//rsi_send_data(socketDescriptor_sync, time, SYNC_TIME_BYTES,RSI_PROTOCOL_UDP_V4,&bytes_sent);
 }
 #endif
-
-//void EXTI15_10_IRQHandler(void)
-//{
-//	EXTI->PR		|=1<<10;
-//	wifi_send_package_test();
-//	GPIO_ResetBits(GPIOA,GPIO_Pin_9);
-//}

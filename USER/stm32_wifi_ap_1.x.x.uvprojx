@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\SPI;..\FWLIB\inc;..\HARDWARE\LCD;..\host\binary\apis\hal\include;..\host\binary\apis\intf\spi\include;..\host\binary\apis\wlan\core\include;..\host\binary\apis\wlan\ref_apps\include;..\HARDWARE\IIC;..\HARDWARE\CAN;..\HARDWARE\QUEUE;..\HARDWARE\TIMER;..\HARDWARE\WIFI;..\HARDWARE\ADC;..\HARDWARE\FLASH;..\TOOLS\CRC;..\TOOLS\TypeTrans</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\HARDWARE\SPI;..\FWLIB\inc;..\HARDWARE\LCD;..\host\binary\apis\hal\include;..\host\binary\apis\intf\spi\include;..\host\binary\apis\wlan\core\include;..\host\binary\apis\wlan\ref_apps\include;..\HARDWARE\IIC;..\HARDWARE\CAN;..\HARDWARE\QUEUE;..\HARDWARE\TIMER;..\HARDWARE\WIFI;..\HARDWARE\ADC;..\HARDWARE\FLASH;..\TOOLS\CRC;..\TOOLS\TypeTrans;..\HARDWARE\GPIO</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -434,11 +434,6 @@
           <GroupName>HARDWARE</GroupName>
           <Files>
             <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\LED\led.c</FilePath>
-            </File>
-            <File>
               <FileName>myiic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\IIC\myiic.c</FilePath>
@@ -482,6 +477,11 @@
               <FileName>stmflash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\FLASH\stmflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GPIO\gpio.c</FilePath>
             </File>
           </Files>
         </Group>

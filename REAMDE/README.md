@@ -35,7 +35,7 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 #define CMD_SET_JOIN_SSID      "SET_RSI_JOIN_SSID"  //设置SSID
 #define CMD_SET_PSK            "SET_RSI_PSK"  //设置PSK
 #define CMD_SET_NODE_ID        "SET_NODE_ID"  //设置节点id
-#define CMD_SET_SERVER_IP       "SET_SERVER_IP"  //设置服务器IP
+#define CMD_SET_SERVER_IP      "SET_SERVER_IP"  //设置服务器IP
 
 
 #define CMD_HELP               "HELP"//输出帮助
@@ -47,14 +47,14 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 ## 3.2 上位机-节点交互
 
 ```cpp
-#define  GET_TIME_SYNC_PC          0xa1
-#define  RETURN_INFO			0xa2
-#define  GET_TEST_NAME         0xa3//获取测试名称
+#define  GET_TIME_SYNC_PC           0xa1   //来自上位机的同步信号
+#define  RETURN_INFO			    0xa2   //
+#define  GET_TEST_NAME              0xa3//获取测试名称
 #define  GET_TIME_SYNC_MAIN_CLOCK   0xa4  //来自主机的同步信号
-#define  GET_WIFI_SEND_EN       0xa5
-#define  GET_WIFI_SEND_DISABLE  0xa6
-#define  GET_CHANNEL_MODEL      0xa7
-#define  GET_CAN_SEND_EN        0xa8
-#define  GET_REMOTE_IP_PORT     0xa9
-#define  PAGING     0xaa  //寻呼信号
+#define  GET_WIFI_SEND_EN           0xa5
+#define  GET_WIFI_SEND_DISABLE      0xa6
+#define  GET_CHANNEL_MODEL          0xa7
+#define  GET_CAN_SEND_EN            0xa8
+#define  GET_REMOTE_IP_PORT         0xa9
+#define  PAGING                     0xaa  //寻呼信号
 ```

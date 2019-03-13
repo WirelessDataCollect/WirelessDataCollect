@@ -96,7 +96,7 @@ void Initialization (void)
 
 u8 Status=1;
 extern u32 bytes_sent;
-void testAdc();
+void testAdc(void);
 int main(void)
 {     
 	setBoardSta(BOARD_INITING);Initialization();setBoardSta(BOARD_INITED);//初始化系统
