@@ -146,7 +146,7 @@ void setClientModePara(void){
 }
 
 //检查模组连接状态,如何没有成功连接多次，则设置为AP模式
-void checkModelSta(void){
+void checkModuleSta(void){
 	u8 RspCode;u8 status;
 	u8 resetNum=6;//最多重启的次数
 	/*STA模式才使用的指令.才有效*/	

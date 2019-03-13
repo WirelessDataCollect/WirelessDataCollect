@@ -5,7 +5,7 @@
 
 //CAN1接收RX0中断使能
 #define CAN1_RX0_INT_ENABLE	1		//0,不使能;1,使能.								    
-extern u8 CAN1_SEND_EN;	
+extern u8 CAN1_Send_EN;	
 										 							 				    
 u8 CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode);//CAN初始化
  

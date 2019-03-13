@@ -18,58 +18,40 @@
 #include "rsi_app.h"
 #include "crc.h"
 
-/*
-优先级
-	
-	//外部中断
-	NVIC_InitStructure.NVIC_IRQChannel=EXTI4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0;
-	
-    //TIM 4
-   	NVIC_InitStructure.NVIC_IRQChannel=TIM4_IRQn; //定时器3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级0
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级0
-	
-    //TIM 3
-   	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x02; //抢占优先级0
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //子优先级0
-	
-	//CAN1
-	NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;     // 主优先级为2
-  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // 次优先级为0
-	
-	//CAN2
-	NVIC_InitStructure.NVIC_IRQChannel = CAN2_RX1_IRQn;
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;     // 主优先级为2
-  	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;            // 次优先级为1
-	
-*/
-extern u8 CAN_Send_EN;
-extern u8 CAN1_Send_EN;
-extern u8 CAN2_Send_EN;
-extern u8 DATA_AUTO_CHECK_EN;
 u8 IO_input[3];
+extern u32 bytes_sent;
+
+void testAdc(void);
 u8 can_send_package(void);
+void Initialization (void);
+
+/**
+  * @brief  系统初始化
+  * @param  None
+  * @retval None
+  */
 void Initialization (void)
 {
+	/*设置优先级分组*/
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	/*初始化GPIO*/
 	GP_IO_Init();
-	uart_init(115200);		
+	/*初始化UART*/
+	uart_init(115200);
+	/*初始化延时功能*/
 	delay_init(168); 
-//	//出厂设置，一般运行不需要。
+//	/* 出厂设置，一般运行不需要*/
 //	setFactory();
 	#if PRINT_UART_LOG
 	printf("System Initing...!\r\n");
 	#endif
 	/*下载参数*/
 	loadParafromMainOrBackupFlash();//getPara();
-	/*设置wifi*/
-	setClientModePara();InitWiFi();//初始化wifi,默认client模式
-	checkModelSta();//如果没有连接AP，则自己的模式将变为AP模式
-	//客户端模式时，开启所有需要的UDP端口
+	/*设置wifi为客户端模式*/
+	setClientModePara();InitWiFi();
+	/*检查模组连接情况，如果连接失败，则设置为AP模式*/
+	checkModuleSta(); 
+	/*开启所有需要的套接字*/
 	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 		openAllSocket();
 	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
@@ -81,22 +63,82 @@ void Initialization (void)
 	queue_init(&adc_queue);
 	/*ADC相关引脚初始化*/
 	ADC_CTRL_Conf();
+	/*CAN初始化*/
 //	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 //	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
-	//ms时间
+	/*ms时间*/
 	TIM3_Int_Init(999,83); //1000us
-	//系统时间
-	TIM4_Int_Init(99,83); //100us
+	/*系统时间100us中断*/
+	TIM4_Int_Init(99,83);
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
+	/*帮助文档*/
 	getHelp();
+	/*参数打印*/
 	getPara();
 	#endif
 }
 
-u8 Status=1;
-extern u32 bytes_sent;
-void testAdc(void);
+/**
+  * @brief  CAN数据发送
+  * @param  None
+  * @retval None
+  */
+u8 can_send_package()
+{ 
+	if(CAN_Send_EN&&CAN1_Send_EN){
+		if(queue_empty(adc_queue)) delay_ms(2);
+		IO_input[0] = DIGITAL_INPUT1;
+		IO_input[1] = DIGITAL_INPUT2;
+		IO_input[2] = nodeId;
+		CAN1_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
+		CAN1_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
+		CAN1_Send_Msg(IO_input,3);
+		CAN_Send_EN = 0;
+		CAN1_Send_EN = 0;
+	}
+	if(CAN_Send_EN && CAN2_Send_EN){
+
+		if(queue_empty(adc_queue)) delay_ms(2);
+		IO_input[0] = DIGITAL_INPUT1;
+		IO_input[1] = DIGITAL_INPUT2;
+		IO_input[2] = nodeId;
+		CAN2_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
+		CAN2_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
+		CAN2_Send_Msg(IO_input,3);
+		CAN_Send_EN = 0;
+		CAN2_Send_EN = 0;
+	}
+	return 1;
+}
+
+
+
+/**
+  * @brief  测试ADC
+  * @param  None
+  * @retval None
+  */
+void testAdc(void){
+	u8 * AdcTemp;
+	ADC_CONV_H();
+	delay_us(5);
+	ADC_CONV_L();
+	delay_us(5);
+	ADC_CONV_H();
+	delay_us(100);
+	AdcTemp = ADC_Read(ADC_MAX_BYTES);
+//	#if IAM_MASTER_CLOCK
+//	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
+//	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
+//	printf("%.3f   ",(float)(AdcTemp[2]*256+AdcTemp[3])*5.0/32768.0);	
+//	printf("%.3f   ",(float)(AdcTemp[4]*256+AdcTemp[5])*5.0/32768.0);	
+//	printf("%.3f   ",(float)(AdcTemp[6]*256+AdcTemp[7])*5.0/32768.0);	
+//	printf("\r\n");
+//	delay_ms(1000);
+//	#endif
+}
+
 int main(void)
 {     
 	setBoardSta(BOARD_INITING);Initialization();setBoardSta(BOARD_INITED);//初始化系统
@@ -164,52 +206,7 @@ int main(void)
 }
 
 
-u8 can_send_package()
-{ 
-	if(CAN_Send_EN&&CAN1_Send_EN){   
-		if(queue_empty(adc_queue)) delay_ms(2);
-		IO_input[0] = DIGITAL_INPUT1;
-		IO_input[1] = DIGITAL_INPUT2;
-		IO_input[2] = nodeId;
-		CAN1_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
-		CAN1_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
-		CAN1_Send_Msg(IO_input,3);
-		CAN_Send_EN = 0;
-		CAN1_Send_EN = 0;
-	}
-	if(CAN_Send_EN && CAN2_Send_EN){
 
-		if(queue_empty(adc_queue)) delay_ms(2);
-		IO_input[0] = DIGITAL_INPUT1;
-		IO_input[1] = DIGITAL_INPUT2;
-		IO_input[2] = nodeId;
-		CAN2_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
-		CAN2_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
-		CAN2_Send_Msg(IO_input,3);
-		CAN_Send_EN = 0;
-		CAN2_Send_EN = 0;
-	}
-	return 1;
-}
-
-//测试ADC
-void testAdc(void){
-	u8 * AdcTemp;
-	ADC_CONV_H();
-	delay_us(5);
-	ADC_CONV_L();
-	delay_us(5);
-	ADC_CONV_H();
-	delay_us(100);
-	AdcTemp = ADC_Read(ADC_MAX_BYTES);
-	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
-//	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
-//	printf("%.3f   ",(float)(AdcTemp[2]*256+AdcTemp[3])*5.0/32768.0);	
-//	printf("%.3f   ",(float)(AdcTemp[4]*256+AdcTemp[5])*5.0/32768.0);	
-//	printf("%.3f   ",(float)(AdcTemp[6]*256+AdcTemp[7])*5.0/32768.0);	
-//	printf("\r\n");
-//	delay_ms(1000);
-}
 
 
 

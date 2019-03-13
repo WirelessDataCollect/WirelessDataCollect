@@ -231,7 +231,7 @@ u8 order_anay(u8 arr[])
 			break;
 		case GET_CAN_SEND_EN:
 			if(arr[1]==nodeId){
-				CAN_Send_EN =1;//wifiÍ£Ö¹·¢ËÍ
+				CAN_Send_EN =1;//CAN¿ªÆô
 			}
 			else{
 				return NOT_NEED_RETURN_INFO;

@@ -80,7 +80,7 @@ void OpenSocket(u8 *destIP,unsigned short destSocket,unsigned short moduleSocket
 int Read_PKT(void);
 int Check_PKT(void);
 void InitWiFi(void);
-void checkModelSta(void);
+void checkModuleSta(void);
 void openAllSocket(void);
 void setClientModePara(void);
 void setApModePara(void);
