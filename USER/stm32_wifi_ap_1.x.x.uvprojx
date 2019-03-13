@@ -486,6 +486,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>TOOLS</GroupName>
+          <Files>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TOOLS\CRC\crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>typetrans.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TOOLS\TypeTrans\typetrans.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>SYSTEM</GroupName>
           <Files>
             <File>
@@ -1192,21 +1207,6 @@
               <FileName>README.md</FileName>
               <FileType>5</FileType>
               <FilePath>..\REAMDE\README.md</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>TOOLS</GroupName>
-          <Files>
-            <File>
-              <FileName>crc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\TOOLS\CRC\crc.c</FilePath>
-            </File>
-            <File>
-              <FileName>typetrans.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\TOOLS\TypeTrans\typetrans.c</FilePath>
             </File>
           </Files>
         </Group>

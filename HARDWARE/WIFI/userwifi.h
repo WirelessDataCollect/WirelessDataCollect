@@ -12,18 +12,23 @@
 
 /** 
   * @brief  上位机命令接收后是否需要返回
-  */  
+  * @{
+  */ 
 typedef enum{
-	NOT_NEED_RETURN_INFO = 0,
-	NEED_RETURN_INFO
+	NOT_NEED_RETURN_INFO = 0,/*!< 需要返回信息>*/
+	NEED_RETURN_INFO         /*!< 不需要返回信息>*/
 }CMD_GetState;
+/**
+  * @}
+  */
+
 
 /** @defgroup 采用TCP还是UDP发送给私有云服务器
   * @hint 两者定义一个且仅仅一个，TCP未验证，不建议使用
   * @{
   */
-//#define  SEND_WITH_TCP  1  //用tcp传输数据
-#define SEND_WITH_UDP     1   //用udp传输数据
+//#define  SEND_WITH_TCP  1  /*!< 用tcp传输数据>*/
+#define SEND_WITH_UDP     1  /*!< 用udp传输数据>*/
 /**
   * @}
   */
@@ -31,10 +36,10 @@ typedef enum{
 /** @defgroup 默认的远程服务器IPV4地址
   * @{
   */
-#define DESTIP_TXRX_GROUP1 115
-#define DESTIP_TXRX_GROUP2 159
-#define DESTIP_TXRX_GROUP3 154
-#define DESTIP_TXRX_GROUP4 160
+#define DESTIP_TXRX_GROUP1 115    /*!< IP 第1组>*/
+#define DESTIP_TXRX_GROUP2 159    /*!< IP 第2组>*/
+#define DESTIP_TXRX_GROUP3 154    /*!< IP 第3组>*/
+#define DESTIP_TXRX_GROUP4 160    /*!< IP 第4组>*/
 /**
   * @}
   */
@@ -42,26 +47,26 @@ typedef enum{
 /** @defgroup AP模式参数
   * @{
   */
-#define AP_MODE_SOCKET_DEST_IP       "192.168.100.2"
-#define AP_MODE_SOCKET_DEST_PORT     5002
-#define AP_MODE_SOCKET_MODULE_PORT   5001
+#define AP_MODE_SOCKET_DEST_IP       "192.168.100.2"    /*!< AP模式下连接者的IP>*/
+#define AP_MODE_SOCKET_DEST_PORT     5002               /*!< AP模式下连接者的端口>*/
+#define AP_MODE_SOCKET_MODULE_PORT   5001               /*!< AP模式下本设备的端口>*/
 /**
   * @}
   */
 
-/** @defgroup 上位机命令 
+/** @defgroup 上位机命令，UDP数据包第1个字节
   * @{
   */
-#define  GET_TIME_SYNC_PC           0xa1   //来自上位机的同步信号
-#define  RETURN_INFO			    0xa2   //
-#define  GET_TEST_NAME              0xa3//获取测试名称
-#define  GET_TIME_SYNC_MAIN_CLOCK   0xa4  //来自主机的同步信号
-#define  GET_WIFI_SEND_EN           0xa5
-#define  GET_WIFI_SEND_DISABLE      0xa6
-#define  GET_CHANNEL_MODEL          0xa7
-#define  GET_CAN_SEND_EN            0xa8
-#define  GET_REMOTE_IP_PORT         0xa9
-#define  PAGING                     0xaa  //寻呼信号
+#define  GET_TIME_SYNC_PC           0xa1   /*!< 来自上位机的同步信号>*/
+#define  RETURN_INFO			    0xa2   /*!< 返回信息>*/
+#define  GET_TEST_NAME              0xa3   /*!< 获取测试名称>*/
+#define  GET_TIME_SYNC_MAIN_CLOCK   0xa4   /*!< 来自主机的同步信号>*/
+#define  GET_WIFI_SEND_EN           0xa5   /*!< 数据采集和发送使能>*/
+#define  GET_WIFI_SEND_DISABLE      0xa6   /*!< 数据采集和发送失能>*/
+#define  GET_CHANNEL_MODEL          0xa7   /*!< 设置通道的电流/电压模式>*/
+#define  GET_CAN_SEND_EN            0xa8   /*!< CAN数据采集和发送使能>*/
+#define  GET_REMOTE_IP_PORT         0xa9   /*!< 设置发送数据对象（私有云服务器）IP>*/
+#define  PAGING                     0xaa   /*!< 寻呼信号>*/
 /**
   * @}
   */

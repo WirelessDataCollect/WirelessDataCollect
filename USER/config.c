@@ -10,37 +10,35 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-u8 RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "418_Lab_5G";
-u8 RSI_PSK[RSI_PSK_MAX_LENGTH]             = "518518518"; 
-u8 nodeId                          = 1;//1,2,3,4，不要超过255
-u32 RSI_WIFI_OPER_MODE             = RSI_WIFI_CLIENT_MODE_VAL; //RSI_WIFI_CLIENT_MODE_VAL
-u8 RSI_IP_CFG_MODE                 = RSI_DHCP_IP_MODE;        //@ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE .static or DHCPV4 mode for IPv4,RSI_FEAT_DHCP_HOST_NAME for dhcp client host name from host or 
-                                                               //@ RSI_FEAT_DHCP_FQDN to enable DHCP OPTION 81 or RSI_DHCP_UNICAST_OFFER_SUPPORT to support DHCP unicast offer.
-u8 RSI_BAND                        = RSI_DUAL_BAND;             //@ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND
+u8   RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "418_Lab_5G";             /*!< WIFI名称>*/
+u8   RSI_PSK[RSI_PSK_MAX_LENGTH]             = "518518518";              /*!< WIFI密码>*/
+u8   nodeId                                  = 1;                        /*!< 节点ID，0-255>*/
+u32  RSI_WIFI_OPER_MODE                      = RSI_WIFI_CLIENT_MODE_VAL; /*!< CLIENT或者AP模式>*/
+u8   RSI_IP_CFG_MODE                         = RSI_DHCP_IP_MODE;         /*!< @ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE >*/
+u8   RSI_BAND                                = RSI_DUAL_BAND;            /*!< @ RSI_BAND_2P4GHZ or RSI_BAND_5GHZ or RSI_DUAL_BAND>*/
+u8   BOARD_STA                               = BOARD_INITING;            /*!< 板子的状态>*/
+u8   catPara[PARA_CAT_CH_MAX_LENGTH]         = {0};                      /*!< 存储连接后的数据>*/
+u8   localhost[IPV4_LENGTH]                  = {0};                      /*!< 本地ip>*/
+extern u8 destIp_txrx[IPV4_LENGTH];                                      /*!< 远程私有云服务器IP>*/
 
-u8 BOARD_STA                       = BOARD_INITING;//板子的状态
 
-u8 catPara[PARA_CAT_CH_MAX_LENGTH]={0};//存储连接后的数据
-
-extern u8 destIp_txrx[IPV4_LENGTH];//远程私有云服务器IP
-
-u8 localhost[IPV4_LENGTH] = {0};//本地ip
-
-//设置board的状态
-/*
-    BOARD_INITING = 0,
-	BOARD_RUNNING,  
-*/
+/**
+  * @brief  下载系统运行所需的参数
+  * @param  sta：板子状态
+  *          @arg BOARD_INITING:正在初始化
+  *          @arg BOARD_INITED:初始化完成
+  *          @arg BOARD_RUNNING:正在主程序运行
+  * @retval 存储参数的数组的字节长度，包括总长度市值、数据、分隔符、crc、结束符等
+  */
 void setBoardSta(u8 sta){
 	BOARD_STA  = sta;
 }
 
-//**********************
-//函数作用：下载系统运行所需的参数
-//数据读取格式：\r\n RSI_JOIN_SSID \r\n
-//
-//**********************
-//从flash中提取出数据长度，包括长度、数据、分隔符、crc、结束符
+/**
+  * @brief  下载系统运行所需的参数
+  * @param  startAddr：Flash起始地址
+  * @retval 存储参数的数组的字节长度，包括总长度市值、数据、分隔符、crc、结束符等
+  */
 u32 getCatParaChLenInFlash(u32 startAddr){
 	u32 catParaChLen;
 	if(FLASH_HEAD_LENGTH_BYTES==4){//32bits保存
@@ -52,9 +50,21 @@ u32 getCatParaChLenInFlash(u32 startAddr){
 	}
 	return catParaChLen;
 }
-//下载一个扇区的数据，包括校验
+
+/**
+  * @brief  读取扇区的参数，并解析、校验
+  * @param  catPara：存储读取的参数的数组指针
+  * @param  startAddr：参数读取的起始地址
+  *          @arg FLASH_SAVE_ADDR_MAIN：主存储扇区起始地址
+  *          @arg FLASH_SAVE_ADDR_BACKUP：备份存储扇区起始地址
+  * @retval 参数读取状态
+  *          @arg LOAD_PARA_CRC_ERROR
+  *          @arg LOAD_PARA_TOO_LONG_ERROR
+  *          @arg LOAD_PARA_POINTER_NULL
+  *          @arg LOAD_PARA_SUCCESS
+  */
 u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
-	//先读出长度
+	/*先读出长度*/
 	u32 catParaChLen = getCatParaChLenInFlash(startAddr);
 	#if PRINT_UART_LOG
 	printf("Para Array Length : %d\r\n",catParaChLen);
@@ -67,16 +77,16 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	}
 	memset(catPara,0,PARA_CAT_CH_MAX_LENGTH);//全部赋值0
 	STMFLASH_ReadBytes(startAddr,catPara,catParaChLen);//读取main区中所有数据
-	//CRC校验
+	/*CRC校验*/
 	#if PRINT_UART_LOG
 	printf("Checking CRC...\r\n");
 	#endif
 	CRC_TYPE crc = CalCrc(0, (c8 *)catPara,catParaChLen- sizeof(FLASH_LABLE_TYPE) - FLASH_CRC_BYTE_LENGTH,0x8005);
-	//计算得到crc转化为字符串，长度固定，高位补0
+	/*计算得到crc转化为字符串，长度固定，高位补0*/
 	u8 crcStr[FLASH_CRC_BYTE_LENGTH+1];memset(crcStr,'0',FLASH_CRC_BYTE_LENGTH);crcStr[FLASH_CRC_BYTE_LENGTH]=0;//初始化"00000\0"
 	u8 * crcStrItoa = itoa(crc);
 	memcpy((char *)crcStr,crcStrItoa,strlen((c8*)crcStrItoa));//转化为字符串
-	//获取在flash中的crc字符串
+	/*获取在flash中的crc字符串*/
 	u8 crcStrFlash[FLASH_CRC_BYTE_LENGTH+1]={0};memcpy(crcStrFlash,catPara+catParaChLen-sizeof(FLASH_LABLE_TYPE)-FLASH_CRC_BYTE_LENGTH,FLASH_CRC_BYTE_LENGTH);
 	#if PRINT_UART_LOG
 	printf("CRC Computed : %s \r\nCRC in Flash : %s\r\n",crcStr,crcStrFlash);
@@ -94,7 +104,7 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	#if PRINT_UART_LOG
 	printf("Paras Unzipping...\r\n");
 	#endif
-	//分割数据
+	/*分割数据*/
 	u32 paraStartAddr =(u32) (catPara + FLASH_HEAD_LENGTH_BYTES);//数据存储开始的位置，在数组中的下标
 	/**SSID*/
 	u32 splitAddr = (u32) strchr((c8 *)(paraStartAddr),FLASH_LABEL_SPLIT);//得到分隔符的地址
@@ -138,19 +148,12 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	return LOAD_PARA_SUCCESS;
 }
 
-//**************************************************/
-//函数作用：利用loadParaAndCheck得到主存储区或者备份存储区的数据
-//函数参数：无
-/**************************************************/
-/*=========================================================================*/
+
 /**
- * @fn          void loadParafromMainOrBackupFlash(void)
- * @brief       利用loadParaAndCheck得到主存储区或者备份存储区的数据
- * @param[in]   none
- * @return      none
- * @section description 
- * 利用loadParaAndCheck得到主存储区或者备份存储区的数据 
- */
+  * @brief  利用loadParaAndCheck得到主存储区或者备份存储区的数据
+  * @param  None
+  * @retval None
+  */
 void loadParafromMainOrBackupFlash(void){
 	#if PRINT_UART_LOG
 	printf("Load Paras Start ...\r\n");
@@ -171,32 +174,63 @@ void loadParafromMainOrBackupFlash(void){
 			#endif				
 		}
 	}else{
+		#if PRINT_UART_LOG
 		printf("Loading Main Flash Paras Successfully!\r\n");
+		#endif	
 	}
 }
 
-
-//**********************
-//函数作用：保存参数
-//
-//**********************
-
-////写入word（4字节）数据，改变写地址
+/**
+  * @brief  写入字（4字节）数据，改变（INC增加）写地址WriteAddr
+  * @param  pBuff：要写入的数据的指针
+  * @param  WriteAddr：要写入的Flash地址
+  * @param  WordLen：数据字（32位）长
+  * @retval 写入状态
+  *          @arg WRITE_PARA_FAILED
+  *          @arg WRITE_PARA_SUCCESS
+  */
 u8 writeFlashWordsIncAddr(u32 * pBuff,u32 * WriteAddr,u16 WordLen){
 	for(int i =0;i<WordLen;i+=1){
-		if(FLASH_ProgramByte(*WriteAddr,*(pBuff + i)) != FLASH_COMPLETE)//写入数据
-		{ 
+		if(FLASH_ProgramByte(*WriteAddr,*(pBuff + i)) != FLASH_COMPLETE){//写入数据		 
 			return WRITE_PARA_FAILED;	//写入异常
 		}
 		*WriteAddr += 4;//4byte为单位
 	}
 	return WRITE_PARA_SUCCESS;
 }
-//写入byte数据，同时改变写地址
+
+/**
+  * @brief  写入字（4字节）数据，不改变（INC增加）写地址WriteAddr
+  * @param  pBuff：要写入的数据的指针
+  * @param  WriteAddr：要写入的Flash地址
+  * @param  WordLen：数据字（32位）长
+  * @retval 写入状态
+  *          @arg WRITE_PARA_FAILED
+  *          @arg WRITE_PARA_SUCCESS
+  */
+u8 writeFlashWords(u32 * pBuff,u32 WriteAddr,u16 WordLen){
+	u32 writeAddrNow = WriteAddr;
+	for(int i =0;i<WordLen;i+=1){
+		if(FLASH_ProgramByte(writeAddrNow,*(pBuff + i)) != FLASH_COMPLETE){//写入数据		 
+			return WRITE_PARA_FAILED;	//写入异常
+		}
+		writeAddrNow += 4;//4byte为单位
+	}
+	return WRITE_PARA_SUCCESS;
+}
+
+/**
+  * @brief  写入字节数据，改变（INC增加）写地址WriteAddr
+  * @param  pBuff：要写入的数据的指针
+  * @param  WriteAddr：要写入的Flash地址
+  * @param  WordLen：数据字节（8位）长
+  * @retval 写入状态
+  *          @arg WRITE_PARA_FAILED
+  *          @arg WRITE_PARA_SUCCESS
+  */
 u8 writeFlashByteIncAddr(u8 * pBuff,u32 * WriteAddr,u16 u8Len){
 	for(int i =0;i<u8Len;i+=1){
-		if(FLASH_ProgramByte(*WriteAddr,*(pBuff + i))!=FLASH_COMPLETE)//写入数据
-		{ 
+		if(FLASH_ProgramByte(*WriteAddr,*(pBuff + i))!=FLASH_COMPLETE){ //写入数据		
 			return WRITE_PARA_FAILED;	//写入异常
 		}
 		*WriteAddr += 1;//1byte为单位
@@ -204,19 +238,16 @@ u8 writeFlashByteIncAddr(u8 * pBuff,u32 * WriteAddr,u16 u8Len){
 	return WRITE_PARA_SUCCESS;
 }
 
-////写入word（4字节）数据，不改变写地址
-u8 writeFlashWords(u32 * pBuff,u32 WriteAddr,u16 WordLen){
-	u32 writeAddrNow = WriteAddr;
-	for(int i =0;i<WordLen;i+=1){
-		if(FLASH_ProgramByte(writeAddrNow,*(pBuff + i)) != FLASH_COMPLETE)//写入数据
-		{ 
-			return WRITE_PARA_FAILED;	//写入异常
-		}
-		writeAddrNow += 4;//4byte为单位
-	}
-	return WRITE_PARA_SUCCESS;
-}
-//写入byte数据，同时不改变写地址
+
+/**
+  * @brief  写入字节数据，不改变（INC增加）写地址WriteAddr
+  * @param  pBuff：要写入的数据的指针
+  * @param  WriteAddr：要写入的Flash地址
+  * @param  WordLen：数据字节（8位）长
+  * @retval 写入状态
+  *          @arg WRITE_PARA_FAILED
+  *          @arg WRITE_PARA_SUCCESS
+  */
 u8 writeFlashByte(u8 * pBuff,u32 WriteAddr,u16 u8Len){
 	u32 writeAddrNow = WriteAddr;
 	for(int i =0;i<u8Len;i+=1){
@@ -229,41 +260,60 @@ u8 writeFlashByte(u8 * pBuff,u32 WriteAddr,u16 u8Len){
 	return WRITE_PARA_SUCCESS;
 }
 
-//获取保存所有数据所需的空间
-//包括数据长度、分隔符、数据、结束符
+/**
+  * @brief  获取保存所有数据所需的空间，包括数据长度、分隔符、数据、结束符
+  * @note   根据当前的参数情况获取，不固定
+  * @param  None
+  * @retval 存储参数总字节长度
+  */
 u32 getParaLen(void){
 	u16 catChLen = 0;
-	catChLen += FLASH_HEAD_LENGTH_BYTES;//用于保存数据长度的byte数
+	/*总字节长*/
+	catChLen += FLASH_HEAD_LENGTH_BYTES;
+	/*SSID*/
 	catChLen += strlen((c8*)RSI_JOIN_SSID);
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
+	/*分隔符*/
+	catChLen += sizeof(FLASH_LABLE_TYPE); 
+	/*PSK*/
 	catChLen += strlen((c8*)RSI_PSK);
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
-	catChLen += strlen((c8 *)itoa(nodeId));  //NodeId转化为字符串后的长度，如23->"23"，则为长度2
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
-	//IP
-	catChLen += strlen((c8 *)itoa(destIp_txrx[0]));//IP第1位
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
-	catChLen += strlen((c8 *)itoa(destIp_txrx[1]));//IP第2位
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
-	catChLen += strlen((c8 *)itoa(destIp_txrx[2]));//IP第3位
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
-	catChLen += strlen((c8 *)itoa(destIp_txrx[3]));//IP第4位
-	catChLen += sizeof(FLASH_LABLE_TYPE); //分隔符占用1byte
-	//CRC校验
+	/*分隔符*/
+	catChLen += sizeof(FLASH_LABLE_TYPE);
+	/*nodeId，转化为字符串后的长度，如23->"23"，则为长度2*/
+	catChLen += strlen((c8 *)itoa(nodeId)); 
+	/*分隔符*/
+	catChLen += sizeof(FLASH_LABLE_TYPE);
+	/*IP*/
+	catChLen += strlen((c8 *)itoa(destIp_txrx[0]));//IP第1组
+	catChLen += sizeof(FLASH_LABLE_TYPE);
+	catChLen += strlen((c8 *)itoa(destIp_txrx[1]));//IP第2组
+	catChLen += sizeof(FLASH_LABLE_TYPE); 
+	catChLen += strlen((c8 *)itoa(destIp_txrx[2]));//IP第3组
+	catChLen += sizeof(FLASH_LABLE_TYPE);
+	catChLen += strlen((c8 *)itoa(destIp_txrx[3]));//IP第4组
+	catChLen += sizeof(FLASH_LABLE_TYPE);
+	/*CRC校验*/
 	catChLen += FLASH_CRC_BYTE_LENGTH;//加入一个CRC校验
 
+	/*结束符*/
 	catChLen += sizeof(FLASH_LABLE_TYPE); //结束符号占用1byte
+//#if PRINT_UART_LOG	
 //	printf("strlen(RSI_JOIN_SSID) : %d\r\n",strlen((c8*)RSI_JOIN_SSID));
 //	printf("FLASH_LABEL_SPLIT : %d\r\n",sizeof(FLASH_LABLE_TYPE));
 //	printf("strlen(RSI_PSK) : %d\r\n",strlen((c8*)RSI_PSK));
 //	printf("CRC_TYPE : %d\r\n",FLASH_CRC_BYTE_LENGTH);
 //	printf("FLASH_LABEL_END : %d\r\n",sizeof(FLASH_LABLE_TYPE));
+//#endif
 	return 	catChLen;
 }
 
-//将所有要保存的数据都连接起来,中间用分隔符分开，返回数据的长度，不包括最后的'\0'
-//分配失败的话会返回0
+/**
+  * @brief  将所有要保存的数据都连接起来,中间用分隔符分开
+  * @param  None
+  * @retval 数据的长度，不包括最后的'\0'
+  *         0：表示分配失败
+  */
 u32 getCatPara(void){
+	/*获取要保存的参数的字节长度*/
 	u32 catParaLen = getParaLen();
 	#if PRINT_UART_LOG
 	printf("catParaLen = %d\r\n",catParaLen);
@@ -332,7 +382,11 @@ u32 getCatPara(void){
 	return catParaLen;
 }
 
-//写一个扇区的数据
+/**
+  * @brief  写保存所有参数的数据到主和备份扇区
+  * @param  None
+  * @retval None
+  */
 void writeSectorPara(void){
 	u32 catParaLen = getCatPara();
 //	if(catParaLen){//如果长度是0，说明保存数据的数组分配失败了。不写，直接返回	
@@ -379,23 +433,25 @@ void writeSectorPara(void){
 	}
 }
 
-
-
-
-
-//UART指令处理
-
-//********************
-//函数作用：命令拆分
-//  ' '：分割指令和设置值
-//  "\r\n"一条指令终止
-//********************
-
+/**
+  * @brief  给某个地址赋值0
+  * @param  None
+  * @retval None
+  */
 void putZero(u8 * pChar,u16 i){
 	*(pChar+i) = 0;
 }
 
-//获取splitCmd函数需要返回的状态
+
+/**
+  * @brief  获取splitCmd函数需要返回的状态
+  * @param  pCmd：存储命令CMD（字符串）的地址，字符串
+  * @param  pValue：存储信息（需要设置的参数等）的地址，字符串格式（数字也表示为字符串，需要转化到数字）
+  * @retval 命令/信息情况
+  *         @arg CMD_VALUE_SPLIT_ERROR
+  *         @arg CMD_VALUE_SPLIT_OK
+  *         @arg CMD_SPLIT_OK
+  */
 u8 getSplitCmdFunReturn(u8* pCmd,u8 * pValue){
 	if(*pValue != 0  &&  *pCmd != 0){//cmd和val都不是空的
 		return CMD_VALUE_SPLIT_OK;
@@ -406,15 +462,32 @@ u8 getSplitCmdFunReturn(u8* pCmd,u8 * pValue){
 	}
 }
 
-/*************************************************
-//函数作用：专门为函数splitCmd的清理变量方法
-*************************************************/
+/**
+  * @brief  专门为函数splitCmd的清理变量方法
+  * @param  pQueue：存储命令（包括信息）的存储空间（队列）地址
+  * @param  pCmd：存储命令的地址
+  * @param  pValue：存储信息的地址
+  * @param  i_cmd：pCmd需要清零的地址（pCmd+i_cmd）
+  * @param  i_val：pValue需要清零的地址（pValue+i_val）
+  * @retval None
+  */
 static void clearPara4SplitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue,u16 i_cmd,u16 i_val){
 		uart_queue_clear(pQueue);
 		putZero(pValue,i_val);
 		putZero(pCmd,i_cmd);	
 }
-//分割出cmd和value
+
+/**
+  * @brief  从存储命令和信息的队列中，分割出命令(cmd)和信息(value)
+  * @param  pQueue：存储命令（包括信息）的存储空间（队列）地址
+  * @param  pCmd：存储命令的地址
+  * @param  pValue：存储信息的地址
+  * @retval CMD和VAL分割情况
+  *         @arg CMD_VALUE_SPLIT_ERROR
+  *         @arg CMD_VALUE_SPLIT_OK
+  *         @arg CMD_SPLIT_OK
+  *         @arg NONE_CMD_VALUE_MSG
+  */
 u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 {
 	u16 i_cmd=0,i_val=0;
@@ -423,7 +496,7 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 	u16 length = uart_queue_length(pQueue); //得到长度	
 	for(u16 forNum = 0;pQueue->CmdCompleteFlag==CMD_COMPLETED;)//一次cmd完成了
 	{		
-		if(forNum >= length){//超过了数据个数
+		if(forNum >= length){  //超过了数据个数
 			clearPara4SplitCmd(pQueue,pCmd,pValue,i_cmd,i_val);
 			#if PRINT_UART_LOG
 				printf("CMD Has No \\r\\n!\r\n");
@@ -482,13 +555,12 @@ u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue)
 }
 
 
-////////////处理CMD VALUE格式///////////////
-
-
-//*************************
-//处理Cmd
-//*************************
-//系统重启
+/**
+  * @brief  重启控制器MCU
+  * @note   不要随便使用，设置为static
+  * @param  None
+  * @retval None
+  */
 static void SystemReset(void){
 	__DSB();                                                     /* Ensure all outstanding memory accesses included
 															  buffered write are completed before reset */
@@ -499,7 +571,13 @@ static void SystemReset(void){
 	while(1);  
 }
 
-//输出帮助文件
+/**
+  * @brief  获取串口/AP模式帮助文档
+  * @note   每次添加命令都要更新
+  * @note   主要针对串口，AP模式部分指令不支持
+  * @param  None
+  * @retval None
+  */
 void getHelp(void){
 	#if PRINT_UART_LOG
 		printf("\r\n============  Help Document  ============ \r\n\r\n");
@@ -516,7 +594,12 @@ void getHelp(void){
 	#endif
 }
 
-//输出参数到串口
+/**
+  * @brief  输出参数到串口
+  * @note   每次添加命令都要更新
+  * @param  None
+  * @retval None
+  */
 void getPara(void){
 	#if PRINT_UART_LOG
 		printf("\r\n============  Parameter List  ============ \r\n\r\n");
@@ -546,6 +629,12 @@ void getPara(void){
 				
 	#endif
 }
+
+/**
+  * @brief  处理已分割的纯命令
+  * @param  cmd：命令指针
+  * @retval None
+  */
 void handleCmd(c8 * cmd){
 #if PRINT_UART_LOG
 	printf("Received CMD:\r\n  %s\r\n",cmd);
@@ -575,13 +664,15 @@ void handleCmd(c8 * cmd){
         SystemReset();                                      /* wait until reset */
 	}
 }
-//*************************
-//处理Cmd Val
-//*************************
-//设置string类型的数据
-//obj：对象
-//val：数值
-void setStrVal(c8 * val,c8 * obj,c8 * objName){//设置string value
+
+/**
+  * @brief  设置字符串类参数
+  * @param  val：参数数值（字符串）
+  * @param  obj：要设置的对象指针（字符串）
+  * @param  objName：要设置的对象的字符串名称
+  * @retval None
+  */
+void setStrVal(c8 * val,c8 * obj,c8 * objName){
 #if PRINT_UART_LOG	
 	printf("Setting %s...\r\n",objName);
 #endif
@@ -594,9 +685,14 @@ void setStrVal(c8 * val,c8 * obj,c8 * objName){//设置string value
 #endif
 }
 
-//设置整数类型的数据
-//obj：对象
-//val：数值
+
+/**
+  * @brief  设置字符串类参数
+  * @param  val：参数数值（字符串），需要从字符串转化为数字，如'15'需要转化为(u8)15
+  * @param  obj：要设置的对象指针（8位无符号整数类型）
+  * @param  objName：要设置的对象的字符串名称
+  * @retval None
+  */
 void setU8Val(u8 * val,u8 * obj,c8 * objName){//设置string value
 #if PRINT_UART_LOG	
 	printf("Setting %s...\r\n",objName);
@@ -610,10 +706,14 @@ void setU8Val(u8 * val,u8 * obj,c8 * objName){//设置string value
 #endif
 }
 
-//设置整数类型的数据
-//obj：对象
-//val：数值
-void setIpVal(u8 * val,u8 * obj,c8 * objName){//设置string value
+/**
+  * @brief  设置字符串类参数
+  * @param  val：IP参数数值地址，需要从字符串转化为u8数组，每个u8数字以IP_GROUP_SPLIT隔开
+  * @param  obj：要设置的对象指针（u8数组）
+  * @param  objName：要设置的对象的字符串名称
+  * @retval None
+  */
+void setIpVal(u8 * val,u8 * obj,c8 * objName){
 #if PRINT_UART_LOG	
 	printf("Setting %s...\r\n",objName);
 #endif
@@ -635,7 +735,12 @@ void setIpVal(u8 * val,u8 * obj,c8 * objName){//设置string value
 #endif
 }
 
-//总的cmd+Val命令处理
+/**
+  * @brief  处理已分割的命令和信息
+  * @param  cmd：命令指针
+  * @param  val：信息指针
+  * @retval None
+  */
 void handleCmdVal(c8 * cmd,c8 * val){
 #if PRINT_UART_LOG
 	printf("RECEIVED\r\n  CMD : %s \r\n  VAL : %s\r\n",cmd,val);
@@ -653,16 +758,22 @@ void handleCmdVal(c8 * cmd,c8 * val){
 
 }
 
-
-//*************************
-//处理分离错误问题
-//*************************
+/**
+  * @brief  处理命令和信息分割错误
+  * @note   目前不做任何处理
+  * @param  None
+  * @retval 0
+  */
 u8 handleSplitError(){
 	//TODO
 	return 0;
 }
 
-
+/**
+  * @brief  处理未分割的命令和信息，包括纯命令
+  * @param  pQueue：存储命令和信息的队列
+  * @retval None
+  */
 void dealCmdMsg(volatile CMD_QUEUE * pQueue){
 	u8 cmd[USART_REC_CMD_LEN];
 	u8 val[USART_REC_VAL_LEN];
@@ -681,7 +792,9 @@ void dealCmdMsg(volatile CMD_QUEUE * pQueue){
 		#endif
 			break;
 		case NONE_CMD_VALUE_MSG:   //没有接收到数据
+//		#if PRINT_UART_LOG
 //			printf("None CMD\r\n");
+//		#endif
 			break;
 		default:
 			
@@ -689,9 +802,12 @@ void dealCmdMsg(volatile CMD_QUEUE * pQueue){
 	}
 }
 
-
-//出厂设置，在flash中写入信息
-//放在delay_init后面
+/**
+  * @brief  出厂设置，在flash中写入信息
+  * @note   必须先进行延时功能的初始化(delay_init)
+  * @param  None
+  * @retval None
+  */
 void setFactory(void){
 	FLASH_Unlock();//解锁 
 	FLASH_DataCacheCmd(DISABLE);//FLASH擦除期间,必须禁止数据缓存	
