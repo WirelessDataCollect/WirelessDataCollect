@@ -15,7 +15,7 @@
 #include "gpio.h"
 #include "rsi_app.h"
 #include "config.h"
-extern rsi_app_cb_t rsi_app_cb;
+
 u8     DATA_AUTO_CHECK_EN = 1;	//是否在中断中自动check数据
 u32    SYSTEMTIME = 0;//系统时间
 u32    YYMMDD =0;//年月日
@@ -30,12 +30,12 @@ u16    destSocket_txrx = 5001;
 u16    moduleSocket_txrx =5002;
 u16    destSocket_sync = 5003;
 u16    moduleSocket_sync = 5003;
-u16    localDestSocket_txrx = 5004;
+u16    localDestSocket_txrx = 5014;
 u16    localModuleSocket_txrx = 5005;
 u16    socketDescriptor_txrx = 0;
 u16    socketDescriptor_sync = 1;
 u16    localSocketDescriptor_txrx = 2;
-u32    bytes_sent=0;//字节数据发送个数
+u32    bytes_sent = 0;//字节数据发送个数
 u8     AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回状态信息
 /**
   * @brief  接受UDP包并处理

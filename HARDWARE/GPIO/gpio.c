@@ -49,8 +49,8 @@ void GP_IO_Init(void)
 	GPIO_InitStructure.GPIO_Pin = CH4_PIN;
 	GPIO_Init(CH4_PORT, &GPIO_InitStructure);//初始化
 	/*默认通道拉低*/
-	Channel1=ADC_CURRENT_MODE;Channel2=ADC_CURRENT_MODE;
-	Channel3=ADC_CURRENT_MODE;Channel4=ADC_CURRENT_MODE;
+	Channel1=ADC_VOLTAGE_MODE;Channel2=ADC_VOLTAGE_MODE;
+	Channel3=ADC_VOLTAGE_MODE;Channel4=ADC_VOLTAGE_MODE;
 	/*本版（母版）LED*/
 	GPIO_InitStructure.GPIO_Pin = LED1_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式

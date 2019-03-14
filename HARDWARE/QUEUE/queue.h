@@ -17,7 +17,7 @@
   * @brief  队列属性
   * @{
   */ 
-#define  UDP_SEND_SIZE          (8*67 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   616 = 8 * 67 + PACKAGE_HEAD_FRAME_LENGTH>*/
+#define  UDP_SEND_SIZE          (8*60 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   616 = 8 * 67 + PACKAGE_HEAD_FRAME_LENGTH>*/
 #define  QUEUE_SIZE             700                                 /*!< 队列正常容量>*/
 #define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+50)      /*!< 队列最大容量>*/
 /**

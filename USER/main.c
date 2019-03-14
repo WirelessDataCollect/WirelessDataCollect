@@ -139,12 +139,15 @@ void testAdc(void){
 	delay_us(100);
 	AdcTemp = ADC_Read(ADC_MAX_BYTES);
 	#if PRINT_UART_LOG
-	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
-//	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
-//	printf("%.3f   ",(float)(AdcTemp[2]*256+AdcTemp[3])*5.0/32768.0);	
-//	printf("%.3f   ",(float)(AdcTemp[4]*256+AdcTemp[5])*5.0/32768.0);	
-//	printf("%.3f   ",(float)(AdcTemp[6]*256+AdcTemp[7])*5.0/32768.0);	
-//	printf("\r\n");
+//	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
+//	printf("%d ",(AdcTemp[1]*256+AdcTemp[2]));
+//	printf("%d ",(AdcTemp[0]*256+AdcTemp[1]));
+//	printf("%d \r\n",(AdcTemp[0]*256+AdcTemp[1]));
+	printf("%.3f   ",(float)(AdcTemp[0]*256+AdcTemp[1])*5.0/32768.0);	
+	printf("%.3f   ",(float)(AdcTemp[2]*256+AdcTemp[3])*5.0/32768.0);	
+	printf("%.3f   ",(float)(AdcTemp[4]*256+AdcTemp[5])*5.0/32768.0);	
+	printf("%.3f   ",(float)(AdcTemp[6]*256+AdcTemp[7])*5.0/32768.0);	
+	printf("\r\n");
 	delay_ms(1000);
 	#endif
 }

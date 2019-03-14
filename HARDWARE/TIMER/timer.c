@@ -174,6 +174,8 @@ void TIM3_IRQHandler(void)
 			ADC_CONV_L();//最短时间25ns
 			/**采集数据，顺便当做延时用*/
 			adcTamp = ADC_Read(ADC_MAX_BYTES);
+		//		printf("%.3f   ",(float)(adcTamp[0]*256+adcTamp[1])*5.0/32768.0);		
+//	printf("\r\n");
 			/* 读八个字节数据*/
 			for(int i=0;i<ADC_MAX_BYTES;i++){
 				queue_put((Queue *)&adc_queue, *(adcTamp+i));
