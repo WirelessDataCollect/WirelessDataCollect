@@ -1,3 +1,14 @@
+/**
+  ******************************************************************************
+  * @file    adc.c
+  * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   ad7606 configuration/read functions   ad7606相关配置和读写方法
+  ******************************************************************************
+  */
+
+//-------------include---------------//
 #include "adc.h"
 #include "rsi_global.h"
 #include "rsi_app.h"

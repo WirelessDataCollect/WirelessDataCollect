@@ -329,8 +329,6 @@ void openAllSocket(void){
 		//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
 	#endif
 		OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
-	#if IAM_MASTER_CLOCK
 		OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket	
-	#endif
 	DATA_AUTO_CHECK_EN= 1;
 }
