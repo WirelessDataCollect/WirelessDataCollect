@@ -1,4 +1,16 @@
+/**
+  ******************************************************************************
+  * @file    queue.c
+  * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   adc data queue configuration functions   ADC数据队列方法
+  ******************************************************************************
+  */
+
+//-------------include---------------//
 #include "queue.h"
+#include "usart.h"
 #include <string.h>
 
 /**
@@ -130,6 +142,7 @@ u8 queue_empty(volatile Queue queue)
   */
 u32 queue_length(volatile Queue queue)
 {
+//	printf("len : %d\r\n",(queue.tail-queue.head+QUEUE_SIZE)%QUEUE_SIZE);
 	return (queue.tail-queue.head+QUEUE_SIZE)%QUEUE_SIZE;
 }
 

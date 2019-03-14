@@ -16,8 +16,6 @@
 #include "queue.h"
 #include "config.h"
 
-//!UDP数据包最大大小   546 = 8 * 67 + PACKAGE_HEAD_FRAME_LENGTH
-#define  UDP_SEND_SIZE          (8*67+PACKAGE_HEAD_FRAME_LENGTH)
 //!是不是主时钟设备
 #define  IAM_MASTER_CLOCK       0  
 
@@ -100,7 +98,7 @@ extern u32   YYMMDD;
 extern u8    Time_Sync_Flag;
 
 //!数据采集和发送使能
-extern u8    Wifi_Send_EN;
+extern volatile u8    Wifi_Send_EN;
 //!CAN采集和发送使能
 extern u8    CAN_Send_EN;
 

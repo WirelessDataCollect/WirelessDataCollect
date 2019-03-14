@@ -155,18 +155,17 @@ void TIM3_IRQHandler(void)
 
 		#endif
 		/* 处理串口或者AP模式下的指令*/
-		if(MS_TIME%500 == 0){
+		if(MS_TIME%2000 == 0){
 			dealCmdMsg(&CMD_RX_BUF);
+//			printf("tail : %d\r\nHead : %d\r\n",adc_queue.tail,adc_queue.head);
 		}
 		/* 如果队列空了，时间戳更新*/
-		if(queue_empty(adc_queue)) 
-		{
+		if(queue_empty(adc_queue)){
 			adc_queue.HeadTime = SYSTEMTIME;
 			adc_queue.YYYY_MM_DD = YYMMDD;
 		}
 		/* 开始发数据了再开始采集*/
-		if(Wifi_Send_EN)
-		{
+		if(Wifi_Send_EN){
 			/*! @note 
 				//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
 				//       AD7606-4,64 Sample ratio,T = 193
@@ -176,13 +175,14 @@ void TIM3_IRQHandler(void)
 			/**采集数据，顺便当做延时用*/
 			adcTamp = ADC_Read(ADC_MAX_BYTES);
 			/* 读八个字节数据*/
-			for(int i=0;i<8;i++)
-			{
-				queue_put(&adc_queue, *(adcTamp+i));
+			for(int i=0;i<ADC_MAX_BYTES;i++){
+				queue_put((Queue *)&adc_queue, *(adcTamp+i));
+//				queue_put((Queue *)&adc_queue, 1);
 					
 			}
 			/* 拉高开始下一次转换*/
 			ADC_CONV_H();//最短时间25ns
+			
 			
 		}	
 	 }

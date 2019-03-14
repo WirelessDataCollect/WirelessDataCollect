@@ -1,13 +1,25 @@
+/**
+  ******************************************************************************
+  * @file    queue.h
+  * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    13-March-2019
+  * @brief   adc data queue configuration functions   ADC数据队列方法
+  ******************************************************************************
+  */
 #ifndef   QUEUE_H_
 #define   QUEUE_H_
+
+//-------------include---------------//
 #include <sys.h>
 
 /** 
   * @brief  队列属性
   * @{
   */ 
-#define QUEUE_SIZE       2000               /*!< 队列正常容量>*/
-#define ARR_SIZE         (QUEUE_SIZE+ 600)  /*!< 队列最大容量>*/
+#define  UDP_SEND_SIZE          (8*67 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   616 = 8 * 67 + PACKAGE_HEAD_FRAME_LENGTH>*/
+#define  QUEUE_SIZE             700                                 /*!< 队列正常容量>*/
+#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+50)      /*!< 队列最大容量>*/
 /**
   * @}
   */
@@ -32,8 +44,8 @@ typedef struct{
     u8 arr[ARR_SIZE];
 	u32 YYYY_MM_DD;
 	u32 HeadTime;
-	volatile u8 test_name[MAX_TEST_NAME_LENGTH];
-    u16 head,tail;
+	volatile u16 head,tail;
+	u8 test_name[MAX_TEST_NAME_LENGTH];   
 }Queue;
 /**
   * @}

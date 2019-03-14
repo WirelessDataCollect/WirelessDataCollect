@@ -4,7 +4,7 @@
   * @author  zju.nesc.iotlab 浙江大学NeSC课题组物联网实验室
   * @version V1.0
   * @date    13-March-2019
-  * @brief   wifi module configuration cfunctions   wifi模组配置方法
+  * @brief   wifi module configuration functions   wifi模组配置方法
   ******************************************************************************
   */
 

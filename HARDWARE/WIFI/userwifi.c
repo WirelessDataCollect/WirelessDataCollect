@@ -20,7 +20,7 @@ u8     DATA_AUTO_CHECK_EN = 1;	//是否在中断中自动check数据
 u32    SYSTEMTIME = 0;//系统时间
 u32    YYMMDD =0;//年月日
 u8     Time_Sync_Flag = 0;//最近时钟是否同步
-u8     Wifi_Send_EN = 0;//数据发送和接受使能
+volatile u8 Wifi_Send_EN = 0;//数据发送和接受使能
 u8     CAN_Send_EN = 0;//CAN数据发送和接受使能
 Queue  adc_queue;//ADC数据存储
 u8     localDestIp_txrx[4] = {255,255,255,255};
@@ -120,10 +120,13 @@ s32 TcpCount = 0;
 u8 wifi_send_package()
 {
 	int Head;
-	uint32 Length;
+	u32 Length;
 
 	
-	if(!Wifi_Send_EN) return 0;
+	if(!Wifi_Send_EN){
+		return 0;
+	}
+	
 
 	if(Time_Sync_Flag==1)
 	{
@@ -131,7 +134,9 @@ u8 wifi_send_package()
 		
 		queue_addtime_addIO(&adc_queue,Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2);    //  head <- head-10; //
 		
-		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
+		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) {
+			queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
+		}
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//  why not use   rsi_send_data()	
@@ -155,13 +160,14 @@ u8 wifi_send_package()
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	
-	if(queue_length(adc_queue) >= UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )//我觉得>=比较好，万一没来得及发现==UDP_SEND_SIZE - 10的情况呢
-	{
+	if(queue_length(adc_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
 		
 		Length = queue_length(adc_queue);
 		
 		queue_addtime_addIO(&adc_queue,Length,nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2);   //  head <- head-10;
-		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
+		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ){
+			queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
+		}
 		Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail; 
 		//发送到远程服务器
