@@ -38,11 +38,11 @@ u8 *reverse(char *s){
 
 /**
   * @brief  整数转字符串，如123->"123"
+  * @note   一次只支持1个转换，否则会被覆盖
   * @param  n：整数
   * @retval 转换后的字符串
   */
-u8 *itoa(u32 n)
-{
+u8 *itoa(u32 n){
     int i = 0,isNegative = 0;
 	/* 必须为static变量，或者是全局变量*/
     static char s[STR_MAX_LENGTH];      
