@@ -157,7 +157,6 @@ void TIM3_IRQHandler(void)
 		/* 处理串口或者AP模式下的指令*/
 		if(MS_TIME%2000 == 0){
 			dealCmdMsg(&CMD_RX_BUF);
-//			printf("tail : %d\r\nHead : %d\r\n",adc_queue.tail,adc_queue.head);
 		}
 		/* 如果队列空了，时间戳更新*/
 		if(queue_empty(adc_queue)){
@@ -174,12 +173,9 @@ void TIM3_IRQHandler(void)
 			ADC_CONV_L();//最短时间25ns
 			/**采集数据，顺便当做延时用*/
 			adcTamp = ADC_Read(ADC_MAX_BYTES);
-		//		printf("%.3f   ",(float)(adcTamp[0]*256+adcTamp[1])*5.0/32768.0);		
-//	printf("\r\n");
 			/* 读八个字节数据*/
 			for(int i=0;i<ADC_MAX_BYTES;i++){
 				queue_put((Queue *)&adc_queue, *(adcTamp+i));
-//				queue_put((Queue *)&adc_queue, 1);
 					
 			}
 			/* 拉高开始下一次转换*/

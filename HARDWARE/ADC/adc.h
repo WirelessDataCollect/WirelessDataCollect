@@ -87,32 +87,38 @@
 /**
   * @}
   */
-//OS1/2/3=110 64采样
-#define ADC_64Sample_Mean()            {GPIO_SetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_SetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_ResetBits(ADC_OS3_PORT,ADC_OS3_PIN);}  
-//时钟
+//!OS_Val = 4*(OS3)+2*(OS2)+1*(OS3)，则过采样 = 2^(OS_Val)
+//例如OS_Val = 4(即100)，则过采样 = 16，16次平均
+#define ADC_2Sample_Mean()             {GPIO_SetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_ResetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_ResetBits(ADC_OS3_PORT,ADC_OS3_PIN);} 
+#define ADC_4Sample_Mean()             {GPIO_ResetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_SetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_ResetBits(ADC_OS3_PORT,ADC_OS3_PIN);}
+#define ADC_8Sample_Mean()             {GPIO_SetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_SetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_ResetBits(ADC_OS3_PORT,ADC_OS3_PIN);} 
+#define ADC_16Sample_Mean()            {GPIO_ResetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_ResetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_SetBits(ADC_OS3_PORT,ADC_OS3_PIN);}
+#define ADC_32Sample_Mean()            {GPIO_SetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_ResetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_SetBits(ADC_OS3_PORT,ADC_OS3_PIN);}
+#define ADC_64Sample_Mean()            {GPIO_ResetBits(ADC_OS1_PORT,ADC_OS1_PIN);GPIO_SetBits(ADC_OS2_PORT,ADC_OS2_PIN);GPIO_SetBits(ADC_OS3_PORT,ADC_OS3_PIN);}
+//!时钟
 #define ADC_CLK_PORT                   GPIOB
 #define ADC_CLK_PIN                    GPIO_Pin_10
 #define ADC_CLK_AF_PINSOURCE           GPIO_PinSource10
-//MISO
+//!MISO
 #define ADC_MISO_PORT                  GPIOC
 #define ADC_MISO_PIN                   GPIO_Pin_2
 #define ADC_MISO_AF_PINSOURCE          GPIO_PinSource2
-//MOSI
+//!MOSI
 #define ADC_MOSI_PORT                  GPIOC
 #define ADC_MOSI_PIN                   GPIO_Pin_3
 #define ADC_MOSI_AF_PINSOURCE          GPIO_PinSource3
-//CS
+//!CS
 #define ADC_CS_PORT                    GPIOA
 #define ADC_CS_PIN                     GPIO_Pin_3
 #define ADC_CS_H()                     GPIO_SetBits(ADC_CS_PORT,ADC_CS_PIN)
 #define ADC_CS_L()                     GPIO_ResetBits(ADC_CS_PORT,ADC_CS_PIN)
-//RESET
+//!RESET
 #define ADC_RST_PORT                   GPIOB
 #define ADC_RST_PIN                    GPIO_Pin_11
 #define ADC_RST_H()	                   GPIO_SetBits(ADC_RST_PORT,ADC_RST_PIN)
 #define ADC_RST_L()                    GPIO_ResetBits(ADC_RST_PORT,ADC_RST_PIN)
 
-//和ADC交互的引脚配置
+//!和ADC交互的引脚配置
 void ADC_CTRL_Conf(void);
 u8 ADC_SPIx_ReadWriteByte(u8 TxData);
 u8 * ADC_Read(u16 NumByteToRead);
