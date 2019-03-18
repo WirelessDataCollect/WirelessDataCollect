@@ -13,6 +13,8 @@
 #include "usart.h"
 #include <string.h>
 
+//! 本次实验名称
+volatile u8 test_name[MAX_TEST_NAME_LENGTH] = DEFAULT_TEST_NAME;  
 /**
   * @brief  队列清零
   * @param  pQueue：队列
@@ -21,7 +23,6 @@
 void queue_init(volatile Queue * pQueue)
 {
     memset((void *)pQueue, 0, sizeof(Queue));
-	strcpy((void *)pQueue->test_name,DEFAULT_TEST_NAME);
 }
 
 /**
@@ -49,6 +50,18 @@ void queue_put(volatile Queue * pQueue, u8 ch)
 }
 
 /**
+  * @brief  u8数据拷贝至queue.arr尾部
+  * @param  pQueue：队列
+  * @param  buf：要加入的u8数组
+  * @param  len：u8数组长度
+  * @retval None
+  */
+void queue_arr_memcpy(Queue * pQueue, u8 * buf , u8 len){
+	memcpy((u8 *)&pQueue->arr[pQueue->tail],buf,len);
+	pQueue->tail = (pQueue->tail + len)  % QUEUE_SIZE;
+}
+
+/**
   * @brief  队列清空，tail=head
   * @param  pQueue：队列
   * @retval None
@@ -65,9 +78,12 @@ void queue_clear(volatile Queue * pQueue)
   * @param  nodeId：节点ID号
   * @param  IO_input1：开关信号1
   * @param  IO_input2：开关信号2
+  * @param  dataType：
+           @arg CAN_DATA_PACKAGE
+		   @arg ADC_DATA_PACKAGE
   * @retval None
   */
-void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2)
+void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2,u8 dataType)
 {
 	pQueue->head = (pQueue->head-PACKAGE_HEAD_FRAME_LENGTH + QUEUE_SIZE)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
 	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
@@ -87,11 +103,11 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_in
 	
 	
 	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = nodeId;
-	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1;
-	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = IO_input2;
+	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1 | (IO_input2 << 1);
+	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = dataType;
 	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//校验位
 	
-	queue_add_name(pQueue,pQueue->test_name);//添加本次实验的名称，长度为MAX_TEST_NAME_LENGTH
+	queue_add_name(pQueue,test_name);//添加本次实验的名称，长度为MAX_TEST_NAME_LENGTH
 
 }
 
@@ -113,7 +129,7 @@ static void queue_add_name(volatile Queue * pQueue, volatile u8 testname[MAX_TES
 }
 
 /**
-  * @brief  给队列直接写入数据
+  * @brief  给队列直接写入数据，队头数据搬移到队尾
   * @param  pQueue：队列
   * @param  length：数据长度
   * @retval None
@@ -121,6 +137,7 @@ static void queue_add_name(volatile Queue * pQueue, volatile u8 testname[MAX_TES
 void queue_oversize(volatile Queue * pQueue,u32 length)
 {
 	memcpy((u8 *)&pQueue->arr[QUEUE_SIZE],(u8 *)&pQueue->arr[0],length);
+	
 }
 
 /**

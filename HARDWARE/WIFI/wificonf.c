@@ -317,18 +317,13 @@ void InitWiFi(void){
 void openAllSocket(void){
 	u8 status;
 	DATA_AUTO_CHECK_EN= 0;
-	#if SEND_WITH_UDP
-		status = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
-		if(status != 0){//有问题
-			printf("WiFi Data-UDP Connect Unsuccessfully!\r\n");
-		}else if(status == 0){
-			printf("WiFi Data-UDP Connect Successfully!\r\n");
-		}
-	#else
-		OpenTcpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//创建一个数据收发socket
-		//  rsi_send_data(socketDescriptor_txrx, "qqqqqqqqqqqqqqqq", 16,RSI_PROTOCOL_TCP_V4,&bytes_sent);
-	#endif
-		OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
-		OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket	
+	status = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
+	if(status != 0){//有问题
+		printf("WiFi Data-UDP Connect Unsuccessfully!\r\n");
+	}else if(status == 0){
+		printf("WiFi Data-UDP Connect Successfully!\r\n");
+	}
+	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
+	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket	
 	DATA_AUTO_CHECK_EN= 1;
 }

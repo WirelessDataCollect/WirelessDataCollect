@@ -87,6 +87,7 @@ void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode){
 	#if CAN1_RX0_INT_ENABLE
 	CAN_ITConfig(CAN1,CAN_IT_FMP0,ENABLE);	    
 	NVIC_InitStructure.NVIC_IRQChannel                   = CAN1_RX0_IRQn;
+	/* !! 中断优先级CAN1和CAN2必须相同*/
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
@@ -106,7 +107,18 @@ void CAN1_RX0_IRQHandler(void){
 
 	if (CAN_GetITStatus(CAN1,CAN_IT_FMP0)!= RESET)
 	{
+		/* 如果队列空了，时间戳更新*/
+		if(queue_empty(can_queue)){
+			can_queue.HeadTime = SYSTEMTIME;
+			can_queue.YYYY_MM_DD = YYMMDD;
+		}
+		/* 接收CAN数据*/
 		CAN_Receive(CAN1, CAN_FIFO0 ,&RxMessage);
+		/* 加入CAN的ID*/
+		queue_put(&can_queue,CAN1_ID);
+		/* 拷贝至queue.arr尾部，并更新tail*/
+		queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));		
+		
 	#if PRINT_UART_LOG
 		printf("CAN1 Data : ");
 		for(int i = 0; i < RxMessage.DLC;i++){

@@ -56,34 +56,34 @@ void Initialization (void)
 	printf("System Initing...!\r\n");
 	#endif
 	
-//	/*下载参数*/
-//	loadParafromMainOrBackupFlash();//getPara();
-//	/*设置wifi为客户端模式*/
-//	setClientModePara();InitWiFi();
-//	/*检查模组连接情况，如果连接失败，则设置为AP模式*/
-//	checkModuleSta(); 
-//	/*开启所有需要的套接字*/
-//	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-//		openAllSocket();
-//	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
-//		OpenSocket((u8*)AP_MODE_SOCKET_DEST_IP,AP_MODE_SOCKET_DEST_PORT,AP_MODE_SOCKET_MODULE_PORT,RSI_SOCKET_TCP_SERVER);
-//		Read_PKT();
-//		printf("Open TCP Socket!\r\n");
-//	}
+	/*下载参数*/
+	loadParafromMainOrBackupFlash();//getPara();
+	/*设置wifi为客户端模式*/
+	setClientModePara();InitWiFi();
+	/*检查模组连接情况，如果连接失败，则设置为AP模式*/
+	checkModuleSta(); 
+	/*开启所有需要的套接字*/
+	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+		openAllSocket();
+	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
+		OpenSocket((u8*)AP_MODE_SOCKET_DEST_IP,AP_MODE_SOCKET_DEST_PORT,AP_MODE_SOCKET_MODULE_PORT,RSI_SOCKET_TCP_SERVER);
+		Read_PKT();
+		printf("Open TCP Socket!\r\n");
+	}
 	
 	/*队列配置*/
 	queue_init(&adc_queue);
 	
-//	/*ADC相关引脚初始化*/
-//	ADC_CTRL_Conf();
+	/*ADC相关引脚初始化*/
+	ADC_CTRL_Conf();
 	
 	/* CAN初始化*/
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
 	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	/*ms时间*/
-	TIM3_Int_Init(999,83); //1000us
+	TIM3_Int_Init(TIM3_ARR,TIM3_PSC); //1000us
 	/*系统时间100us中断*/
-	TIM4_Int_Init(99,83);
+	TIM4_Int_Init(TIM4_ARR,TIM4_PSC);
 	#if PRINT_UART_LOG
 	printf("System Inited Successfully!\r\n");
 	/*帮助文档*/
@@ -164,12 +164,12 @@ int main(void)
 	while(1)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-			CAN1_Send_Msg((u8 *)&SYSTEMTIME,4);
-			delay_ms(1000);
-			CAN2_Send_Msg((u8 *)&SYSTEMTIME,4);
+//			CAN1_Send_Msg((u8 *)&SYSTEMTIME,4);
+//			delay_ms(1000);
+//			CAN2_Send_Msg((u8 *)&SYSTEMTIME,4);
 //			CAN1_Receive_Msg(CanBuf);
-			delay_ms(1000);
-//		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+//			delay_ms(1000);
+		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 //			testAdc();
 //			receive_udp_package();\\stm32_wifi_ap_1_x\../HARDWARE/WIFI/userwifi.c\adc_queue.tail
 //			wifi_send_package_test();

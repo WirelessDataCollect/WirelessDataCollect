@@ -618,7 +618,7 @@ void getPara(void){
 		printf("nodeId            :      %d\r\n",nodeId);
 		printf("destIp_txrx       :      %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
 		printf("localhost         :      %d.%d.%d.%d\r\n",localhost[0],localhost[1],localhost[2],localhost[3]);
-		printf("test_name         :      %s\r\n",adc_queue.test_name);
+		printf("test_name         :      %s\r\n",test_name);
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			printf("Module Mode       :      CLIENT\r\n");
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){

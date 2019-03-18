@@ -21,6 +21,14 @@
 #define LED_SHINE_IN_TIMER    1
 //! 是否让IO每隔一段时间取反
 #define IO_SHINE_IN_TIMER     0     
+//! TIME3 的ARR和PSC
+#define TIM3_ARR              999
+#define TIM3_PSC              83
+//! TIME4 的ARR和PSC
+#define TIM4_ARR              99
+#define TIM4_PSC              83
+//! TIM3和4的主时钟频率MHz
+#define TIM3_4_PCLK_MHZ       84
 
 //!系统时钟，计时单位根据TIM4设置情况而定
 //! @note 计时单位T = Tclk / (arr + 1) / (psc + 1)

@@ -32,17 +32,6 @@ typedef enum{
   * @}
   */
 
-
-/** @defgroup 采用TCP还是UDP发送给私有云服务器
-  * @hint 两者定义一个且仅仅一个，TCP未验证，不建议使用
-  * @{
-  */
-//#define  SEND_WITH_TCP  1  /*!< 用tcp传输数据>*/
-#define SEND_WITH_UDP     1  /*!< 用udp传输数据>*/
-/**
-  * @}
-  */
-
 /** @defgroup 默认的远程服务器IPV4地址
   * @{
   */
@@ -104,6 +93,8 @@ extern u8    CAN_Send_EN;
 
 //!adc接收缓存
 extern Queue adc_queue;	
+//!can接收缓存
+extern Queue can_queue;
 
 //!私有云服务器IP地址
 extern u8 destIp_txrx[IPV4_LENGTH];

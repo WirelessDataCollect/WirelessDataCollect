@@ -14,17 +14,6 @@
 #include <sys.h>
 
 /** 
-  * @brief  队列属性
-  * @{
-  */ 
-#define  UDP_SEND_SIZE          (8*60 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   616 = 8 * 67 + PACKAGE_HEAD_FRAME_LENGTH>*/
-#define  QUEUE_SIZE             700                                 /*!< 队列正常容量>*/
-#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+50)      /*!< 队列最大容量>*/
-/**
-  * @}
-  */
-  
-/** 
   * @brief  测试名称属性
   * @{
   */   
@@ -32,6 +21,18 @@
 #define PACKAGE_TIME_IO_LENGTH       16       /*!< 时间、IO、ADC数量等长度>*/
 #define PACKAGE_HEAD_FRAME_LENGTH    (MAX_TEST_NAME_LENGTH+PACKAGE_TIME_IO_LENGTH)   /*!< 帧头总长度>*/
 #define DEFAULT_TEST_NAME            "DefaultName/2019-03-09\0"       /*!< 默认测试名称>*/
+/**
+  * @}
+  */
+  
+/** 
+  * @brief  队列属性
+  * @note   队列存储ADC和CAN数据，数据长度以ADC长度设置
+  * @{
+  */ 
+#define  UDP_SEND_SIZE          (8*60 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   540 = 8 * 60 + PACKAGE_HEAD_FRAME_LENGTH>*/
+#define  QUEUE_SIZE             700                                 /*!< 队列正常容量>*/
+#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+50)      /*!< 队列最大容量>*/
 /**
   * @}
   */
@@ -45,19 +46,44 @@ typedef struct{
 	u32 YYYY_MM_DD;
 	u32 HeadTime;
 	volatile u16 head,tail;
-	u8 test_name[MAX_TEST_NAME_LENGTH];   
 }Queue;
 /**
   * @}
   */
 
+/** 
+  * @brief  CANx_ID，用于区分不同的CAN编号
+  * @{
+  */
+typedef enum{
+	CAN1_ID = 0x01,
+	CAN2_ID
+}CANx;
+/**
+  * @}
+  */
 
+/** 
+  * @brief  wifi数据包存储数据类型，ADC或者CAN
+  * @{
+  */
+typedef enum{
+	CAN_DATA_PACKAGE = 0x01,
+	ADC_DATA_PACKAGE
+}WiFi_DATA_Type;
+/**
+  * @}
+  */
+
+//! 本次实验名称
+extern volatile u8 test_name[MAX_TEST_NAME_LENGTH]; 
 
 
 void queue_init(volatile Queue * pQueue);
 u8 queue_get(volatile Queue * pQueue);
 void queue_put(volatile Queue * pQueue, u8 ch);
-void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2);
+void queue_arr_memcpy(Queue * pQueue, u8 * buf , u8 len);
+void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2,u8 dataType);
 void queue_oversize(volatile Queue * pQueue,u32 length);
 void queue_clear(volatile Queue * pQueue);
 u8 queue_empty(volatile Queue queue);
