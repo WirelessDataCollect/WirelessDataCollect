@@ -20,10 +20,8 @@
 #include "can2.h"
 #include "timer.h"
 #include "adc.h"
-
 #include "stmflash.h" 
 #include "config.h"
-
 #include "rsi_global.h"
 #include "rsi_app.h"
 #include "crc.h"
@@ -57,27 +55,31 @@ void Initialization (void)
 	#if PRINT_UART_LOG
 	printf("System Initing...!\r\n");
 	#endif
-	/*下载参数*/
-	loadParafromMainOrBackupFlash();//getPara();
-	/*设置wifi为客户端模式*/
-	setClientModePara();InitWiFi();
-	/*检查模组连接情况，如果连接失败，则设置为AP模式*/
-	checkModuleSta(); 
-	/*开启所有需要的套接字*/
-	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-		openAllSocket();
-	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
-		OpenSocket((u8*)AP_MODE_SOCKET_DEST_IP,AP_MODE_SOCKET_DEST_PORT,AP_MODE_SOCKET_MODULE_PORT,RSI_SOCKET_TCP_SERVER);
-		Read_PKT();
-		printf("Open TCP Socket!\r\n");
-	}
+	
+//	/*下载参数*/
+//	loadParafromMainOrBackupFlash();//getPara();
+//	/*设置wifi为客户端模式*/
+//	setClientModePara();InitWiFi();
+//	/*检查模组连接情况，如果连接失败，则设置为AP模式*/
+//	checkModuleSta(); 
+//	/*开启所有需要的套接字*/
+//	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
+//		openAllSocket();
+//	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
+//		OpenSocket((u8*)AP_MODE_SOCKET_DEST_IP,AP_MODE_SOCKET_DEST_PORT,AP_MODE_SOCKET_MODULE_PORT,RSI_SOCKET_TCP_SERVER);
+//		Read_PKT();
+//		printf("Open TCP Socket!\r\n");
+//	}
+	
 	/*队列配置*/
 	queue_init(&adc_queue);
-	/*ADC相关引脚初始化*/
-	ADC_CTRL_Conf();
-	/*CAN初始化*/
-//	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
-//	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
+	
+//	/*ADC相关引脚初始化*/
+//	ADC_CTRL_Conf();
+	
+	/* CAN初始化*/
+	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
+	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	/*ms时间*/
 	TIM3_Int_Init(999,83); //1000us
 	/*系统时间100us中断*/
@@ -98,7 +100,7 @@ void Initialization (void)
   */
 u8 can_send_package()
 { 
-	if(CAN_Send_EN&&CAN1_Send_EN){
+	if(CAN_Send_EN && CAN1_Send_EN){
 		if(queue_empty(adc_queue)) delay_ms(2);
 		IO_input[0] = DIGITAL_INPUT1;
 		IO_input[1] = DIGITAL_INPUT2;
@@ -127,7 +129,7 @@ u8 can_send_package()
 
 
 /**
-  * @brief  测试ADC
+  * @brief  测试ADC，打印到串口
   * @param  None
   * @retval None
   */
@@ -162,7 +164,12 @@ int main(void)
 	while(1)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-			wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+			CAN1_Send_Msg((u8 *)&SYSTEMTIME,4);
+			delay_ms(1000);
+			CAN2_Send_Msg((u8 *)&SYSTEMTIME,4);
+//			CAN1_Receive_Msg(CanBuf);
+			delay_ms(1000);
+//		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 //			testAdc();
 //			receive_udp_package();\\stm32_wifi_ap_1_x\../HARDWARE/WIFI/userwifi.c\adc_queue.tail
 //			wifi_send_package_test();
@@ -203,17 +210,13 @@ int main(void)
 					}else if(CMD_RX_BUF.CmdCompleteFlag == CMD_COMPLETED){
 						rsi_send_data( rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.recvFrameTcp.recvSocket[0], //id
 							(u8*)"Cannot Deal With More Than 2 CMD!\r\nPlese Wait!\r\n", 				//接受数据指针
-							tcpRecvBuffLen,//
+							tcpRecvBuffLen,
 							RSI_PROTOCOL_TCP_V4,&bytes_sent);		//参数
 						#if PRINT_UART_LOG
 						printf("WARNING : Cannot Deal With More Than 2 CMDs!\r\n");
 						#endif						
 					}
 					break;
-//				case 0x59:
-//					rsi_wireless_fwupgrade();
-//					while(1);
-//					break;
 				default:
 					break;
 			}

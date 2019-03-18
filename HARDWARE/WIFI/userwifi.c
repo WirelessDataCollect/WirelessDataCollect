@@ -21,7 +21,7 @@ u32    SYSTEMTIME = 0;//系统时间
 u32    YYMMDD =0;//年月日
 u8     Time_Sync_Flag = 0;//最近时钟是否同步
 volatile u8 Wifi_Send_EN = 0;//数据发送和接受使能
-u8     CAN_Send_EN = 0;//CAN数据发送和接受使能
+u8     CAN_Send_EN = 1;//CAN数据发送和接受使能
 Queue  adc_queue;//ADC数据存储
 u8     localDestIp_txrx[4] = {255,255,255,255};
 u8     destIp_txrx[4] = {DESTIP_TXRX_GROUP1,DESTIP_TXRX_GROUP2,DESTIP_TXRX_GROUP3,DESTIP_TXRX_GROUP4};
@@ -37,6 +37,7 @@ u16    socketDescriptor_sync = 1;
 u16    localSocketDescriptor_txrx = 2;
 u32    bytes_sent = 0;//字节数据发送个数
 u8     AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回状态信息
+
 /**
   * @brief  接受UDP包并处理
   * @param  None
@@ -69,9 +70,10 @@ void receive_udp_package()
 			}
 			
 			break;
-		case RSI_FWUP_RSP://无线更新固件（RS9113的）
-			rsi_wireless_fwupgrade();
-			break;
+			//!无线更新RS9113固件
+//		case RSI_FWUP_RSP:
+//			rsi_wireless_fwupgrade();
+//			break;
 		default:
 			break;
 	
