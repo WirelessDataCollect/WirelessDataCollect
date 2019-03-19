@@ -95,7 +95,7 @@ typedef enum
 #define CMD_SET_JOIN_SSID      "SET_RSI_JOIN_SSID"   /*!< 设置SSID>*/
 #define CMD_SET_PSK            "SET_RSI_PSK"         /*!< 设置PSK>*/
 #define CMD_SET_NODE_ID        "SET_NODE_ID"         /*!< 设置节点id>*/
-#define CMD_SET_SERVER_IP       "SET_SERVER_IP"      /*!< 设置私有云服务器IP>*/
+#define CMD_SET_SERVER_IP      "SET_SERVER_IP"       /*!< 设置私有云服务器IP>*/
 /** !纯命令*/
 #define CMD_HELP               "HELP"                /*!< 输出帮助>*/
 #define CMD_GET_PARA           "GET_PARA"            /*!< 输出参数情况>*/
