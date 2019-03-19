@@ -77,9 +77,6 @@ void Initialization (void)
 	/*ADC相关引脚初始化*/
 	ADC_CTRL_Conf();
 	
-	/* CAN初始化*/
-	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);   //500K
-	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal);   //250k
 	/*ms时间*/
 	TIM3_Int_Init(TIM3_ARR,TIM3_PSC); //1000us
 	/*系统时间100us中断*/

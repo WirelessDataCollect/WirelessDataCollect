@@ -16,6 +16,8 @@
 #include "rsi_app.h"
 #include "config.h"
 #include "timer.h"
+#include "can1.h"
+#include "can2.h"
 
 u8     DATA_AUTO_CHECK_EN = 1;	     //是否在中断中自动check数据
 u32    SYSTEMTIME = 0;               //系统时间
@@ -321,15 +323,30 @@ u8 order_anay(u8 arr[])
 				return NOT_NEED_RETURN_INFO;
 			}
 			break;
-		case GET_CHANNEL_MODEL:         // 通道模式选择
-			if(arr[1]==nodeId)//如果命令指定了本ID
+		//! 通道模式选择
+		case GET_CHANNEL_MODEL:         
+			if(arr[1]==nodeId)
 				setAdcModel(&arr[2]);
 			else  //如果命令不是给本设备的，则返回0，表示不需要返回ack
 				return NOT_NEED_RETURN_INFO;
 			break;
-		case GET_CAN_SEND_EN:
-			if(arr[1]==nodeId){
-				CAN_Send_EN =1;//CAN开启
+		//! [CMD,nodeId,CANx,FREQ,FilterListNum,[FilterList]]
+		//! 即命令，节点ID，CANX，通信频率10KHz，过滤ID数目，过滤ID列表
+		case GET_CAN_FILTER_ID:
+			if(arr[1] == nodeId){
+				if(arr[2] == CAN1_ID){
+					if(arr[3] == 50){ //500KHz
+						CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,&arr[5],arr[4]);   //500K
+					}else if(arr[3] == 25){ //250KHz
+						CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,&arr[5],arr[4]);   //250K
+					}
+				}else if(arr[2] == CAN2_ID){
+					if(arr[3] == 50){ //500KHz
+						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,&arr[5],arr[4]);   //500K
+					}else if(arr[3] == 25){ //250KHz
+						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,&arr[5],arr[4]);   //250K
+					}
+				}
 			}
 			else{
 				return NOT_NEED_RETURN_INFO;

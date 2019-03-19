@@ -27,12 +27,14 @@ u8 CAN1_Send_EN = 1;
   * @param  mode：CAN_Mode_Normal,普通模式;CAN_Mode_LoopBack,回环模式;
 			@arg CAN_Mode_Normal：普通模式
 			@arg CAN_Mode_LoopBack：回环模式
+  * @param  filter_list：存储过滤器ID的数组，8个字节为一组
+  * @param  list_len：过滤器个数，1~14
   * @note   BaudRate = Tpclk / (tq * ( (tbs1+1) + (tbs2 +2) + 1))
   * @note   Tpclk一般为42MHz
   * @exam   CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);//can1初始化500k波特率
   * @retval None
   */
-void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode){
+void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 list_len){
 	GPIO_InitTypeDef GPIO_InitStructure; 
 	CAN_InitTypeDef        CAN_InitStructure;
 	CAN_FilterInitTypeDef  CAN_FilterInitStructure;
@@ -68,20 +70,24 @@ void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode){
 	CAN_InitStructure.CAN_SJW       = tsjw;	      //重新同步跳跃宽度(Tsjw)为tsjw+1个时间单位 CAN_SJW_1tq~CAN_SJW_4tq
 	CAN_InitStructure.CAN_BS1       = tbs1;       //Tbs1范围CAN_BS1_1tq ~CAN_BS1_16tq
 	CAN_InitStructure.CAN_BS2       = tbs2;       //Tbs2范围CAN_BS2_1tq ~	CAN_BS2_8tq
-	CAN_InitStructure.CAN_Prescaler = brp;        //分频系数(Fdiv)为brp+1	
+	CAN_InitStructure.CAN_Prescaler = brp;        //分频系数(Fdiv)为brp+1
 	CAN_Init(CAN1, &CAN_InitStructure);           // 初始化CAN1 
 
 	/* 配置过滤器*/
-	CAN_FilterInitStructure.CAN_FilterNumber         = 0;	                  //过滤器0
-	CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdMask; 
-	CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
-	CAN_FilterInitStructure.CAN_FilterIdHigh         = 0x0000;                //32位ID
-	CAN_FilterInitStructure.CAN_FilterIdLow          = 0x0000;
-	CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = 0x0000;                //32位MASK
-	CAN_FilterInitStructure.CAN_FilterMaskIdLow      = 0x0000;
-	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;      //过滤器0关联到FIFO0
-	CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器0
-	CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化
+	for(u8 filter_num = 0;filter_num < list_len;filter_num++){
+		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num;	          //过滤器
+//		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdMask;
+		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList; //List模式	
+		CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
+		CAN_FilterInitStructure.CAN_FilterIdHigh         = *(filter_list + 0 + filter_num * 8) + 256 * (*(filter_list + 1 + filter_num * 8));
+		CAN_FilterInitStructure.CAN_FilterIdLow          = *(filter_list + 2 + filter_num * 8) + 256 * (*(filter_list + 3 + filter_num * 8));
+		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = *(filter_list + 4 + filter_num * 8) + 256 * (*(filter_list + 5 + filter_num * 8));
+		CAN_FilterInitStructure.CAN_FilterMaskIdLow      = *(filter_list + 6 + filter_num * 8) + 256 * (*(filter_list + 7 + filter_num * 8));;
+		CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;      //过滤器0关联到FIFO0
+		CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
+		CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	
+	}
+
 
 	/* 接收中断*/
 	#if CAN1_RX0_INT_ENABLE

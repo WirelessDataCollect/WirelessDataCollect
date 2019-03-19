@@ -32,6 +32,7 @@ typedef enum{
   * @}
   */
 
+
 /** @defgroup 默认的远程服务器IPV4地址
   * @{
   */
@@ -63,7 +64,7 @@ typedef enum{
 #define  GET_WIFI_SEND_EN           0xa5   /*!< 数据采集和发送使能>*/
 #define  GET_WIFI_SEND_DISABLE      0xa6   /*!< 数据采集和发送失能>*/
 #define  GET_CHANNEL_MODEL          0xa7   /*!< 设置通道的电流/电压模式>*/
-#define  GET_CAN_SEND_EN            0xa8   /*!< CAN数据采集和发送使能>*/
+#define  GET_CAN_FILTER_ID          0xa8   /*!< CAN数据采集的ID列表设置>*/
 #define  GET_REMOTE_IP_PORT         0xa9   /*!< 设置发送数据对象（私有云服务器）IP>*/
 #define  PAGING                     0xaa   /*!< 寻呼信号>*/
 /**
