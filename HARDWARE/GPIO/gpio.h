@@ -15,46 +15,33 @@
 #include "sys.h"
 
 /** 
-  * @brief  母版LED端口定义
+  * @brief  子板LED端口定义
   * @{
   */ 
 #define LED1_PORT    GPIOB
-#define LED1_PIN     GPIO_Pin_3
-#define LED2_PORT    GPIOD
-#define LED2_PIN     GPIO_Pin_2
-#define LED1         PBout(3)
+#define LED1_PIN     GPIO_Pin_6
+#define LED2_PORT    GPIOB
+#define LED2_PIN     GPIO_Pin_7
+#define LED3_PORT    GPIOB
+#define LED3_PIN     GPIO_Pin_5
+
+#define LED1         PBout(6)
 //!LED1关闭
 #define LED1_OFF(x)  (LED1 = x) 
 //!LED1取反
 #define LED1_CONV()  (LED1 = ~LED1)
-#define LED2         PDout(2)
+
+#define LED2         PBout(7)
 //!LED2关闭
 #define LED2_OFF(x)  (LED2 = x)
 //!LED2取反
 #define LED2_CONV()  (LED2 = ~LED2)
-/**
-  * @}
-  */
-  
-  
-/** 
-  * @brief  子板LED端口定义
-  * @{
-  */ 
-#define LED3_PORT    GPIOC
-#define LED3_PIN     GPIO_Pin_0
-#define LED4_PORT    GPIOC
-#define LED4_PIN     GPIO_Pin_1
-#define LED3         PCout(0)
+
+#define LED3         PBout(5)
+//!LED3关闭
+#define LED3_OFF(x)  (LED3 = x)
 //!LED3取反
-#define LED3_OFF(x)  (LED3 = x) 
-//!LED3取反
-#define LED3_CONV()  (LED3=~LED3)
-#define LED4         PCout(1)
-//!LED4关闭
-#define LED4_OFF(x)  (LED4 = x)
-//!LED4取反
-#define LED4_CONV()  (LED4=~LED4)
+#define LED3_CONV()  (LED3 = ~LED3)
 /**
   * @}
   */
@@ -63,12 +50,8 @@
   * @brief  电源通断芯片shutdown端口定义（低电平有效）
   * @{
   */ 
-#define V5V_SHUTOWN_PORT    GPIOC
-#define V5V_SHUTOWN_PIN     GPIO_Pin_13
 #define V24V_SHUTOWN_PORT   GPIOB
 #define V24V_SHUTOWN_PIN    GPIO_Pin_14
-//!5V电源。x=1：关闭电源；x=0，开启电源
-#define V5V_SHUTOWN(x)      PCout(13)=~x 
 //!传感器24V电源。x=1：关闭电源；x=0，开启电源
 #define V24V_SHUTOWN(x)     PBout(14)=~x
 /**

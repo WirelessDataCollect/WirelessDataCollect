@@ -143,13 +143,11 @@ void TIM3_IRQHandler(void)
 		#if LED_SHINE_IN_TIMER	
 			if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){/*!< CLIENT模式下低速闪烁>*/
 				if(MS_TIME%1000==0){
-					LED1_CONV();//主控板DS1
-					LED3_CONV();//DS3翻转
+					LED1_CONV();//工作灯
 				}
 			}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){/*!< AP模式下快速闪烁>*/
 				if(MS_TIME%200==0){
-					LED1_CONV();//主控板DS1
-					LED3_CONV();//DS3翻转
+					LED1_CONV();//工作灯
 				}				
 			}
 

@@ -294,7 +294,6 @@ u8 order_anay(u8 arr[])
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			LED2_CONV();
-			LED4_CONV();
 		  }
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
@@ -302,7 +301,6 @@ u8 order_anay(u8 arr[])
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
 			LED2_CONV();
-			LED4_CONV();
 			return NOT_NEED_RETURN_INFO;				
 		case RETURN_INFO://返回了回复信号
 			return NOT_NEED_RETURN_INFO;//表示不需要返回信息

@@ -48,7 +48,7 @@ Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   --
 
 ```cpp
 #define  GET_TIME_SYNC_PC           0xa1   /*!< 来自上位机的同步信号>*/
-#define  RETURN_INFO			    0xa2   /*!< 返回信息>*/
+#define  RETURN_INFO                0xa2   /*!< 返回信息>*/
 #define  GET_TEST_NAME              0xa3   /*!< 获取测试名称>*/
 #define  GET_TIME_SYNC_MAIN_CLOCK   0xa4   /*!< 来自主机的同步信号>*/
 #define  GET_WIFI_SEND_EN           0xa5   /*!< 数据采集和发送使能>*/
