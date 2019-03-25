@@ -32,42 +32,37 @@ void GP_IO_Init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(DIG1_PORT, &GPIO_InitStructure);//初始化
+	GPIO_Init(DIG1_PORT, &GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin = DIG2_PIN;
-	GPIO_Init(DIG2_PORT, &GPIO_InitStructure);//初始化	
+	GPIO_Init(DIG2_PORT, &GPIO_InitStructure);
 	/*ADG711的开关通道*/
 	GPIO_InitStructure.GPIO_Pin = CH1_PIN;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-	GPIO_Init(CH1_PORT, &GPIO_InitStructure);//初始化
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;      //普通输出模式
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;     //推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //100MHz
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;       //上拉
+	GPIO_Init(CH1_PORT, &GPIO_InitStructure);          //CH1初始化
 	GPIO_InitStructure.GPIO_Pin = CH2_PIN;
-	GPIO_Init(CH2_PORT, &GPIO_InitStructure);//初始化
+	GPIO_Init(CH2_PORT, &GPIO_InitStructure);          //CH2初始化
 	GPIO_InitStructure.GPIO_Pin = CH3_PIN;
-	GPIO_Init(CH3_PORT, &GPIO_InitStructure);//初始化	
+	GPIO_Init(CH3_PORT, &GPIO_InitStructure);          //CH3初始化	
 	GPIO_InitStructure.GPIO_Pin = CH4_PIN;
-	GPIO_Init(CH4_PORT, &GPIO_InitStructure);//初始化
+	GPIO_Init(CH4_PORT, &GPIO_InitStructure);          //CH4初始化
 	/*默认通道拉低*/
 	Channel1=ADC_VOLTAGE_MODE;Channel2=ADC_VOLTAGE_MODE;
 	Channel3=ADC_VOLTAGE_MODE;Channel4=ADC_VOLTAGE_MODE;
 	/*子板LED*/
 	GPIO_InitStructure.GPIO_Pin = LED1_PIN;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-	GPIO_Init(LED1_PORT, &GPIO_InitStructure);//初始化
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;      //普通输出模式
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;     //推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;       //上拉
+	GPIO_Init(LED1_PORT, &GPIO_InitStructure);         //LED1初始化
 	GPIO_InitStructure.GPIO_Pin = LED2_PIN;
-	GPIO_Init(LED2_PORT, &GPIO_InitStructure);//初始化
-	
+	GPIO_Init(LED2_PORT, &GPIO_InitStructure);         //LED2初始化
 	GPIO_InitStructure.GPIO_Pin = LED3_PIN;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-	GPIO_Init(LED3_PORT, &GPIO_InitStructure);//初始化
-	LED1_OFF(1);//工作指示灯
+	GPIO_Init(LED3_PORT, &GPIO_InitStructure);         //LED3初始化
+	LED1_OFF(0);//工作指示灯
 	LED2_OFF(1);LED3_OFF(1);//关灯
 	
 	/* 蜂鸣器初始化*/
