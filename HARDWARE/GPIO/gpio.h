@@ -47,6 +47,20 @@
   */
 
 /** 
+  * @brief  蜂鸣器定义
+  * @{
+  */ 
+#define BEEP_PORT           GPIOB
+#define BEEP_PIN            GPIO_Pin_1
+
+#define BEEP                PBout(1)
+#define BEEP_ON(x)          (BEEP = x)
+#define BEEP_CONV()         (BEEP = ~BEEP)
+/**
+  * @}
+  */
+  
+/** 
   * @brief  电源通断芯片shutdown端口定义（低电平有效）
   * @{
   */ 

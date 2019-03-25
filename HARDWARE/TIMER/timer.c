@@ -144,10 +144,12 @@ void TIM3_IRQHandler(void)
 			if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){/*!< CLIENT模式下低速闪烁>*/
 				if(MS_TIME%1000==0){
 					LED1_CONV();//工作灯
+					BEEP_ON(0);//关蜂鸣器
 				}
 			}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){/*!< AP模式下快速闪烁>*/
 				if(MS_TIME%200==0){
 					LED1_CONV();//工作灯
+					BEEP_CONV();//蜂鸣器取反
 				}				
 			}
 
