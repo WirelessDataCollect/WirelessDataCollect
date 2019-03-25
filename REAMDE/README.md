@@ -2,25 +2,29 @@
 
 ### 1、设置频段
 
-wifi_main.c--->
+wifi_main.c \-\-\-\>
 
+```cpp
 retval = rsi_band(RSI_BAND); 
+```
 
 ### 2、选择天线
 
-wifi_main.c--->
+wifi_main.c \-\-\-\>
 
+```cpp
 retval = rsi_select_antenna(1,8,8);//1：外部UFL天线，8:2.4GHz增益，8:5GHz增益
+```
 
 # 2、程序框图
 
 * 主程序
 
-Initialization初始化     ---->   创建数据收发txrx的socket和同步sync的socket   ------>     接收来自局域网中PC的命令       ----->
+Initialization初始化     \-\-\-\-\>   创建数据收发txrx的socket和同步sync的socket   \-\-\-\-\>     接收来自局域网中PC的命令       \-\-\-\-\>
 
-设置主机地址        ----->      设置同步时钟，Time_Sync_Flag=1     ------->     设置允许发送信息     ----->      
+设置主机地址        \-\-\-\-\>      设置同步时钟，Time_Sync_Flag=1     \-\-\-\-\>     设置允许发送信息     \-\-\-\-\>      
 
-第一次可能发送一个只包含同步时间的信息，Time_Sync_Flag=0        ---->       后面正常发送信息
+第一次可能发送一个只包含同步时间的信息，Time_Sync_Flag=0        \-\-\-\-\>       后面正常发送信息
 
 * 定时器中断
 
