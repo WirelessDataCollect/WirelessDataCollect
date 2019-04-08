@@ -63,7 +63,7 @@ void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 
 	CAN_InitStructure.CAN_TTCM      = DISABLE;	  //非时间触发通信模式   
 	CAN_InitStructure.CAN_ABOM      = DISABLE;	  //软件自动离线管理	  
 	CAN_InitStructure.CAN_AWUM      = DISABLE;    //睡眠模式通过软件唤醒(清除CAN->MCR的SLEEP位)
-	CAN_InitStructure.CAN_NART      = ENABLE;	  //使能报文自动重发 
+	CAN_InitStructure.CAN_NART      = ENABLE;	    //使能报文自动重发 
 	CAN_InitStructure.CAN_RFLM      = DISABLE;	  //报文不锁定,新的覆盖旧的  
 	CAN_InitStructure.CAN_TXFP      = DISABLE;	  //优先级由报文标识符决定 
 	CAN_InitStructure.CAN_Mode      = mode;	      //模式设置 
@@ -190,10 +190,10 @@ u8 CAN1_Receive_Msg(u8 *buf){
     if( CAN_MessagePending(CAN1,CAN_FIFO0)==0){
 		return 0;		
 	}
-	//! 读取数据	
+	  //! 读取数据	
     CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
     for(i=0;i<RxMessage.DLC;i++){
-		buf[i]=RxMessage.Data[i]; 
+		  buf[i]=RxMessage.Data[i]; 
 	}
 	return RxMessage.DLC;	
 }

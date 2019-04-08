@@ -81,7 +81,7 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 
 
 	/* 配置过滤器*/
 	for(u8 filter_num = 0;filter_num < list_len;filter_num++){
-		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num + 14;	          //过滤器
+		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num;	          //过滤器
 //		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdMask;
 		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList; //List模式	
 		CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
