@@ -150,8 +150,7 @@ void CAN2_RX1_IRQHandler(void)
            @arg CAN2_SEND_ERROR 失败
            @arg CAN2_SEND_OK  成功
   */
-u8 CAN2_Send_Msg(u8* msg,u8 len)
-{	
+u8 CAN2_Send_Msg(u8* msg,u8 len){	
   u8 mbox;
   u16 i=0;
   CanTxMsg TxMessage;
@@ -161,7 +160,7 @@ u8 CAN2_Send_Msg(u8* msg,u8 len)
   TxMessage.RTR   = 0;		  // 消息类型为数据帧，一帧8位
   TxMessage.DLC   = len;							 // 发送信息长度
   for(i=0;i<len;i++)
-  TxMessage.Data[i]=msg[i];				 // 第一帧信息          
+  TxMessage.Data[i]=msg[i];				 // 第一帧信息
   mbox = CAN_Transmit(CAN2, &TxMessage);   
   i=0;
   while((CAN_TransmitStatus(CAN2, mbox)==CAN_TxStatus_Failed)&&(i<0XFFF)){

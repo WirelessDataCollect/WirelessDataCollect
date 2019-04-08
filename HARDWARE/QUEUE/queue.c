@@ -80,7 +80,7 @@ void queue_clear(volatile Queue * pQueue)
   * @param  IO_input2£º¿ª¹ØÐÅºÅ2
   * @param  dataType£º
            @arg CAN_DATA_PACKAGE
-		   @arg ADC_DATA_PACKAGE
+		       @arg ADC_DATA_PACKAGE
   * @retval None
   */
 void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2,u8 dataType)
