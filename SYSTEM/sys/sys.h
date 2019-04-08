@@ -1,14 +1,21 @@
+/**
+  ******************************************************************************
+  * @file    sys.h
+  * @author  zju.nesc.iotlab    浙江大学NeSC课题组物联网实验室
+  * @version V1.0
+  * @date    8-April-2019
+  * @brief   sys function   系统函数
+  ******************************************************************************
+  */
+
 #ifndef __SYS_H
 #define __SYS_H	 
+//-------------include---------------//
 #include "stm32f4xx.h" 
 
 //指针常量：指针地址不可改变，指针指向的数值可以改
 //restrict：必须通过该指针修改数值
-typedef const char c8; 
-
-//0,不支持ucos
-//1,支持ucos
-#define SYSTEM_SUPPORT_OS		0		//定义系统文件夹是否支持UCOS
+typedef const char c8;
 																	    
 	 
 //位带操作,实现51类似的GPIO控制功能
@@ -67,7 +74,6 @@ typedef const char c8;
 #define PIout(n)   BIT_ADDR(GPIOI_ODR_Addr,n)  //输出 
 #define PIin(n)    BIT_ADDR(GPIOI_IDR_Addr,n)  //输入
 
-//以下为汇编函数
 void WFI_SET(void);		//执行WFI指令
 void INTX_DISABLE(void);//关闭所有中断
 void INTX_ENABLE(void);	//开启所有中断
