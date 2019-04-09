@@ -120,6 +120,8 @@ void CAN1_RX0_IRQHandler(void){
 		}
 		/* 接收CAN数据*/
 		CAN_Receive(CAN1, CAN_FIFO0 ,&RxMessage);
+		
+		//!! ID和数据总长度20bytes
 		/* 加入CAN的ID*/
 		queue_put(&can_queue,CAN1_ID);
 		/* 拷贝至queue.arr尾部，并更新tail*/
