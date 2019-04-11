@@ -43,7 +43,7 @@ u8 queue_get(volatile Queue * pQueue)
   * @param  ch：要加入的u8数据
   * @retval None
   */
-void queue_put(volatile Queue * pQueue, u8 ch)
+ void queue_put(volatile Queue * pQueue, u8 ch)
 {
     pQueue->arr[pQueue->tail] = ch;
 	pQueue->tail = (pQueue->tail + 1) % QUEUE_SIZE;
