@@ -48,7 +48,8 @@ void Initialization (void)
 	uart_init(115200);
 	/*初始化延时功能*/
 	delay_init(168); 
-	
+	/*ms时间，放在前面，请不要随意移动位置*/
+	TIM3_Int_Init(TIM3_ARR,TIM3_PSC); //1000us	
 	/* 出厂设置，一般运行不需要*/
 	/*setFactory();*/
 	
@@ -77,8 +78,6 @@ void Initialization (void)
 	/*ADC相关引脚初始化*/
 	ADC_CTRL_Conf();
 	
-	/*ms时间*/
-	TIM3_Int_Init(TIM3_ARR,TIM3_PSC); //1000us
 	/*系统时间100us中断*/
 	TIM4_Int_Init(TIM4_ARR,TIM4_PSC);
 	#if PRINT_UART_LOG
@@ -171,10 +170,8 @@ int main(void)
 //			receive_udp_package();\\stm32_wifi_ap_1_x\../HARDWARE/WIFI/userwifi.c\adc_queue.tail
 //			wifi_send_package_test();
 			#if IAM_MASTER_CLOCK
-				if(sync_interval_time >= SYNC_INTERVAL_TIME&&Wifi_Send_EN)
-				{
-					LED2_CONV();//DS2翻转
-					LED4_CONV();
+				if(sync_interval_time >= SYNC_INTERVAL_TIME&&Wifi_Send_EN){
+					TEST_LED_CONV();//翻转
 					sync_interval_time = 0;
 					Send_Sync_Time();//时钟同步一下
 				}
@@ -182,8 +179,7 @@ int main(void)
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
 			delay_ms(10);
 			RspCode =Check_PKT();
-			switch (RspCode)
-			{
+			switch (RspCode){
 				case RSI_RSP_DATA_RECEIVE://RSI_RSP_DATA_RECEIVE 接到数据再发出去
 					pRecvData =rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.recvFrameTcp.recvDataBuf;
 					tcpRecvBuffLen = rsi_bytes4R_to_uint32(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.recvFrameTcp.recvBufLen);

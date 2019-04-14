@@ -62,8 +62,7 @@ void GP_IO_Init(void)
 	GPIO_Init(LED2_PORT, &GPIO_InitStructure);         //LED2初始化
 	GPIO_InitStructure.GPIO_Pin = LED3_PIN;
 	GPIO_Init(LED3_PORT, &GPIO_InitStructure);         //LED3初始化
-	LED1_OFF(0);//工作指示灯
-	LED2_OFF(1);LED3_OFF(1);//关灯
+	TEST_LED_OFF(1);WORKING_LED_OFF(0);ID_LED_OFF(1);//关灯
 	
 	/* 蜂鸣器初始化*/
 	GPIO_InitStructure.GPIO_Pin = BEEP_PIN;

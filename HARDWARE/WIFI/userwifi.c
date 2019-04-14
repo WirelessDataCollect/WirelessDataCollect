@@ -290,17 +290,17 @@ u8 order_anay(u8 arr[])
 		case GET_TIME_SYNC_PC://时钟同步信号
 			if(DATA_AUTO_CHECK_EN)
 			{
-			memcpy(&YYMMDD,&arr[1],4);
-			memcpy(&SYSTEMTIME,&arr[5],4);
-			Time_Sync_Flag = 1;
-			LED2_CONV();
-		  }
+				memcpy(&YYMMDD,&arr[1],4);
+				memcpy(&SYSTEMTIME,&arr[5],4);
+				Time_Sync_Flag = 1;
+				TEST_LED_CONV();
+			}
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
-			LED2_CONV();
+			TEST_LED_CONV();
 			return NOT_NEED_RETURN_INFO;				
 		case RETURN_INFO://返回了回复信号
 			return NOT_NEED_RETURN_INFO;//表示不需要返回信息

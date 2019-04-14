@@ -13,12 +13,15 @@
 
 //-------------include---------------//
 #include "sys.h"
+#include "config.h"
 
 
 //! 基本是10s(10000ms)更新一下
 #define SYNC_INTERVAL_TIME    10000
-//! 是否让灯在定时器中闪烁
-#define LED_SHINE_IN_TIMER    1
+//! 是否让工作灯在定时器中闪烁
+#define WORKING_LED_SHINE_IN_TIMER  1
+//! 是否让展示nodeId灯在定时器中闪烁
+#define NODE_ID_LED_SHINE_IN_TIMER	1
 //! 是否让IO每隔一段时间取反
 #define IO_SHINE_IN_TIMER     0     
 //! TIME3 的ARR和PSC

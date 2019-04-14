@@ -83,7 +83,7 @@ void queue_init(volatile Queue * pQueue);
 u8 queue_get(volatile Queue * pQueue);
 void queue_put(volatile Queue * pQueue, u8 ch);
 void queue_arr_memcpy(Queue * pQueue, u8 * buf , u8 len);
-void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2,u8 dataType);
+void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 id, u8 IO_input1, u8 IO_input2,u8 dataType);
 void queue_oversize(volatile Queue * pQueue,u32 length);
 void queue_clear(volatile Queue * pQueue);
 u8 queue_empty(volatile Queue queue);

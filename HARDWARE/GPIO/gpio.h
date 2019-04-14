@@ -42,6 +42,17 @@
 #define LED3_OFF(x)  (LED3 = x)
 //!LED3取反
 #define LED3_CONV()  (LED3 = ~LED3)
+
+//!测试灯
+#define TEST_LED_CONV()    LED1_CONV()
+#define TEST_LED_OFF(x)    LED1_OFF(x)
+//!工作灯
+#define WORKING_LED_CONV() LED2_CONV()
+#define WORKING_LED_OFF(x) LED2_OFF(x)
+//!nodeId灯
+#define ID_LED_CONV()      LED3_CONV()
+#define ID_LED_OFF(x)      LED3_OFF(x)
+
 /**
   * @}
   */

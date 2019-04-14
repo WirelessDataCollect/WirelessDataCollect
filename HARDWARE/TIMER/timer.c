@@ -14,7 +14,6 @@
 #include "queue.h"
 #include "string.h"
 #include "userwifi.h"
-#include "config.h"
 #include "adc.h"
 
 /**
@@ -112,6 +111,13 @@ volatile u32 sync_interval_time = 0;
 
 //!ms时间
 u32 MS_TIME = 0;
+//!指示nodeId闪烁周期
+#define NODE_ID_LED_SHINE_1PERIOD      400      /*!< 一次闪烁的周期>*/
+#define NODE_ID_LED_SLEEP_PERIOD       2000     /*!< nodeId次闪烁后等待的时间>*/
+#define NODE_ID_TIMER_ARR              ((u32)nodeId * NODE_ID_LED_SHINE_1PERIOD + NODE_ID_LED_SLEEP_PERIOD)  /*!< 指示nodeId闪烁周期,包括闪烁和等待的时间>*/
+#define NODE_ID_LED_SHINE_PERIOD       ((u32)nodeId * NODE_ID_LED_SHINE_1PERIOD)                             /*!< 指示nodeId闪烁周期,只有闪烁时间>*/
+//!ms时间，计算一个nodeId展示周期
+u32 dispNodeIdTimer = 0;
 /**
   * @brief  定时器3中断处理函数，用于处理各个周期性的活动
   * @note   中断周期以TIM3初始化时决定，暂时采用1ms周期
@@ -126,9 +132,79 @@ void TIM3_IRQHandler(void)
 	//!溢出中断
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) 
 	{
-		#if IAM_MASTER_CLOCK
-			sync_interval_time++;
+		/**
+		* 在系统初始化后才能运行的程序
+		*/
+		if(BOARD_STA == BOARD_RUNNING){
+			/* 如果队列空了，时间戳更新*/
+			if(queue_empty(adc_queue)){
+				adc_queue.HeadTime = SYSTEMTIME;
+				adc_queue.YYYY_MM_DD = YYMMDD;
+			}
+			/* 开始发数据了再开始采集*/
+			if(Wifi_Send_EN){
+				/*! @note 
+					//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
+					//       AD7606-4,64 Sample ratio,T = 193
+					//       CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
+				*/
+				ADC_CONV_L();//最短时间25ns
+				/**采集数据，顺便当做延时用*/
+				adcTamp = ADC_Read(ADC_MAX_BYTES);
+				/* 读八个字节数据*/
+				for(int i=0;i<ADC_MAX_BYTES;i++){
+					queue_put((Queue *)&adc_queue, *(adcTamp+i));
+						
+				}
+				/* 拉高开始下一次转换*/
+				ADC_CONV_H();//最短时间25ns
+			}
+			
+			#if IAM_MASTER_CLOCK
+				sync_interval_time++;
+			#endif	
+				
+			/* LED闪烁*/
+			#if WORKING_LED_SHINE_IN_TIMER					
+				/* 工作灯*/
+				if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){/*!< CLIENT模式下低速闪烁>*/
+					if(MS_TIME%1000==0){
+						WORKING_LED_CONV();//工作灯
+						BEEP_ON(0);//关蜂鸣器
+					}
+				}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){/*!< AP模式下快速闪烁>*/
+					if(MS_TIME%200==0){
+						WORKING_LED_CONV();//工作灯
+						BEEP_CONV();//蜂鸣器取反
+					}	
+				}
+			#endif			
+		}else if((BOARD_STA == BOARD_INITING) || (BOARD_STA == BOARD_INITING)){
+			/* 工作灯亮*/
+			WORKING_LED_OFF(0);
+		}
+		
+		/**
+		* 在系统启动后就能运行的程序
+		*/
+		/* LED等闪烁或者亮*/
+		#if NODE_ID_LED_SHINE_IN_TIMER	
+					
+			/* nodeId展示*/
+			dispNodeIdTimer++;
+			if(dispNodeIdTimer >= NODE_ID_TIMER_ARR){              //计时器大于重装载值，则清零
+				dispNodeIdTimer = 0;
+				ID_LED_OFF(1);
+			}else if(dispNodeIdTimer >= NODE_ID_LED_SHINE_PERIOD){ //计时器大于闪烁周期，则关灯等待
+				ID_LED_OFF(1);
+			}else if((dispNodeIdTimer % (NODE_ID_LED_SHINE_1PERIOD/2)) == 0){
+				ID_LED_CONV();
+			}
 		#endif
+		/* 处理串口或者AP模式下的指令*/
+		if(MS_TIME%2000 == 0){
+			dealCmdMsg(&CMD_RX_BUF);
+		}
 		
 		/* 输出50ms脉冲，用于测量同步时钟精度*/
 		/*! @note 测试时，需要关闭串口打印功能 @ref PRINT_UART_LOG*/
@@ -138,51 +214,6 @@ void TIM3_IRQHandler(void)
 				PAout(10) = ~PAout(10);
 			}
 		#endif
-			
-		/* LED闪烁*/
-		#if LED_SHINE_IN_TIMER	
-			if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){/*!< CLIENT模式下低速闪烁>*/
-				if(MS_TIME%1000==0){
-					LED1_CONV();//工作灯
-					BEEP_ON(0);//关蜂鸣器
-				}
-			}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){/*!< AP模式下快速闪烁>*/
-				if(MS_TIME%200==0){
-					LED1_CONV();//工作灯
-					BEEP_CONV();//蜂鸣器取反
-				}				
-			}
-
-		#endif
-		/* 处理串口或者AP模式下的指令*/
-		if(MS_TIME%2000 == 0){
-			dealCmdMsg(&CMD_RX_BUF);
-		}
-		/* 如果队列空了，时间戳更新*/
-		if(queue_empty(adc_queue)){
-			adc_queue.HeadTime = SYSTEMTIME;
-			adc_queue.YYYY_MM_DD = YYMMDD;
-		}
-		/* 开始发数据了再开始采集*/
-		if(Wifi_Send_EN){
-			/*! @note 
-				//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
-				//       AD7606-4,64 Sample ratio,T = 193
-				//       CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
-			*/
-			ADC_CONV_L();//最短时间25ns
-			/**采集数据，顺便当做延时用*/
-			adcTamp = ADC_Read(ADC_MAX_BYTES);
-			/* 读八个字节数据*/
-			for(int i=0;i<ADC_MAX_BYTES;i++){
-				queue_put((Queue *)&adc_queue, *(adcTamp+i));
-					
-			}
-			/* 拉高开始下一次转换*/
-			ADC_CONV_H();//最短时间25ns
-			
-			
-		}	
 	 }
 
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);

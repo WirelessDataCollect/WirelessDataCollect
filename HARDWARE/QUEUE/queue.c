@@ -75,7 +75,7 @@ void queue_clear(volatile Queue * pQueue)
   * @brief  队列添加帧头，包括年月日、计时器、ADC字节数据、节点数据长度、开关信号、测试名称
   * @param  pQueue：队列
   * @param  count：ADC字节格式
-  * @param  nodeId：节点ID号
+  * @param  id：节点ID号
   * @param  IO_input1：开关信号1
   * @param  IO_input2：开关信号2
   * @param  dataType：
@@ -83,7 +83,7 @@ void queue_clear(volatile Queue * pQueue)
 		       @arg ADC_DATA_PACKAGE
   * @retval None
   */
-void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_input1, u8 IO_input2,u8 dataType)
+void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 id, u8 IO_input1, u8 IO_input2,u8 dataType)
 {
 	pQueue->head = (pQueue->head-PACKAGE_HEAD_FRAME_LENGTH + QUEUE_SIZE)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
 	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
@@ -102,7 +102,7 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 nodeId, u8 IO_in
 	pQueue->arr[(pQueue->head+11)% QUEUE_SIZE] = (u8)(count>>24);
 	
 	
-	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = nodeId;
+	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = id;
 	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1 | (IO_input2 << 1);
 	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = dataType;
 	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//校验位
