@@ -124,7 +124,10 @@ void CAN1_RX0_IRQHandler(void){
 		//!! ID和数据总长度20bytes
 		/* 加入CAN的ID*/
 		queue_put(&can_queue,CAN1_ID);
-		/* 拷贝至queue.arr尾部，并更新tail*/
+		/* 加入CAN的接收时间偏移*/
+		u32 deltaTime = SYSTEMTIME - can_queue.HeadTime;
+		queue_arr_memcpy(&can_queue, (u8 *)&deltaTime , sizeof(deltaTime));
+		/* CAN1数据拷贝至queue.arr尾部，并更新tail*/
 		queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));		
 		
 	#if PRINT_UART_LOG

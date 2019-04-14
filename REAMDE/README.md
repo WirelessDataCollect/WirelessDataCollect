@@ -62,3 +62,16 @@ Initialization初始化     \-\-\-\-\>   创建数据收发txrx的socket和同步sync的socket
 #define  GET_REMOTE_IP_PORT         0xa9   /*!< 设置发送数据对象（私有云服务器）IP>*/
 #define  PAGING                     0xaa   /*!< 寻呼信号>*/
 ```
+
+# 4、数据格式
+## CAN数据
+[head_frame;can_data_1;can_data_2;...]
+
+can_data_n = [can_n;delta_time;specific_can_data]
+
+其中，can_n表示CAN1或者CAN2；delta_time表示相对于起始时间（在head_frame中）的偏移；specific_can_data表示具体的数据
+
+## ADC数据
+[head_frame;adc_data_1;adc_data_2;...]
+
+adc_data_n = [ch1;ch2;ch3;ch4]

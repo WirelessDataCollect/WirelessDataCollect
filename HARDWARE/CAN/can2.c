@@ -126,7 +126,10 @@ void CAN2_RX1_IRQHandler(void)
 		CAN_Receive(CAN2, CAN_FIFO1 ,&RxMessage);
 		/* 加入CAN的ID*/
 		queue_put(&can_queue,CAN2_ID);
-		/* 拷贝至queue.arr尾部，并更新tail*/
+		/* 加入CAN的接收时间偏移*/
+		u32 deltaTime = SYSTEMTIME - can_queue.HeadTime;
+		queue_arr_memcpy(&can_queue, (u8 *)&deltaTime , sizeof(deltaTime));
+		/* CAN2数据拷贝至queue.arr尾部，并更新tail*/
 		queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));
 	#if PRINT_UART_LOG
 		printf("CAN2 Data : ");
