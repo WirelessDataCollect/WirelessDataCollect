@@ -145,21 +145,21 @@ void TIM3_IRQHandler(void)
 			}
 			/* 开始发数据了再开始采集*/
 			if(Wifi_Send_EN){
-//				/*! @note 
-//					//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
-//					//       AD7606-4,64 Sample ratio,T = 193
-//					//       CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
-//				*/
-//				ADC_CONV_L();//最短时间25ns
-//				/**采集数据，顺便当做延时用*/
-//				adcTamp = ADC_Read(ADC_MAX_BYTES);
-//				/* 读八个字节数据*/
-//				for(int i=0;i<ADC_MAX_BYTES;i++){
-//					queue_put((Queue *)&adc_queue, *(adcTamp+i));
-//						
-//				}
-//				/* 拉高开始下一次转换*/
-//				ADC_CONV_H();//最短时间25ns
+				/*! @note 
+					//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
+					//       AD7606-4,64 Sample ratio,T = 193
+					//       CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
+				*/
+				ADC_CONV_L();//最短时间25ns
+				/**采集数据，顺便当做延时用*/
+				adcTamp = ADC_Read(ADC_MAX_BYTES);
+				/* 读八个字节数据*/
+				for(int i=0;i<ADC_MAX_BYTES;i++){
+					queue_put((Queue *)&adc_queue, *(adcTamp+i));
+						
+				}
+				/* 拉高开始下一次转换*/
+				ADC_CONV_H();//最短时间25ns
 			}
 			
 			#if IAM_MASTER_CLOCK

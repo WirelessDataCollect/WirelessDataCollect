@@ -78,10 +78,10 @@ void Initialization (void)
 	/*ADC相关引脚初始化*/
 	ADC_CTRL_Conf();
 	
-	/* CAN测试*/
-	u32 filter[7] = {0x1800f001,0x1800f002,0x1800f003,0x1800f004,0x1800f005,0x1800f006,0x1800f007};
-	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32 *)filter,7);
-	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32 *)filter,7);
+//	/* CAN测试*/
+//	u32 filter[7] = {0x1800f001,0x1800f002,0x1800f003,0x1800f004,0x1800f005,0x1800f006,0x1800f007};
+//	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32 *)filter,7);
+//	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32 *)filter,7);
 	/*系统时间100us中断*/
 	TIM4_Int_Init(TIM4_ARR,TIM4_PSC);
 	#if PRINT_UART_LOG
@@ -92,41 +92,6 @@ void Initialization (void)
 	getPara();
 	#endif
 }
-
-/**
-  * @brief  CAN数据发送
-  * @param  None
-  * @retval None
-  */
-u8 can_send_package()
-{ 
-	if(CAN_Send_EN && CAN1_Send_EN){
-		if(queue_empty(adc_queue)) delay_ms(2);
-		IO_input[0] = DIGITAL_INPUT1;
-		IO_input[1] = DIGITAL_INPUT2;
-		IO_input[2] = nodeId;
-		CAN1_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
-		CAN1_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
-		CAN1_Send_Msg(IO_input,3);
-		CAN_Send_EN = 0;
-		CAN1_Send_EN = 0;
-	}
-	if(CAN_Send_EN && CAN2_Send_EN){
-
-		if(queue_empty(adc_queue)) delay_ms(2);
-		IO_input[0] = DIGITAL_INPUT1;
-		IO_input[1] = DIGITAL_INPUT2;
-		IO_input[2] = nodeId;
-		CAN2_Send_Msg((u8 *) &adc_queue.YYYY_MM_DD, 8);
-		CAN2_Send_Msg((u8 *) &adc_queue.arr[adc_queue.head],8);
-		CAN2_Send_Msg(IO_input,3);
-		CAN_Send_EN = 0;
-		CAN2_Send_EN = 0;
-	}
-	return 1;
-}
-
-
 
 /**
   * @brief  测试ADC，打印到串口

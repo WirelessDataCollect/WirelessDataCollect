@@ -46,6 +46,10 @@ void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 	#endif
 	/* 重置CAN1设置*/
 	CAN_DeInit(CAN1);
+	/* 如果全部过滤掉，则直接返回*/
+	if(list_len == 0){
+		return;
+	}
 	/* 使能相关时钟*/
 	RCC_AHB1PeriphClockCmd(RCC_PERIPH_CAN1_PORT_TX|RCC_PERIPH_CAN1_PORT_RX, ENABLE);                  											 
 	RCC_APB1PeriphClockCmd(RCC_PERIPH_CAN1, ENABLE);	
