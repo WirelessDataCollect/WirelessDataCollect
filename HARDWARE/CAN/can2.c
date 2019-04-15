@@ -50,6 +50,9 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 	#if CAN2_RX1_INT_ENABLE 
 		NVIC_InitTypeDef  NVIC_InitStructure;
 	#endif
+	
+	/* 重置CAN2设置*/
+	CAN_DeInit(CAN2);
 	/* 使能相关时钟*/
 	RCC_AHB1PeriphClockCmd(RCC_PERIPH_CAN2_PORT_TX|RCC_PERIPH_CAN2_PORT_RX, ENABLE);	
 	RCC_APB1PeriphClockCmd(RCC_PERIPH_CAN1, ENABLE);
@@ -164,9 +167,8 @@ void CAN2_RX1_IRQHandler(void)
 		CAN_Receive(CAN2, CAN_FIFO1 ,&RxMessage);
 		/* 加入CAN的ID*/
 		queue_put(&can_queue,CAN2_ID);
-		/* 加入CAN的接收时间偏移*/
-		u32 deltaTime = SYSTEMTIME - can_queue.HeadTime;
-		queue_arr_memcpy(&can_queue, (u8 *)&deltaTime , sizeof(deltaTime));
+		/* 加入CAN的接收时间*/
+		queue_arr_memcpy(&can_queue, (u8 *)&SYSTEMTIME , sizeof(SYSTEMTIME));
 		/* CAN2数据拷贝至queue.arr尾部，并更新tail*/
 		queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));
 	#if PRINT_UART_LOG

@@ -245,16 +245,16 @@ u8 wifi_send_package()
 		DATA_AUTO_CHECK_EN = temp;
 	}
 	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/
-	if((SYSTEMTIME - can_queue.HeadTime)*((TIM4_ARR + 1)*(TIM4_PSC + 1) / TIM3_4_PCLK_MHZ) > 500000){
+	if(queue_length(can_queue) > 0){
 		Can_Length = queue_length(can_queue);
-		/* 时间过长而且有数据*/
-		if(Can_Length > 0){
+		if(((SYSTEMTIME - ((u32)(can_queue.arr[can_queue.head+1]&0xff)|((u32)(can_queue.arr[can_queue.head+2]&0xff)<<8)|((u32)(can_queue.arr[can_queue.head+3]&0xff)<<16)
+			      |((u32)(can_queue.arr[can_queue.head+4]&0xff)<<24)))*(TIM4_ARR + 1)*(TIM4_PSC + 1) / TIM3_4_PCLK_MHZ) > 500000){
 			/* CAN Queue加入帧头*/
 			queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
 			
 			/* 如果分成两段，将前面一段复制到后面*/
-			if(adc_queue.head + Can_Length > QUEUE_SIZE ) {
-				queue_oversize(&adc_queue,adc_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
+			if(can_queue.head + Can_Length > QUEUE_SIZE ) {
+				queue_oversize(&can_queue,can_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
 			}
 			
 			/**获取队列头，并更新队列*/
@@ -272,7 +272,7 @@ u8 wifi_send_package()
 			DATA_AUTO_CHECK_EN = 0;
 			/* CAN数据发送到局域网*/
 			rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-			DATA_AUTO_CHECK_EN = temp;		
+			DATA_AUTO_CHECK_EN = temp;					
 		}
 	}
 	return 1;
@@ -334,18 +334,14 @@ u8 order_anay(u8 arr[])
 			if(arr[1] == nodeId){
 				if(arr[2] == CAN1_ID){
 					if(arr[3] == 50){ //500KHz
-						CAN_DeInit(CAN1);
 						CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32*)&arr[5],arr[4]);   //500K
 					}else if(arr[3] == 25){ //250KHz
-						CAN_DeInit(CAN1);
 						CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32*)&arr[5],arr[4]);   //250K
 					}
 				}else if(arr[2] == CAN2_ID){
 					if(arr[3] == 50){ //500KHz
-						CAN_DeInit(CAN2);
 						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32*)&arr[5],arr[4]);   //500K
 					}else if(arr[3] == 25){ //250KHz
-						CAN_DeInit(CAN2);
 						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32*)&arr[5],arr[4]);   //250K
 					}
 				}
