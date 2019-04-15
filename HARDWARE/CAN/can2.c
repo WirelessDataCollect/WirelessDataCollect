@@ -32,14 +32,14 @@ u8 CAN2_Send_EN = 0;
   * @param  mode：CAN_Mode_Normal,普通模式;CAN_Mode_LoopBack,回环模式;
 			@arg CAN_Mode_Normal：普通模式
 			@arg CAN_Mode_LoopBack：回环模式
-  * @param  filter_list：存储过滤器ID的数组，8个字节为一组
-  * @param  list_len：过滤器个数，1~14
+  * @param  filter_list：存储过滤器拓展ID的数组
+  * @param  list_len：滤波ID个数
   * @note   BaudRate = Tpclk / (tq * ( (tbs1+1) + (tbs2 +2) + 1))
   * @note   Tpclk一般为42MHz
   * @exam   CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal);//can2初始化500k波特率
   * @retval None
   */
-void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 list_len){
+void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8 list_len){
 
 	GPIO_InitTypeDef GPIO_InitStructure; 
 	CAN_InitTypeDef        CAN_InitStructure;
@@ -80,15 +80,22 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 
 	CAN_Init(CAN2, &CAN_InitStructure);            // 初始化CAN2 
 
 	/* 配置过滤器*/
-	for(u8 filter_num = 0;filter_num < list_len;filter_num++){
-		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num + 14;	          //过滤器，can2支持从14开始
-//		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdMask;
+	for(u8 filter_num = 0;filter_num < list_len;filter_num+=2){
+		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num + 14;	      //过滤器，can2支持从14开始
 		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList; //List模式	
 		CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
-		CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)(((*(filter_list + 2 + filter_num * 8) + 256 * (*(filter_list + 3 + filter_num * 8))) << 3) & 0xFFFF);
-		CAN_FilterInitStructure.CAN_FilterIdLow          = (u16)((((*(filter_list + 0 + filter_num * 8) + 256 * (*(filter_list + 1 + filter_num * 8))) << 3) & 0xFFFF) | CAN_ID_EXT);
-		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)(((*(filter_list + 6 + filter_num * 8) + 256 * (*(filter_list + 7 + filter_num * 8))) << 3) & 0xFFFF);
-		CAN_FilterInitStructure.CAN_FilterMaskIdLow      = (u16)((((*(filter_list + 4 + filter_num * 8) + 256 * (*(filter_list + 5 + filter_num * 8))) << 3) & 0xFFFF) | CAN_ID_EXT);
+		u32 ext_id1 = *(filter_list + filter_num * 4);
+		u32 ext_id2;
+		/* 根据list长度奇数或者偶数来决定第二个滤波器寄存器的数值*/
+		if(list_len - filter_num == 1){ //发现只剩下一个ID没有过滤，则将第二个寄存器也配置成该ID
+			ext_id2 = *(filter_list + filter_num * 4);
+		}else{                          //还有大于等于2个ID没有过滤
+			ext_id2 = *(filter_list + filter_num * 4 + 4);
+		}
+		CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)((ext_id1<<3)>>16) & 0xffff;
+		CAN_FilterInitStructure.CAN_FilterIdLow          = (u16)((ext_id1<<3) & 0xffff) | CAN_ID_EXT;
+		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)((ext_id2<<3)>>16) & 0xffff;
+		CAN_FilterInitStructure.CAN_FilterMaskIdLow      = (u16)((ext_id2<<3) & 0xffff) | CAN_ID_EXT;		
 		CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO1;      //过滤器0关联到FIFO0
 		CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
 		CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	

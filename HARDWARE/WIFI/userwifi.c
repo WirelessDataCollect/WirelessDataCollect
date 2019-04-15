@@ -334,15 +334,19 @@ u8 order_anay(u8 arr[])
 			if(arr[1] == nodeId){
 				if(arr[2] == CAN1_ID){
 					if(arr[3] == 50){ //500KHz
+						CAN_DeInit(CAN1);
 						CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,&arr[5],arr[4]);   //500K
 					}else if(arr[3] == 25){ //250KHz
+						CAN_DeInit(CAN1);
 						CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,&arr[5],arr[4]);   //250K
 					}
 				}else if(arr[2] == CAN2_ID){
 					if(arr[3] == 50){ //500KHz
-						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,&arr[5],arr[4]);   //500K
+						CAN_DeInit(CAN2);
+						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32*)&arr[5],arr[4]);   //500K
 					}else if(arr[3] == 25){ //250KHz
-						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,&arr[5],arr[4]);   //250K
+						CAN_DeInit(CAN2);
+						CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32*)&arr[5],arr[4]);   //250K
 					}
 				}
 			}
