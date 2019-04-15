@@ -53,6 +53,14 @@ typedef enum{
 /**
   * @}
   */
+  
+/** @defgroup 超时发送
+  * @{
+  */
+#define CAN_OVERTIME_SEND_TIME       500000    /*!< 500ms>*/
+/**
+  * @}
+  */  
 
 /** @defgroup 上位机命令，UDP数据包第1个字节
   * @{
