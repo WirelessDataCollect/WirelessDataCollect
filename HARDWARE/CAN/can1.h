@@ -55,7 +55,7 @@ typedef enum{
 //! CAN2发使能
 extern u8 CAN1_Send_EN;	
 										 							 				    
-void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 list_len);
+void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8 list_len);
 u8 CAN1_Send_Msg(u8* msg,u8 len);						//发送数据
 u8 CAN1_Receive_Msg(u8 *buf);							//接收数据
 #endif

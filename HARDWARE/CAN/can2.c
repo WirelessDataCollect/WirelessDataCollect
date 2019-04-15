@@ -9,6 +9,7 @@
   */
 
 //-------------include---------------//
+#include "can1.h"
 #include "can2.h"
 #include "gpio.h"
 #include "delay.h"
@@ -40,7 +41,9 @@ u8 CAN2_Send_EN = 0;
   * @retval None
   */
 void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8 list_len){
-
+	#if PRINT_UART_LOG
+	printf("\r\nCAN2 Initing...\r\n");
+	#endif
 	GPIO_InitTypeDef GPIO_InitStructure; 
 	CAN_InitTypeDef        CAN_InitStructure;
 	CAN_FilterInitTypeDef  CAN_FilterInitStructure;
@@ -48,7 +51,8 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 		NVIC_InitTypeDef  NVIC_InitStructure;
 	#endif
 	/* 使能相关时钟*/
-	RCC_AHB1PeriphClockCmd(RCC_PERIPH_CAN2_PORT_TX|RCC_PERIPH_CAN2_PORT_RX, ENABLE);	                   											 
+	RCC_AHB1PeriphClockCmd(RCC_PERIPH_CAN2_PORT_TX|RCC_PERIPH_CAN2_PORT_RX, ENABLE);	
+	RCC_APB1PeriphClockCmd(RCC_PERIPH_CAN1, ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_PERIPH_CAN2, ENABLE);
 
 	/* 初始化GPIO*/
@@ -78,20 +82,41 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 	CAN_InitStructure.CAN_BS2       = tbs2;        //Tbs2范围CAN_BS2_1tq ~	CAN_BS2_8tq
 	CAN_InitStructure.CAN_Prescaler = brp;         //分频系数(Fdiv)为brp+1	
 	CAN_Init(CAN2, &CAN_InitStructure);            // 初始化CAN2 
-
+	
+	#if PRINT_UART_LOG
+	printf("CAN2 Filter List:\r\n");
+	printf("--------------------------------\r\n");
+	#endif	
 	/* 配置过滤器*/
+//	/* Example. 过滤出标准帧ID：0x7e9和拓展帧ID：0x1800f001*/
+//	CAN_FilterInitStructure.CAN_FilterNumber         = 14;	          //过滤器
+//	CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList;
+//	CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
+////	u16 std_id = 0x7e9;
+////	CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)(std_id<<5);
+////	CAN_FilterInitStructure.CAN_FilterIdLow          = 0|CAN_ID_STD;
+//	u32 ext_id1 = 0x1800f001;
+//	CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)((ext_id1<<3)>>16) & 0xffff;
+//	CAN_FilterInitStructure.CAN_FilterIdLow          = (u16)((ext_id1<<3) & 0xffff) | CAN_ID_EXT;
+//	u32 ext_id2 = 0x1800f002;
+//	CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)(((ext_id2<<3)>>16) & 0xffff);
+//	CAN_FilterInitStructure.CAN_FilterMaskIdLow      = (u16)(((ext_id2<<3) & 0xffff) | CAN_ID_EXT);
+//	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO1;      //过滤器0关联到FIFO1
+//	CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
+//	CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	
+	u32 ext_id1,ext_id2;
 	for(u8 filter_num = 0;filter_num < list_len;filter_num+=2){
-		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num + 14;	      //过滤器，can2支持从14开始
+		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num/2 + 14;	      //过滤器，can2支持从14开始
 		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList; //List模式	
 		CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
-		u32 ext_id1 = *(filter_list + filter_num * 4);
-		u32 ext_id2;
+		ext_id1 = filter_list[filter_num];
 		/* 根据list长度奇数或者偶数来决定第二个滤波器寄存器的数值*/
 		if(list_len - filter_num == 1){ //发现只剩下一个ID没有过滤，则将第二个寄存器也配置成该ID
-			ext_id2 = *(filter_list + filter_num * 4);
+			ext_id2 = filter_list[filter_num];
 		}else{                          //还有大于等于2个ID没有过滤
-			ext_id2 = *(filter_list + filter_num * 4 + 4);
+			ext_id2 = filter_list[filter_num+1];
 		}
+		printf("  0x%X , 0x%X \r\n",ext_id1,ext_id2);
 		CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)((ext_id1<<3)>>16) & 0xffff;
 		CAN_FilterInitStructure.CAN_FilterIdLow          = (u16)((ext_id1<<3) & 0xffff) | CAN_ID_EXT;
 		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)((ext_id2<<3)>>16) & 0xffff;
@@ -100,21 +125,10 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 		CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
 		CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	
 	}
-
-//	/* Example. 过滤出标准帧ID：0x7e9和拓展帧ID：0x1800f001*/
-//	CAN_FilterInitStructure.CAN_FilterNumber         = 14;	          //过滤器
-//	CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList;
-//	CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
-//	u16 std_id = 0x7e9;
-//	CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)(std_id<<5);
-//	CAN_FilterInitStructure.CAN_FilterIdLow          = 0|CAN_ID_STD;
-//	u32 ext_id = 0x1800f001;
-//	CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)((ext_id<<3)>>16) & 0xffff;
-//	CAN_FilterInitStructure.CAN_FilterMaskIdLow      = (u16)((ext_id<<3) & 0xffff) | CAN_ID_EXT;
-//	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO1;      //过滤器0关联到FIFO1
-//	CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
-//	CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	
-		
+	#if PRINT_UART_LOG
+	printf("--------------------------------\r\n");
+	#endif
+	
 	#if CAN2_RX1_INT_ENABLE
 	CAN_ITConfig(CAN2,CAN_IT_FMP1,ENABLE);		    
 	NVIC_InitStructure.NVIC_IRQChannel                   = CAN2_RX1_IRQn;
@@ -124,6 +138,9 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 	NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	#endif
+	#if PRINT_UART_LOG
+	printf("CAN2 Inited Successfully...!\r\n\r\n");
+	#endif	
 }   
  
 //!使能RX0中断

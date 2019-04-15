@@ -79,9 +79,9 @@ void Initialization (void)
 	ADC_CTRL_Conf();
 	
 	/* CAN测试*/
-	u32 filter[2] = {0x1800f001,0x1800f002};
-//	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u8 *)filter,1);
-	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32 *)filter,1);
+	u32 filter[7] = {0x1800f001,0x1800f002,0x1800f003,0x1800f004,0x1800f005,0x1800f006,0x1800f007};
+	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32 *)filter,7);
+	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32 *)filter,7);
 	/*系统时间100us中断*/
 	TIM4_Int_Init(TIM4_ARR,TIM4_PSC);
 	#if PRINT_UART_LOG
