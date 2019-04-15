@@ -15,6 +15,7 @@
 #include "string.h"
 #include "userwifi.h"
 #include "adc.h"
+#include "can2.h"
 
 /**
   * @brief  定时器4初始化
@@ -171,6 +172,8 @@ void TIM3_IRQHandler(void)
 					if(MS_TIME%1000==0){
 						WORKING_LED_CONV();//工作灯
 						BEEP_ON(0);//关蜂鸣器
+						char msg[8] = {1,2,3,4,5,6,7,8};
+						CAN2_Send_Msg((u8 *)msg,8);
 					}
 				}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){/*!< AP模式下快速闪烁>*/
 					if(MS_TIME%200==0){

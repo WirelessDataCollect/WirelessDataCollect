@@ -434,6 +434,11 @@
           <GroupName>HARDWARE</GroupName>
           <Files>
             <File>
+              <FileName>can1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\CAN\can1.c</FilePath>
+            </File>
+            <File>
               <FileName>can2.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\CAN\can2.c</FilePath>
@@ -472,11 +477,6 @@
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\GPIO\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>can1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\CAN\can1.c</FilePath>
             </File>
           </Files>
         </Group>

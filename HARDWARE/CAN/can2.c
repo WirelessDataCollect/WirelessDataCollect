@@ -81,19 +81,33 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u8 * filter_list,u8 
 
 	/* 配置过滤器*/
 	for(u8 filter_num = 0;filter_num < list_len;filter_num++){
-		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num;	          //过滤器
+		CAN_FilterInitStructure.CAN_FilterNumber         = filter_num + 14;	          //过滤器，can2支持从14开始
 //		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdMask;
 		CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList; //List模式	
 		CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
-		CAN_FilterInitStructure.CAN_FilterIdHigh         = *(filter_list + 0 + filter_num * 8) + 256 * (*(filter_list + 1 + filter_num * 8));
-		CAN_FilterInitStructure.CAN_FilterIdLow          = *(filter_list + 2 + filter_num * 8) + 256 * (*(filter_list + 3 + filter_num * 8));
-		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = *(filter_list + 4 + filter_num * 8) + 256 * (*(filter_list + 5 + filter_num * 8));
-		CAN_FilterInitStructure.CAN_FilterMaskIdLow      = *(filter_list + 6 + filter_num * 8) + 256 * (*(filter_list + 7 + filter_num * 8));;
+		CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)(((*(filter_list + 2 + filter_num * 8) + 256 * (*(filter_list + 3 + filter_num * 8))) << 3) & 0xFFFF);
+		CAN_FilterInitStructure.CAN_FilterIdLow          = (u16)((((*(filter_list + 0 + filter_num * 8) + 256 * (*(filter_list + 1 + filter_num * 8))) << 3) & 0xFFFF) | CAN_ID_EXT);
+		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)(((*(filter_list + 6 + filter_num * 8) + 256 * (*(filter_list + 7 + filter_num * 8))) << 3) & 0xFFFF);
+		CAN_FilterInitStructure.CAN_FilterMaskIdLow      = (u16)((((*(filter_list + 4 + filter_num * 8) + 256 * (*(filter_list + 5 + filter_num * 8))) << 3) & 0xFFFF) | CAN_ID_EXT);
 		CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO1;      //过滤器0关联到FIFO0
 		CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
 		CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	
 	}
 
+//	/* Example. 过滤出标准帧ID：0x7e9和拓展帧ID：0x1800f001*/
+//	CAN_FilterInitStructure.CAN_FilterNumber         = 14;	          //过滤器
+//	CAN_FilterInitStructure.CAN_FilterMode           = CAN_FilterMode_IdList;
+//	CAN_FilterInitStructure.CAN_FilterScale          = CAN_FilterScale_32bit; //32位滤波
+//	u16 std_id = 0x7e9;
+//	CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)(std_id<<5);
+//	CAN_FilterInitStructure.CAN_FilterIdLow          = 0|CAN_ID_STD;
+//	u32 ext_id = 0x1800f001;
+//	CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)((ext_id<<3)>>16) & 0xffff;
+//	CAN_FilterInitStructure.CAN_FilterMaskIdLow      = (u16)((ext_id<<3) & 0xffff) | CAN_ID_EXT;
+//	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO1;      //过滤器0关联到FIFO1
+//	CAN_FilterInitStructure.CAN_FilterActivation     = ENABLE;                //激活过滤器
+//	CAN_FilterInit(&CAN_FilterInitStructure);                                 //滤波器初始化	
+		
 	#if CAN2_RX1_INT_ENABLE
 	CAN_ITConfig(CAN2,CAN_IT_FMP1,ENABLE);		    
 	NVIC_InitStructure.NVIC_IRQChannel                   = CAN2_RX1_IRQn;
@@ -154,26 +168,31 @@ void CAN2_RX1_IRQHandler(void)
            @arg CAN2_SEND_OK  成功
   */
 u8 CAN2_Send_Msg(u8* msg,u8 len){	
-  u8 mbox;
-  u16 i=0;
-  CanTxMsg TxMessage;
-  TxMessage.StdId = 0x32;	 // 标准标识符为0
-  TxMessage.ExtId = 0x32;	 // 设置扩展标示符（29位）
-  TxMessage.IDE   = 0;		  // 使用扩展标识符
-  TxMessage.RTR   = 0;		  // 消息类型为数据帧，一帧8位
-  TxMessage.DLC   = len;							 // 发送信息长度
-  for(i=0;i<len;i++)
-  TxMessage.Data[i]=msg[i];				 // 第一帧信息
-  mbox = CAN_Transmit(CAN2, &TxMessage);   
-  i=0;
-  while((CAN_TransmitStatus(CAN2, mbox)==CAN_TxStatus_Failed)&&(i<0XFFF)){
+	u8 mbox;
+	u16 i=0;
+	CanTxMsg TxMessage;
+	//! 标准标识符为0,该帧的优先级
+	TxMessage.StdId = 0x32;
+	//! 设置扩展标示符（29位）
+	TxMessage.ExtId = 0x32;
+	//! 使用扩展标识符
+	TxMessage.IDE   = CAN_Id_Extended;
+	//! 消息类型为数据帧，一帧8位
+	TxMessage.RTR   = 0;
+	//! 发送信息长度
+	TxMessage.DLC   = len;
+	for(i=0;i<len;i++)
+	TxMessage.Data[i]=msg[i];				 // 第一帧信息
+	mbox = CAN_Transmit(CAN2, &TxMessage);   
+	i=0;
+	while((CAN_TransmitStatus(CAN2, mbox)==CAN_TxStatus_Failed)&&(i<0XFFF)){
 		i++;
 		mbox= CAN_Transmit(CAN2, &TxMessage); 
 	}
-  if(i>=0XFFF){
+	if(i>=0XFFF){
 	  return CAN2_SEND_ERROR;
-  }
-  return CAN2_SEND_OK;		
+	}
+	return CAN2_SEND_OK;		
 
 }
 
