@@ -162,26 +162,28 @@ void CAN2_RX1_IRQHandler(void)
   	CanRxMsg RxMessage;
 
 	if (CAN_GetITStatus(CAN2,CAN_IT_FMP1)!= RESET){
-		/* 如果队列空了，时间戳更新*/
-		if(queue_empty(can_queue)){
-			can_queue.HeadTime = SYSTEMTIME;
-			can_queue.YYYY_MM_DD = YYMMDD;
+		if((Wifi_Send_EN == 1) && ((CAN_Get_EN & CAN2_ENABLE_BIT_SLC) != 0)){
+			/* 如果队列空了，时间戳更新*/
+			if(queue_empty(can_queue)){
+				can_queue.HeadTime = SYSTEMTIME;
+				can_queue.YYYY_MM_DD = YYMMDD;
+			}
+			/* 接收CAN数据*/
+			CAN_Receive(CAN2, CAN_FIFO1 ,&RxMessage);
+			/* 加入CAN的ID*/
+			queue_put(&can_queue,CAN2_ID);
+			/* 加入CAN的接收时间*/
+			queue_arr_memcpy(&can_queue, (u8 *)&SYSTEMTIME , sizeof(SYSTEMTIME));
+			/* CAN2数据拷贝至queue.arr尾部，并更新tail*/
+			queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));
+		#if PRINT_UART_LOG
+			printf("CAN2 Data : ");
+			for(int i = 0; i < RxMessage.DLC;i++){
+				printf("%d ",RxMessage.Data[i]);
+			}
+			printf("\r\n");
+		#endif			
 		}
-		/* 接收CAN数据*/
-		CAN_Receive(CAN2, CAN_FIFO1 ,&RxMessage);
-		/* 加入CAN的ID*/
-		queue_put(&can_queue,CAN2_ID);
-		/* 加入CAN的接收时间*/
-		queue_arr_memcpy(&can_queue, (u8 *)&SYSTEMTIME , sizeof(SYSTEMTIME));
-		/* CAN2数据拷贝至queue.arr尾部，并更新tail*/
-		queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));
-	#if PRINT_UART_LOG
-		printf("CAN2 Data : ");
-		for(int i = 0; i < RxMessage.DLC;i++){
-			printf("%d ",RxMessage.Data[i]);
-		}
-		printf("\r\n");
-	#endif
 	 }
 	 CAN_ClearITPendingBit(CAN2, CAN_IT_FMP1);
 	 CAN_FIFORelease(CAN2,CAN_FIFO1); //清中断标志

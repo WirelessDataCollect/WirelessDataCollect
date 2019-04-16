@@ -86,6 +86,15 @@ typedef enum{
 /**
   * @}
   */
+  
+/** @defgroup CAN使能位
+  * @{
+  */
+#define CAN1_ENABLE_BIT_SLC         0x01  /*!< CAN1使能位，即第0位>*/
+#define CAN2_ENABLE_BIT_SLC         0x02  /*!< CAN2使能位，即第1位>*/
+/**
+  * @}
+  */
 
 //!系统时钟
 extern u32   SYSTEMTIME;
@@ -97,8 +106,10 @@ extern u8    Time_Sync_Flag;
 
 //!数据采集和发送使能
 extern volatile u8    Wifi_Send_EN;
-//!CAN采集和发送使能
-extern u8    CAN_Send_EN;
+//!CAN采集使能
+extern u8    CAN_Get_EN;
+//!ADC采集使能
+extern u8    ADC_Get_EN;
 
 //!adc接收缓存
 extern Queue adc_queue;	

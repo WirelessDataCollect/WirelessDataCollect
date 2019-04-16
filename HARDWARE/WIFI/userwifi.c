@@ -19,17 +19,18 @@
 #include "can1.h"
 #include "can2.h"
 
-u8     DATA_AUTO_CHECK_EN = 1;	     //是否在中断中自动check数据
-u32    SYSTEMTIME = 0;               //系统时间
-u32    YYMMDD =0;                    //年月日
-u8     Time_Sync_Flag = 0;           //最近时钟是否同步
-volatile u8 Wifi_Send_EN = 0;        //数据发送和接受使能
-u8     CAN_Send_EN = 0;              //CAN数据发送和接受使能
-Queue  adc_queue;                    //ADC数据存储
-Queue  can_queue;                    //can数据存储
+u8     DATA_AUTO_CHECK_EN = 1;	    									 //是否在中断中自动check数据
+u32    SYSTEMTIME = 0;                                                   //系统时间
+u32    YYMMDD =0;                                                        //年月日
+u8     Time_Sync_Flag = 0;                                               //最近时钟是否同步
+volatile u8 Wifi_Send_EN = 0;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
+u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CAN数据发送使能（第0位使能can1，第1位使能can2），默认开启（必须满足Wifi_Send_EN=1，才能采集）
+u8     ADC_Get_EN = 1;                                                   //ADC数据采集使能，默认开启（必须满足Wifi_Send_EN=1，才能采集）
+Queue  adc_queue;                                                        //ADC数据存储
+Queue  can_queue;                                                        //can数据存储
 u8     localDestIp_txrx[4] = {255,255,255,255};
 u8     destIp_txrx[4] = {DESTIP_TXRX_GROUP1,DESTIP_TXRX_GROUP2,DESTIP_TXRX_GROUP3,DESTIP_TXRX_GROUP4};
-u8     destIp_sync[4] = {255,255,255,255};  //同步
+u8     destIp_sync[4] = {255,255,255,255};                              //同步
 u16    destSocket_txrx = 5001;
 u16    moduleSocket_txrx =5002;
 u16    destSocket_sync = 5003;
