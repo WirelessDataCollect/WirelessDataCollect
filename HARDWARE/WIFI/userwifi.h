@@ -57,7 +57,7 @@ typedef enum{
 /** @defgroup ³¬Ê±·¢ËÍ
   * @{
   */
-#define CAN_OVERTIME_SEND_TIME       2000000    /*!< 2000ms>*/
+#define CAN_OVERTIME_SEND_TIME       600000    /*!< 8000ms>*/
 /**
   * @}
   */  

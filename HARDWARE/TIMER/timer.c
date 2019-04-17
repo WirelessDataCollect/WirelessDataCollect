@@ -51,7 +51,7 @@ void TIM4_Int_Init(u16 arr,u16 psc)
 	/* TIM4中断*/
 	NVIC_InitStructure.NVIC_IRQChannel=TIM4_IRQn; 
 	/* 抢占优先级*/
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x00;
 	/* 子优先级3*/
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; 
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;

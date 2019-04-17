@@ -23,9 +23,9 @@ u8     DATA_AUTO_CHECK_EN = 1;	    									 //是否在中断中自动check数据
 u32    SYSTEMTIME = 0;                                                   //系统时间
 u32    YYMMDD =0;                                                        //年月日
 u8     Time_Sync_Flag = 0;                                               //最近时钟是否同步
-volatile u8 Wifi_Send_EN = 0;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
+volatile u8 Wifi_Send_EN = 1;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
 u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CAN数据发送使能（第0位使能can1，第1位使能can2），默认开启（必须满足Wifi_Send_EN=1，才能采集）
-u8     ADC_Get_EN = 0;                                                   //ADC数据采集使能，默认开启（必须满足Wifi_Send_EN=1，才能采集）
+u8     ADC_Get_EN = 1;                                                   //ADC数据采集使能，默认开启（必须满足Wifi_Send_EN=1，才能采集）
 Queue  adc_queue;                                                        //ADC数据存储
 Queue  can_queue;                                                        //can数据存储
 u8     localDestIp_txrx[4] = {255,255,255,255};
@@ -143,25 +143,23 @@ u8 wifi_send_package()
 		
 		/* ADC Queue加入帧头*/
 		queue_addtime_addIO(&adc_queue,Adc_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);
-		
-		/* CAN Queue加入帧头*/
-		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
-		
-		/* ADC如果分成两段，将前面一段复制到后面*/
-		if(adc_queue.head + Adc_Length > QUEUE_SIZE ) {
-			queue_oversize(&adc_queue,adc_queue.head + PACKAGE_HEAD_FRAME_LENGTH + Adc_Length - QUEUE_SIZE);
-		}
-		/* CAN如果分成两段，将前面一段复制到后面*/
-		if(can_queue.head + Can_Length > QUEUE_SIZE ) {
-			queue_oversize(&can_queue,can_queue.head + PACKAGE_HEAD_FRAME_LENGTH + Can_Length - QUEUE_SIZE);
-		}
-		
 		/**获取队列头，并更新队列*/
 		Adc_Head = adc_queue.head;
-		Can_Head = can_queue.head;
-		adc_queue.head = adc_queue.tail; 
-		can_queue.head = can_queue.tail; 
-
+		adc_queue.head = adc_queue.tail;		
+		/* CAN Queue加入帧头*/
+		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
+		Can_Head = can_queue.head; 
+		can_queue.head = can_queue.tail;
+		
+		/* ADC如果分成两段，将前面一段复制到后面*/
+		if(Adc_Head + Adc_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+			queue_oversize(&adc_queue,Adc_Head + PACKAGE_HEAD_FRAME_LENGTH + Adc_Length - QUEUE_SIZE);
+		}
+		/* CAN如果分成两段，将前面一段复制到后面*/
+		if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+			queue_oversize(&can_queue,Can_Head + PACKAGE_HEAD_FRAME_LENGTH + Can_Length - QUEUE_SIZE);
+		}
+		
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* ADC数据发送到远程服务器*/
@@ -196,13 +194,13 @@ u8 wifi_send_package()
 	if(queue_length(adc_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
 		
 		Adc_Length = queue_length(adc_queue);
-		
 		queue_addtime_addIO(&adc_queue,Adc_Length,nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);   //  head <- head-10;
-		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ){
-			queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
-		}
 		Adc_Head = adc_queue.head;
-		adc_queue.head = adc_queue.tail; 
+		adc_queue.head = adc_queue.tail;
+		if(Adc_Head + Adc_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ){
+			queue_oversize(&adc_queue,Adc_Head + Adc_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
+		}
+ 
 		//发送到远程服务器
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
@@ -218,55 +216,53 @@ u8 wifi_send_package()
 	}
 	/* CAN队列已满*/
 	if( queue_length(can_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
+		/* 得到can队列的长度，只有数据*/
 		Can_Length = queue_length(can_queue);
-		
 		/* CAN Queue加入帧头*/
 		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
-		
-		/* 如果分成两段，将前面一段复制到后面*/
-		if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) {
-			queue_oversize(&can_queue,can_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
-		}
-		
-		/**获取队列头，并更新队列*/
 		Can_Head = can_queue.head;
 		can_queue.head = can_queue.tail; 
+		
+		/* 如果分成两段，将前面一段复制到后面*/
+		if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+			queue_oversize(&can_queue,Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
+		}
+//		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
+//			printf("%x ",can_queue.arr[can_queue.head+i]);
+//		}		
 		
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* 发送到远程服务器*/
-		rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-		
+		rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+			
 		DATA_AUTO_CHECK_EN = temp;
 		delay_ms(5);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* CAN数据发送到局域网*/
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
-	}
-	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/
-	if(queue_length(can_queue) > 0){
-		Can_Length = queue_length(can_queue);
+	}else if(queue_length(can_queue) > 0){	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/	
 		if(((SYSTEMTIME - ((u32)(can_queue.arr[can_queue.head+1]&0xff)|((u32)(can_queue.arr[can_queue.head+2]&0xff)<<8)|((u32)(can_queue.arr[can_queue.head+3]&0xff)<<16)
 			      |((u32)(can_queue.arr[can_queue.head+4]&0xff)<<24)))*(TIM4_ARR + 1)*(TIM4_PSC + 1) / TIM3_4_PCLK_MHZ) > CAN_OVERTIME_SEND_TIME){
+			/* 得到can队列的长度，只有数据*/
+			Can_Length = queue_length(can_queue);
 			/* CAN Queue加入帧头*/
 			queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
-			
-			/* 如果分成两段，将前面一段复制到后面*/
-			if(can_queue.head + Can_Length > QUEUE_SIZE ) {
-				queue_oversize(&can_queue,can_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
-			}
-			
 			/**获取队列头，并更新队列*/
 			Can_Head = can_queue.head;
-			can_queue.head = can_queue.tail; 
+			can_queue.head = can_queue.tail; 			
+			/* 如果分成两段，将前面一段复制到后面*/
+			if(can_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+				queue_oversize(&can_queue,can_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
+			};		
+
 			
 			temp = DATA_AUTO_CHECK_EN;
 			DATA_AUTO_CHECK_EN = 0;
 			/* 发送到远程服务器*/
 			rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-			
 			DATA_AUTO_CHECK_EN = temp;
 			delay_ms(5);
 			temp = DATA_AUTO_CHECK_EN;

@@ -57,8 +57,15 @@ u8 queue_get(volatile Queue * pQueue)
   * @retval None
   */
 void queue_arr_memcpy(Queue * pQueue, u8 * buf , u8 len){
-	memcpy((u8 *)&pQueue->arr[pQueue->tail],buf,len);
+	if((len + pQueue->tail) <= QUEUE_SIZE){
+		memcpy((u8 *)&(pQueue->arr[pQueue->tail]),buf,len);
+		
+	}else{
+		memcpy((u8 *)&(pQueue->arr[pQueue->tail]),buf,QUEUE_SIZE - pQueue->tail);
+		memcpy((u8 *)&(pQueue->arr[0]),buf+QUEUE_SIZE - pQueue->tail,len - QUEUE_SIZE + pQueue->tail);
+	}
 	pQueue->tail = (pQueue->tail + len)  % QUEUE_SIZE;
+	
 }
 
 /**
@@ -85,7 +92,8 @@ void queue_clear(volatile Queue * pQueue)
   */
 void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 id, u8 IO_input1, u8 IO_input2,u8 dataType)
 {
-	pQueue->head = (pQueue->head-PACKAGE_HEAD_FRAME_LENGTH + QUEUE_SIZE)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
+	pQueue->head = (pQueue->head  + QUEUE_SIZE -PACKAGE_HEAD_FRAME_LENGTH)% QUEUE_SIZE;  //往前距离为包的帧头长度，包括测试名称、时间、IO高低电平等
+//	printf("Head: %d \r\nTail: %d \r\n\r\n",pQueue->head,pQueue->tail);
 	pQueue->arr[(pQueue->head+0)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD);
 	pQueue->arr[(pQueue->head+1)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>8);
 	pQueue->arr[(pQueue->head+2)% QUEUE_SIZE] = (u8)(pQueue->YYYY_MM_DD>>16);
@@ -159,7 +167,6 @@ u8 queue_empty(volatile Queue queue)
   */
 u32 queue_length(volatile Queue queue)
 {
-//	printf("len : %d\r\n",(queue.tail-queue.head+QUEUE_SIZE)%QUEUE_SIZE);
 	return (queue.tail-queue.head+QUEUE_SIZE)%QUEUE_SIZE;
 }
 

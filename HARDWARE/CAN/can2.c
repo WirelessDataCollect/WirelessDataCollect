@@ -140,7 +140,7 @@ void CAN2_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 	CAN_ITConfig(CAN2,CAN_IT_FMP1,ENABLE);		    
 	NVIC_InitStructure.NVIC_IRQChannel                   = CAN2_RX1_IRQn;
 	/* !! 中断优先级CAN1和CAN2必须相同*/
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -176,13 +176,13 @@ void CAN2_RX1_IRQHandler(void)
 			queue_arr_memcpy(&can_queue, (u8 *)&SYSTEMTIME , sizeof(SYSTEMTIME));
 			/* CAN2数据拷贝至queue.arr尾部，并更新tail*/
 			queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));
-		#if PRINT_UART_LOG
-			printf("CAN2 Data : ");
-			for(int i = 0; i < RxMessage.DLC;i++){
-				printf("%d ",RxMessage.Data[i]);
-			}
-			printf("\r\n");
-		#endif			
+//		#if PRINT_UART_LOG
+//			printf("CAN2 Data : ");
+//			for(int i = 0; i < RxMessage.DLC;i++){
+//				printf("%d ",RxMessage.Data[i]);
+//			}
+//			printf("\r\n");
+//		#endif			
 		}
 	 }
 	 CAN_ClearITPendingBit(CAN2, CAN_IT_FMP1);

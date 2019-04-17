@@ -30,9 +30,9 @@
   * @note   队列存储ADC和CAN数据，数据长度以ADC长度设置
   * @{
   */ 
-#define  UDP_SEND_SIZE          (8*60 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   540 = 8 * 60 + PACKAGE_HEAD_FRAME_LENGTH>*/
-#define  QUEUE_SIZE             700                                 /*!< 队列正常容量>*/
-#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+50)      /*!< 队列最大容量>*/
+#define  UDP_SEND_SIZE          (8*40 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   540 = 8 * 60 + PACKAGE_HEAD_FRAME_LENGTH>*/
+#define  QUEUE_SIZE             500                                 /*!< 队列正常容量，必须比UDP_SEND_SIZE大一些，不然会在被后面的信息覆盖>*/
+#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+52)      /*!< 队列最大容量>*/
 /**
   * @}
   */
