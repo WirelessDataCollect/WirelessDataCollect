@@ -32,7 +32,7 @@
   */ 
 #define  UDP_SEND_SIZE          (8*40 + PACKAGE_HEAD_FRAME_LENGTH)    /*!< UDP数据包最大大小   540 = 8 * 60 + PACKAGE_HEAD_FRAME_LENGTH>*/
 #define  QUEUE_SIZE             500                                 /*!< 队列正常容量，必须比UDP_SEND_SIZE大一些，不然会在被后面的信息覆盖>*/
-#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+52)      /*!< 队列最大容量>*/
+#define  ARR_SIZE               (QUEUE_SIZE + UDP_SEND_SIZE+120)      /*!< 队列最大容量>*/
 /**
   * @}
   */

@@ -126,7 +126,7 @@ s32 TcpCount = 0;
   */
 u8 wifi_send_package()
 {
-	u16 Adc_Head;u16 Can_Head;
+	u16 Adc_Head,Can_Head;
 	u32 Adc_Length;u32 Can_Length;
 	u8 temp;
 
@@ -142,10 +142,12 @@ u8 wifi_send_package()
 		Can_Length = queue_length(can_queue);
 		
 		/* ADC Queue加入帧头*/
+		//1.加入帧头
 		queue_addtime_addIO(&adc_queue,Adc_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);
-		/**获取队列头，并更新队列*/
+		//2.获取队列头
 		Adc_Head = adc_queue.head;
-		adc_queue.head = adc_queue.tail;		
+		//3.更新队列
+		adc_queue.head = adc_queue.tail;  //队列清空，则会启动下一个包的ADC采集，包括1、在tail后加ADC数据；2、更新时间；3、更新tail		
 		/* CAN Queue加入帧头*/
 		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
 		Can_Head = can_queue.head; 
@@ -213,17 +215,14 @@ u8 wifi_send_package()
 		DATA_AUTO_CHECK_EN = 0;
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
+		delay_ms(5);
 	}
 	/* CAN队列已满*/
 	if( queue_length(can_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
-		/* 得到can队列的长度，只有数据*/
 		Can_Length = queue_length(can_queue);
-		/* CAN Queue加入帧头*/
 		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
 		Can_Head = can_queue.head;
 		can_queue.head = can_queue.tail; 
-		
-		/* 如果分成两段，将前面一段复制到后面*/
 		if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
 			queue_oversize(&can_queue,Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
 		}
@@ -234,31 +233,25 @@ u8 wifi_send_package()
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* 发送到远程服务器*/
-		rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 			
 		DATA_AUTO_CHECK_EN = temp;
 		delay_ms(5);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* CAN数据发送到局域网*/
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
 	}else if(queue_length(can_queue) > 0){	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/	
 		if(((SYSTEMTIME - ((u32)(can_queue.arr[can_queue.head+1]&0xff)|((u32)(can_queue.arr[can_queue.head+2]&0xff)<<8)|((u32)(can_queue.arr[can_queue.head+3]&0xff)<<16)
 			      |((u32)(can_queue.arr[can_queue.head+4]&0xff)<<24)))*(TIM4_ARR + 1)*(TIM4_PSC + 1) / TIM3_4_PCLK_MHZ) > CAN_OVERTIME_SEND_TIME){
-			/* 得到can队列的长度，只有数据*/
 			Can_Length = queue_length(can_queue);
-			/* CAN Queue加入帧头*/
 			queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
-			/**获取队列头，并更新队列*/
 			Can_Head = can_queue.head;
 			can_queue.head = can_queue.tail; 			
-			/* 如果分成两段，将前面一段复制到后面*/
-			if(can_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
-				queue_oversize(&can_queue,can_queue.head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
+			if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+				queue_oversize(&can_queue,Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
 			};		
-
-			
 			temp = DATA_AUTO_CHECK_EN;
 			DATA_AUTO_CHECK_EN = 0;
 			/* 发送到远程服务器*/
@@ -269,7 +262,8 @@ u8 wifi_send_package()
 			DATA_AUTO_CHECK_EN = 0;
 			/* CAN数据发送到局域网*/
 			rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-			DATA_AUTO_CHECK_EN = temp;					
+			DATA_AUTO_CHECK_EN = temp;	
+			delay_ms(5);			
 		}
 	}
 	return 1;

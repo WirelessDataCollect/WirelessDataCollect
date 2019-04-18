@@ -54,10 +54,10 @@ typedef enum{
   * @}
   */
   
-/** @defgroup 超时发送
+/** @defgroup CAN超时发送
   * @{
   */
-#define CAN_OVERTIME_SEND_TIME       600000    /*!< 8000ms>*/
+#define CAN_OVERTIME_SEND_TIME       600000    /*!< 600ms>*/
 /**
   * @}
   */  

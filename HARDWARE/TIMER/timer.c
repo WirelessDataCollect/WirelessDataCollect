@@ -178,7 +178,7 @@ void TIM3_IRQHandler(void)
 						CAN2_Send_Msg((u8 *)msg,8);
 					}
 				}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){/*!< AP模式下快速闪烁>*/
-					if(MS_TIME%200==0){
+					if(MS_TIME%150==0){
 						WORKING_LED_CONV();//工作灯
 						BEEP_CONV();//蜂鸣器取反
 					}	

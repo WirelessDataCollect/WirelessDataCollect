@@ -113,7 +113,7 @@ void queue_addtime_addIO(volatile Queue * pQueue, u32 count, u8 id, u8 IO_input1
 	pQueue->arr[(pQueue->head+12)% QUEUE_SIZE] = id;
 	pQueue->arr[(pQueue->head+13)% QUEUE_SIZE] = IO_input1 | (IO_input2 << 1);
 	pQueue->arr[(pQueue->head+14)% QUEUE_SIZE] = dataType;
-	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head+4)% QUEUE_SIZE];//校验位
+	pQueue->arr[(pQueue->head+15)% QUEUE_SIZE] = pQueue->arr[(pQueue->head + 4)% QUEUE_SIZE];//校验位
 	
 	queue_add_name(pQueue,test_name);//添加本次实验的名称，长度为MAX_TEST_NAME_LENGTH
 
