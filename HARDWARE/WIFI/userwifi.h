@@ -62,6 +62,14 @@ typedef enum{
   * @}
   */  
 
+/** @defgroup WIFI模组等待的时间
+  * @{
+  */
+#define WIFI_MODUEL_WAIT_MSTIME       2   /*!< 用于防止缓存区被重写>*/
+/**
+  * @}
+  */
+  
 /** @defgroup 上位机命令，UDP数据包第1个字节
   * @{
   */

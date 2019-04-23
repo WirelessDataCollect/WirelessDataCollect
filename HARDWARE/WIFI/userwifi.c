@@ -168,7 +168,7 @@ u8 wifi_send_package()
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 		
 		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(5);
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* 发送到远程服务器*/
@@ -176,20 +176,20 @@ u8 wifi_send_package()
 		
 		DATA_AUTO_CHECK_EN = temp;
 		/* 延时防止阻塞崩溃*/
-		delay_ms(5);
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* ADC数据发送到局域网*/
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		
 		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(5);
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* CAN数据发送到局域网*/
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;		
-		
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	/* ADC队列已满*/
@@ -209,13 +209,13 @@ u8 wifi_send_package()
 		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 
 		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(5);
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		//发送到局域网
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(5);
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 	}
 	/* CAN队列已满*/
 	if( queue_length(can_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
@@ -226,17 +226,26 @@ u8 wifi_send_package()
 		if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
 			queue_oversize(&can_queue,Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
 		}
-//		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
-//			printf("%x ",can_queue.arr[can_queue.head+i]);
-//		}		
-		
+		//! 是否打印出要发出去的CAN数据
+		#if PRINTF_CAN_QUEUE_DATA
+		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
+			printf("%x ",can_queue.arr[(Can_Head+i)%QUEUE_SIZE]);
+		}		
+		printf("\r\n");
+		#endif
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* 发送到远程服务器*/
+		//! 是否打印发送数据到模组的时间
+		#if PRINTF_WIFI_SEND2MODULE_TIME
+		u32 time0 = SYSTEMTIME;
+		#endif
 		rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-			
+		#if PRINTF_WIFI_SEND2MODULE_TIME
+		printf("Time of Send to Module : %d\r\n",SYSTEMTIME - time0);
+		#endif
 		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(5);
+		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* CAN数据发送到局域网*/
@@ -257,13 +266,13 @@ u8 wifi_send_package()
 			/* 发送到远程服务器*/
 			rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
 			DATA_AUTO_CHECK_EN = temp;
-			delay_ms(5);
+			delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 			temp = DATA_AUTO_CHECK_EN;
 			DATA_AUTO_CHECK_EN = 0;
 			/* CAN数据发送到局域网*/
 			rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 			DATA_AUTO_CHECK_EN = temp;	
-			delay_ms(5);			
+			delay_ms(WIFI_MODUEL_WAIT_MSTIME);			
 		}
 	}
 	return 1;
