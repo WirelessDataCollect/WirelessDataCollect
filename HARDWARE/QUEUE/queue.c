@@ -61,8 +61,8 @@ void queue_arr_memcpy(Queue * pQueue, u8 * buf , u8 len){
 		memcpy((u8 *)&(pQueue->arr[pQueue->tail]),buf,len);
 		
 	}else{
-		memcpy((u8 *)&(pQueue->arr[pQueue->tail]),buf,QUEUE_SIZE - pQueue->tail - 1);
-		memcpy((u8 *)&(pQueue->arr[0]),buf+QUEUE_SIZE - pQueue->tail - 1,len - QUEUE_SIZE + pQueue->tail + 1);
+		memcpy((u8 *)&(pQueue->arr[pQueue->tail]),buf,QUEUE_SIZE - pQueue->tail);
+		memcpy((u8 *)&(pQueue->arr[0]),buf+QUEUE_SIZE - pQueue->tail,len - QUEUE_SIZE + pQueue->tail);
 	}
 	pQueue->tail = (pQueue->tail + len)  % QUEUE_SIZE;
 	
