@@ -276,10 +276,6 @@ u8 wifi_send_package()
 			};	
 			//! 是否打印出要发出去的CAN数据
 			#if CHECK_CAN_STATUS_PRINTF
-	//		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
-	//			printf("%x ",can_queue.arr[(Can_Head+i)%QUEUE_SIZE]);
-	//		}		
-	//		printf("\r\n");
 			//校验时间最低位是否正确
 			if(can_queue.arr[(Can_Head+15)%QUEUE_SIZE] != can_queue.arr[(Can_Head+4)%QUEUE_SIZE]){
 				printf("Time Check Error\r\n");
