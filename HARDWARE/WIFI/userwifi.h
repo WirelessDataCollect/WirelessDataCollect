@@ -54,6 +54,15 @@ typedef enum{
   * @}
   */
   
+/** @defgroup 是否打印
+  * @{
+  */
+#define CHECK_CAN_STATUS_PRINTF        1   /*!< 校验CAN数据>*/
+#define PRINTF_WIFI_SEND2MODULE_TIME   0   /*!< 打印udp发送时间间隔>*/
+/**
+  * @}
+  */ 
+  
 /** @defgroup CAN超时发送
   * @{
   */
@@ -65,7 +74,7 @@ typedef enum{
 /** @defgroup WIFI模组等待的时间
   * @{
   */
-#define WIFI_MODUEL_WAIT_MSTIME       2   /*!< 用于防止缓存区被重写>*/
+#define WIFI_MODUEL_WAIT_MSTIME       5   /*!< 用于防止缓存区被重写>*/
 /**
   * @}
   */

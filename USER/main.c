@@ -135,7 +135,7 @@ int main(void)
 //			CAN2_Send_Msg((u8 *)&SYSTEMTIME,4);
 //			CAN1_Receive_Msg(CanBuf);
 //			delay_ms(1000);
-		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量UDP_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
+		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量ADC_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
 //			testAdc();
 //			receive_udp_package();\\stm32_wifi_ap_1_x\../HARDWARE/WIFI/userwifi.c\adc_queue.tail
 //			wifi_send_package_test();

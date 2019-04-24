@@ -25,7 +25,7 @@ u32    YYMMDD =0;                                                        //ÄêÔÂÈ
 u8     Time_Sync_Flag = 0;                                               //×î½üÊ±ÖÓÊÇ·ñÍ¬²½
 volatile u8 Wifi_Send_EN = 1;                                            //Êý¾Ý²É¼¯ºÍ·¢ËÍÊ¹ÄÜ£¬ÊÇCANºÍADC²É¼¯µÄ×Ü¿ª¹Ø
 u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CANÊý¾Ý·¢ËÍÊ¹ÄÜ£¨µÚ0Î»Ê¹ÄÜcan1£¬µÚ1Î»Ê¹ÄÜcan2£©£¬Ä¬ÈÏ¿ªÆô£¨±ØÐëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
-u8     ADC_Get_EN = 1;                                                   //ADCÊý¾Ý²É¼¯Ê¹ÄÜ£¬Ä¬ÈÏ¿ªÆô£¨±ØÐëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
+u8     ADC_Get_EN = 0;                                                   //ADCÊý¾Ý²É¼¯Ê¹ÄÜ£¬Ä¬ÈÏ¿ªÆô£¨±ØÐëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
 Queue  adc_queue;                                                        //ADCÊý¾Ý´æ´¢
 Queue  can_queue;                                                        //canÊý¾Ý´æ´¢
 u8     localDestIp_txrx[4] = {255,255,255,255};
@@ -95,14 +95,14 @@ void wifi_send_package_test()
 	int Head;
 	uint32 Length;
 	u8 temp= DATA_AUTO_CHECK_EN;
-	for(int i =0;i<UDP_SEND_SIZE;i++)
+	for(int i =0;i<ADC_SEND_SIZE;i++)
 	{
 		queue_put(&adc_queue,i);
 	}
 
 	Length = queue_length(adc_queue);
 	queue_addtime_addIO(&adc_queue,Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);
-	if(adc_queue.head + UDP_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + UDP_SEND_SIZE - QUEUE_SIZE);
+	if(adc_queue.head + ADC_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + ADC_SEND_SIZE - QUEUE_SIZE);
 	Head = adc_queue.head;
 	adc_queue.head = adc_queue.tail; 
 
@@ -193,7 +193,7 @@ u8 wifi_send_package()
 		Time_Sync_Flag = 0;//Ê±ÖÓÍ¬²½Î»ÇåÁã
 	}
 	/* ADC¶ÓÁÐÒÑÂú*/
-	if(queue_length(adc_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
+	if(queue_length(adc_queue) >= (ADC_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
 		
 		Adc_Length = queue_length(adc_queue);
 		queue_addtime_addIO(&adc_queue,Adc_Length,nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);   //  head <- head-10;
@@ -218,7 +218,7 @@ u8 wifi_send_package()
 		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 	}
 	/* CAN¶ÓÁÐÒÑÂú*/
-	if( queue_length(can_queue) >= (UDP_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
+	if( queue_length(can_queue) >= (CAN_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
 		Can_Length = queue_length(can_queue);
 		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
 		Can_Head = can_queue.head;
@@ -226,13 +226,7 @@ u8 wifi_send_package()
 		if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
 			queue_oversize(&can_queue,Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
 		}
-		//! ÊÇ·ñ´òÓ¡³öÒª·¢³öÈ¥µÄCANÊý¾Ý
-		#if PRINTF_CAN_QUEUE_DATA
-		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
-			printf("%x ",can_queue.arr[(Can_Head+i)%QUEUE_SIZE]);
-		}		
-		printf("\r\n");
-		#endif
+
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* ·¢ËÍµ½Ô¶³Ì·þÎñÆ÷*/
@@ -249,6 +243,25 @@ u8 wifi_send_package()
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
 		/* CANÊý¾Ý·¢ËÍµ½¾ÖÓòÍø*/
+		//! ÊÇ·ñ´òÓ¡³öÒª·¢³öÈ¥µÄCANÊý¾Ý
+		#if CHECK_CAN_STATUS_PRINTF
+//		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
+//			printf("%x ",can_queue.arr[(Can_Head+i)%QUEUE_SIZE]);
+//		}		
+//		printf("\r\n");
+		//Ð£ÑéÊ±¼ä×îµÍÎ»ÊÇ·ñÕýÈ·
+		printf("%x ?= %x\r\n",can_queue.arr[(Can_Head+4)%QUEUE_SIZE],can_queue.arr[(Can_Head+15)%QUEUE_SIZE]);
+		if(can_queue.arr[(Can_Head+15)%QUEUE_SIZE] != can_queue.arr[(Can_Head+4)%QUEUE_SIZE]){
+			printf("Time Check Error\r\n");
+		}
+		//Ð£ÑéÊý¾Ý³¤¶È
+		
+		u32 count = can_queue.arr[(Can_Head+8)%QUEUE_SIZE] + 255 * can_queue.arr[(Can_Head+9)%QUEUE_SIZE];
+		printf("count : %d ?= Can_Length : %d\r\n",count,Can_Length);
+		if(count != Can_Length){
+			printf("Len Check Error\r\n");
+		}
+		#endif
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
 	}else if(queue_length(can_queue) > 0){	/* CAN¶ÓÁÐÖÐÊý¾Ý´æ´¢Ê±¼ä¹ý³¤£¬ÒÔusÎªµ¥Î»£¬¾Í·¢³öÀ´*/	
@@ -260,7 +273,23 @@ u8 wifi_send_package()
 			can_queue.head = can_queue.tail; 			
 			if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
 				queue_oversize(&can_queue,Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH - QUEUE_SIZE);
-			};		
+			};	
+			//! ÊÇ·ñ´òÓ¡³öÒª·¢³öÈ¥µÄCANÊý¾Ý
+			#if CHECK_CAN_STATUS_PRINTF
+	//		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
+	//			printf("%x ",can_queue.arr[(Can_Head+i)%QUEUE_SIZE]);
+	//		}		
+	//		printf("\r\n");
+			//Ð£ÑéÊ±¼ä×îµÍÎ»ÊÇ·ñÕýÈ·
+			if(can_queue.arr[(Can_Head+15)%QUEUE_SIZE] != can_queue.arr[(Can_Head+4)%QUEUE_SIZE]){
+				printf("Time Check Error\r\n");
+			}
+			//Ð£ÑéÊý¾Ý³¤¶È
+			u32 count = can_queue.arr[(Can_Head+8)%QUEUE_SIZE] + 255 * can_queue.arr[(Can_Head+9)%QUEUE_SIZE];
+			if(count != Can_Length){
+				printf("Len Check Error\r\n");
+			}
+			#endif			
 			temp = DATA_AUTO_CHECK_EN;
 			DATA_AUTO_CHECK_EN = 0;
 			/* ·¢ËÍµ½Ô¶³Ì·þÎñÆ÷*/
