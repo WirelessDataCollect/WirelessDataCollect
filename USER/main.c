@@ -26,11 +26,9 @@
 #include "rsi_app.h"
 #include "crc.h"
 
-u8 IO_input[3];
-extern u32 bytes_sent;
+#define CAN_INIT_REBOOT   0 /*< 是否开机启动can，进行测试>*/
 
 void testAdc(void);
-u8 can_send_package(void);
 void Initialization (void);
 
 /**
@@ -79,10 +77,12 @@ void Initialization (void)
 	/*ADC相关引脚初始化*/
 	ADC_CTRL_Conf();
 	
-//	/* CAN测试*/
+	/* CAN测试*/
+	#if CAN_INIT_REBOOT
 	u32 filter[7] = {0x1800f001,0x1800f002,0x1800f003,0x1800f004,0x1800f005,0x1800f006,0x1800f007};
 	CAN1_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,12,CAN_Mode_Normal,(u32 *)filter,7);
-//	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32 *)filter,7);
+	CAN2_Mode_Init(CAN_SJW_1tq,CAN_BS1_6tq,CAN_BS2_7tq,6,CAN_Mode_Normal,(u32 *)filter,7);
+	#endif
 	/*系统时间100us中断*/
 	TIM4_Int_Init(TIM4_ARR,TIM4_PSC);
 	#if PRINT_UART_LOG

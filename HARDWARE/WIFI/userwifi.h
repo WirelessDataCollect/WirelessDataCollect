@@ -163,6 +163,9 @@ extern unsigned short localSocketDescriptor_txrx;
 //!是否在中断中自动check数据
 extern u8 DATA_AUTO_CHECK_EN;
 
+//!字节数据发送个数
+extern u32 bytes_sent;
+
 void receive_udp_package(void);
 void wifi_send_package_test(void);
 u8 OpenLudpSocket(u8* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);

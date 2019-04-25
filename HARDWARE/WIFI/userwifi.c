@@ -75,10 +75,6 @@ void receive_udp_package()
 			}
 			
 			break;
-			//!无线更新RS9113固件
-//		case RSI_FWUP_RSP:
-//			rsi_wireless_fwupgrade();
-//			break;
 		default:
 			break;
 	
@@ -242,26 +238,21 @@ u8 wifi_send_package()
 		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		temp = DATA_AUTO_CHECK_EN;
 		DATA_AUTO_CHECK_EN = 0;
-		/* CAN数据发送到局域网*/
 		//! 是否打印出要发出去的CAN数据
 		#if CHECK_CAN_STATUS_PRINTF
-//		for(int i =0 ;i < Can_Length+PACKAGE_HEAD_FRAME_LENGTH;i++){
-//			printf("%x ",can_queue.arr[(Can_Head+i)%QUEUE_SIZE]);
-//		}		
-//		printf("\r\n");
 		//校验时间最低位是否正确
 		printf("%x ?= %x\r\n",can_queue.arr[(Can_Head+4)%QUEUE_SIZE],can_queue.arr[(Can_Head+15)%QUEUE_SIZE]);
 		if(can_queue.arr[(Can_Head+15)%QUEUE_SIZE] != can_queue.arr[(Can_Head+4)%QUEUE_SIZE]){
 			printf("Time Check Error\r\n");
 		}
 		//校验数据长度
-		
 		u32 count = can_queue.arr[(Can_Head+8)%QUEUE_SIZE] + 256 * can_queue.arr[(Can_Head+9)%QUEUE_SIZE] + 256 * 256 * can_queue.arr[(Can_Head+10)%QUEUE_SIZE];
 		printf("count : %d ?= Can_Length : %d\r\n",count,Can_Length);
 		if(count != Can_Length){
 			printf("Len Check Error\r\n");
 		}
 		#endif
+		/* CAN数据发送到局域网*/
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
 	}else if(queue_length(&can_queue) > 0){	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/	
