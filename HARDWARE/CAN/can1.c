@@ -143,7 +143,7 @@ void CAN1_RX0_IRQHandler(void){
 	{
 		if((Wifi_Send_EN == 1) && ((CAN_Get_EN & CAN1_ENABLE_BIT_SLC) != 0)){
 			/* 如果队列空了，时间戳更新*/
-			if(queue_empty(can_queue)){
+			if(queue_empty(&can_queue)){
 				can_queue.HeadTime = SYSTEMTIME;
 				can_queue.YYYY_MM_DD = YYMMDD;
 			}

@@ -100,7 +100,7 @@ void wifi_send_package_test()
 		queue_put(&adc_queue,i);
 	}
 
-	Length = queue_length(adc_queue);
+	Length = queue_length(&adc_queue);
 	queue_addtime_addIO(&adc_queue,Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);
 	if(adc_queue.head + ADC_SEND_SIZE > QUEUE_SIZE ) queue_oversize(&adc_queue,adc_queue.head + ADC_SEND_SIZE - QUEUE_SIZE);
 	Head = adc_queue.head;
@@ -138,8 +138,8 @@ u8 wifi_send_package()
 	/* 有同步时钟到来*/
 	if(Time_Sync_Flag==1)
 	{
-		Adc_Length = queue_length(adc_queue);
-		Can_Length = queue_length(can_queue);
+		Adc_Length = queue_length(&adc_queue);
+		Can_Length = queue_length(&can_queue);
 		
 		/* ADC Queue加入帧头*/
 		//1.加入帧头
@@ -193,9 +193,9 @@ u8 wifi_send_package()
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 	/* ADC队列已满*/
-	if(queue_length(adc_queue) >= (ADC_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
+	if(queue_length(&adc_queue) >= (ADC_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
 		
-		Adc_Length = queue_length(adc_queue);
+		Adc_Length = queue_length(&adc_queue);
 		queue_addtime_addIO(&adc_queue,Adc_Length,nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);   //  head <- head-10;
 		Adc_Head = adc_queue.head;
 		adc_queue.head = adc_queue.tail;
@@ -218,8 +218,8 @@ u8 wifi_send_package()
 		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 	}
 	/* CAN队列已满*/
-	if( queue_length(can_queue) >= (CAN_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
-		Can_Length = queue_length(can_queue);
+	if( queue_length(&can_queue) >= (CAN_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
+		Can_Length = queue_length(&can_queue);
 		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
 		Can_Head = can_queue.head;
 		can_queue.head = can_queue.tail; 
@@ -256,7 +256,7 @@ u8 wifi_send_package()
 		}
 		//校验数据长度
 		
-		u32 count = can_queue.arr[(Can_Head+8)%QUEUE_SIZE] + 255 * can_queue.arr[(Can_Head+9)%QUEUE_SIZE];
+		u32 count = can_queue.arr[(Can_Head+8)%QUEUE_SIZE] + 256 * can_queue.arr[(Can_Head+9)%QUEUE_SIZE] + 256 * 256 * can_queue.arr[(Can_Head+10)%QUEUE_SIZE];
 		printf("count : %d ?= Can_Length : %d\r\n",count,Can_Length);
 		if(count != Can_Length){
 			printf("Len Check Error\r\n");
@@ -264,10 +264,10 @@ u8 wifi_send_package()
 		#endif
 		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 		DATA_AUTO_CHECK_EN = temp;
-	}else if(queue_length(can_queue) > 0){	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/	
+	}else if(queue_length(&can_queue) > 0){	/* CAN队列中数据存储时间过长，以us为单位，就发出来*/	
 		if(((SYSTEMTIME - ((u32)(can_queue.arr[can_queue.head+1]&0xff)|((u32)(can_queue.arr[can_queue.head+2]&0xff)<<8)|((u32)(can_queue.arr[can_queue.head+3]&0xff)<<16)
 			      |((u32)(can_queue.arr[can_queue.head+4]&0xff)<<24)))*(TIM4_ARR + 1)*(TIM4_PSC + 1) / TIM3_4_PCLK_MHZ) > CAN_OVERTIME_SEND_TIME){
-			Can_Length = queue_length(can_queue);
+			Can_Length = queue_length(&can_queue);
 			queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
 			Can_Head = can_queue.head;
 			can_queue.head = can_queue.tail; 			

@@ -139,7 +139,7 @@ void TIM3_IRQHandler(void)
 		*/
 		if(BOARD_STA == BOARD_RUNNING){
 			/* 如果队列空了，时间戳更新*/
-			if(queue_empty(adc_queue)){
+			if(queue_empty(&adc_queue)){
 				adc_queue.HeadTime = SYSTEMTIME;
 				adc_queue.YYYY_MM_DD = YYMMDD;
 			}

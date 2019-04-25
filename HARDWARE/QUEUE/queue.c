@@ -153,9 +153,9 @@ void queue_oversize(volatile Queue * pQueue,u32 length)
   * @param  queue：队列
   * @retval 是否空队列（1：空队列；0：非空队列）
   */
-u8 queue_empty(volatile Queue queue)
+u8 queue_empty(volatile Queue * queue)
 {
-    if(queue.head == queue.tail)
+    if(queue->head == queue->tail)
         return 1;
     return 0;
 }
@@ -165,9 +165,9 @@ u8 queue_empty(volatile Queue queue)
   * @param  queue：队列
   * @retval 队列长度
   */
-u32 queue_length(volatile Queue queue)
+u32 queue_length(volatile Queue * queue)
 {
-	return (queue.tail-queue.head+QUEUE_SIZE)%QUEUE_SIZE;
+	return (queue->tail-queue->head+QUEUE_SIZE)%QUEUE_SIZE;
 }
 
 /**
@@ -175,9 +175,9 @@ u32 queue_length(volatile Queue queue)
   * @param  queue：队列
   * @retval 是否满队列（1：满队列；0：非满队列）
   */
-u8 queue_full(volatile Queue queue)
+u8 queue_full(volatile Queue * queue)
 {
-    if((queue.tail + 20) % QUEUE_SIZE >= queue.head)
+    if((queue->tail + 20) % QUEUE_SIZE >= queue->head)
         return 1;
     return 0;
 }

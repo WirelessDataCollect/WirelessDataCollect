@@ -164,7 +164,7 @@ void CAN2_RX1_IRQHandler(void)
 	if (CAN_GetITStatus(CAN2,CAN_IT_FMP1)!= RESET){
 		if((Wifi_Send_EN == 1) && ((CAN_Get_EN & CAN2_ENABLE_BIT_SLC) != 0)){
 			/* 如果队列空了，时间戳更新*/
-			if(queue_empty(can_queue)){
+			if(queue_empty(&can_queue)){
 				can_queue.HeadTime = SYSTEMTIME;
 				can_queue.YYYY_MM_DD = YYMMDD;
 			}
