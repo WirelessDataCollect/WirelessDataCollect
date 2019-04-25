@@ -419,7 +419,7 @@ void writeSectorPara(void){
 	#endif
 	}else{
 	#if PRINT_UART_LOG
-		printf("Main flash Writen Successfully!\r\n\r\n");
+		printf("Main flash Writen Successfully!\r\n");
 	#endif
 	}
 	status = FLASH_EraseSector(FLASH_SAVE_SECTOR_BACKUP,VoltageRange_3);//擦除掉变量主存储区的所有数据

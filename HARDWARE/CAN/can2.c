@@ -175,14 +175,7 @@ void CAN2_RX1_IRQHandler(void)
 			/* 加入CAN的接收时间*/
 			queue_arr_memcpy(&can_queue, (u8 *)&SYSTEMTIME , sizeof(SYSTEMTIME));
 			/* CAN2数据拷贝至queue.arr尾部，并更新tail*/
-			queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));
-//		#if PRINT_UART_LOG
-//			printf("CAN2 Data : ");
-//			for(int i = 0; i < RxMessage.DLC;i++){
-//				printf("%d ",RxMessage.Data[i]);
-//			}
-//			printf("\r\n");
-//		#endif			
+			queue_arr_memcpy(&can_queue, (u8 *)&RxMessage , sizeof(RxMessage));		
 		}
 	 }
 	 CAN_ClearITPendingBit(CAN2, CAN_IT_FMP1);
