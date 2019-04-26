@@ -30,6 +30,7 @@ u8   RSI_BAND                                = RSI_DUAL_BAND;            /*!< @ 
 u8   BOARD_STA                               = BOARD_INITING;            /*!< 板子的状态>*/
 u8   catPara[PARA_CAT_CH_MAX_LENGTH]         = {0};                      /*!< 存储连接后的数据>*/
 u8   localhost[IPV4_LENGTH]                  = {0};                      /*!< 本地ip>*/
+u8   IAM_MASTER_CLOCK                        = 'N';                      /*!< 我是不是主时钟>*/
 
 
 /**
@@ -73,6 +74,7 @@ u32 getCatParaChLenInFlash(u32 startAddr){
   *          @arg LOAD_PARA_POINTER_NULL
   *          @arg LOAD_PARA_SUCCESS
   */
+void setMc(c8 * val);
 u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	/*先读出长度*/
 	u32 catParaChLen = getCatParaChLenInFlash(startAddr);
@@ -155,6 +157,9 @@ u8 loadParaAndCheck(u8 * catPara,u32 startAddr){
 	#if PRINT_UART_LOG
 	printf("destIp_txrx : %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
 	#endif
+	/*IAM_MASTER_CLOCK*/
+	setMc((c8 *)paraStartAddr);
+	paraStartAddr = splitAddr+1;//开始下一个
 	return LOAD_PARA_SUCCESS;
 }
 
@@ -301,6 +306,9 @@ u32 getParaLen(void){
 	catChLen += sizeof(FLASH_LABLE_TYPE);
 	catChLen += strlen((c8 *)itoa(destIp_txrx[3]));//IP第4组
 	catChLen += sizeof(FLASH_LABLE_TYPE);
+	/*是否是主时钟*/
+	catChLen += sizeof(IAM_MASTER_CLOCK);
+	catChLen += sizeof(FLASH_LABLE_TYPE);
 	/*CRC校验*/
 	catChLen += FLASH_CRC_BYTE_LENGTH;//加入一个CRC校验
 
@@ -358,6 +366,9 @@ u32 getCatPara(void){
 	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
 	memcpy((char *)(catPara+i),ip4,strlen((c8 *)ip4));i += strlen((c8 *)ip4);
 	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte
+	//存是不是主时钟
+	memcpy((char *)(catPara+i),&IAM_MASTER_CLOCK,sizeof(IAM_MASTER_CLOCK));i += sizeof(IAM_MASTER_CLOCK);
+	*(catPara+i) = FLASH_LABEL_SPLIT;i += sizeof(FLASH_LABLE_TYPE);//分隔符1byte	
 	//存crc
 	CRC_TYPE crc = CalCrc(0, (c8 *)catPara,catParaLen- FLASH_CRC_BYTE_LENGTH - sizeof(FLASH_LABLE_TYPE),0x8005);//得到crc,把结束符号和crc位都去掉
 	#if PRINT_UART_LOG
@@ -596,6 +607,7 @@ void getHelp(void){
 		printf("- SET_RSI_PSK          : Set RSI_PSK\r\n  E.G. SET_RSI_PSK 123456\r\n\r\n");
 	    printf("- SET_NODE_ID          : Set Id of the Node\r\n  E.G. SET_NODE_ID 1\r\n\r\n");
 		printf("- SET_SERVER_IP        : Set IP of the Server\r\n  E.G. SET_SERVER_IP 115.159.154.160\r\n\r\n");
+		printf("- SET_MASTER_CLK       : Set MasterClock('Y') or Sensoring Node('N')\r\n  E.G. SET_MASTER_CLK Y\r\n\r\n");
 		//CMD
 		printf("- HELP                 : Print Help Document\r\n  E.G. HELP\r\n\r\n");
 		printf("- GET_PARA             : Print Parameters List\r\n  E.G. GET_PARA\r\n\r\n");
@@ -619,6 +631,7 @@ void getPara(void){
 		printf("destIp_txrx       :      %d.%d.%d.%d\r\n",destIp_txrx[0],destIp_txrx[1],destIp_txrx[2],destIp_txrx[3]);
 		printf("localhost         :      %d.%d.%d.%d\r\n",localhost[0],localhost[1],localhost[2],localhost[3]);
 		printf("test_name         :      %s\r\n",test_name);
+		printf("IAM_MASTER_CLK    :      %c\r\n",IAM_MASTER_CLOCK);
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			printf("Module Mode       :      CLIENT\r\n");
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
@@ -746,6 +759,32 @@ void setIpVal(u8 * val,u8 * obj,c8 * objName){
 }
 
 /**
+  * @brief  是否设置为主时钟
+  * @param  val：'Y'是主时钟；'N'不是主时钟，是传感节点
+  * @retval None
+  */
+void setMc(c8 * val){
+#if PRINT_UART_LOG	
+	printf("Setting IAM_MASTER_CLOCK...\r\n");
+#endif
+	if(*val == 'Y'){
+		IAM_MASTER_CLOCK = 'Y';
+	}else if(*val == 'N'){
+		IAM_MASTER_CLOCK = 'N';
+	}else{
+		#if PRINT_UART_LOG
+		printf("Please Input Y or N\r\n");
+		#endif
+		return;
+	}	
+#if PRINT_UART_LOG
+	printf("Now IAM_MASTER_CLOCK = %c\r\n",IAM_MASTER_CLOCK);
+	printf("Setted IAM_MASTER_CLOCK OK\r\n");
+	printf("To Save Flash.Send \"%s\"\r\n",CMD_SAVE_ALL_PARA);	
+#endif
+}
+
+/**
   * @brief  处理已分割的命令和信息
   * @param  cmd：命令指针
   * @param  val：信息指针
@@ -763,8 +802,9 @@ void handleCmdVal(c8 * cmd,c8 * val){
 		setU8Val((u8 *)val,&nodeId,NODE_ID_STRNAME);
 	}else if(!strcmp(cmd,CMD_SET_SERVER_IP)){//设置服务器IP
 		setIpVal((u8 * )val,(u8 * )destIp_txrx,SERVER_IP_STRNAME);
+	}else if(strcmp(cmd,CMD_SET_MASTER_CLK) == 0){//设置是否是主时钟
+		setMc(val);
 	}
-	
 
 }
 

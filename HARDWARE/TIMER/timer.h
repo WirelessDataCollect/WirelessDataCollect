@@ -38,10 +38,7 @@
 extern u32 SYSTEMTIME;
 
 //!同步时钟模块距离上次同步的时间间隔
-#if IAM_MASTER_CLOCK
-extern u16 sync_interval_time;
-#endif
-
+extern volatile u32 sync_interval_time;
 
 void TIM3_Int_Init(u16 arr,u16 psc);
 void TIM4_Int_Init(u16 arr,u16 psc);

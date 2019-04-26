@@ -130,22 +130,15 @@ int main(void)
 	while(1)
 	{
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
-//			CAN1_Send_Msg((u8 *)&SYSTEMTIME,4);
-//			delay_ms(1000);
-//			CAN2_Send_Msg((u8 *)&SYSTEMTIME,4);
-//			CAN1_Receive_Msg(CanBuf);
-//			delay_ms(1000);
-		wifi_send_package();//发送数据，每次时钟更新后或者数据到达一定数量ADC_SEND_SIZE  8bytes时间+2bytes数字IO+8*N bytes ADC信号
-//			testAdc();
-//			receive_udp_package();\\stm32_wifi_ap_1_x\../HARDWARE/WIFI/userwifi.c\adc_queue.tail
-//			wifi_send_package_test();
-			#if IAM_MASTER_CLOCK
+			if(IAM_MASTER_CLOCK == 'Y'){
 				if(sync_interval_time >= SYNC_INTERVAL_TIME&&Wifi_Send_EN){
 					TEST_LED_CONV();//翻转
 					sync_interval_time = 0;
 					Send_Sync_Time();//时钟同步一下
 				}
-			#endif
+			}else{  //不是主时钟需要发送ADC和CAN数据
+				wifi_send_package();
+			}
 		}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
 			delay_ms(10);
 			RspCode =Check_PKT();

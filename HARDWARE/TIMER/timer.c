@@ -17,6 +17,7 @@
 #include "adc.h"
 #include "can1.h"
 #include "can2.h"
+#include "config.h"
 
 /**
   * @brief  定时器4初始化
@@ -107,9 +108,7 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 }
 
 //!同步时钟模块距离上次同步的时间间隔
-#if IAM_MASTER_CLOCK
 volatile u32 sync_interval_time = 0;
-#endif
 
 //!ms时间
 u32 MS_TIME = 0;
@@ -138,33 +137,33 @@ void TIM3_IRQHandler(void)
 		* 在系统初始化后才能运行的程序
 		*/
 		if(BOARD_STA == BOARD_RUNNING){
-			/* 如果队列空了，时间戳更新*/
-			if(queue_empty(&adc_queue)){
-				adc_queue.HeadTime = SYSTEMTIME;
-				adc_queue.YYYY_MM_DD = YYMMDD;
-			}
-			/* 开始发数据了再开始采集*/
-			if((Wifi_Send_EN == 1) && (ADC_Get_EN == 1)){
-				/*! @note 
-					//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
-					//       AD7606-4,64 Sample ratio,T = 193
-					//       CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
-				*/
-				ADC_CONV_L();//最短时间25ns
-				/**采集数据，顺便当做延时用*/
-				adcTamp = ADC_Read(ADC_MAX_BYTES);
-				/* 读八个字节数据*/
-				for(int i=0;i<ADC_MAX_BYTES;i++){
-					queue_put((Queue *)&adc_queue, *(adcTamp+i));
-						
-				}
-				/* 拉高开始下一次转换*/
-				ADC_CONV_H();//最短时间25ns
-			}
-			
-			#if IAM_MASTER_CLOCK
+			if(IAM_MASTER_CLOCK == 'Y'){
 				sync_interval_time++;
-			#endif	
+			}else{
+				/* 如果队列空了，时间戳更新*/
+				if(queue_empty(&adc_queue)){
+					adc_queue.HeadTime = SYSTEMTIME;
+					adc_queue.YYYY_MM_DD = YYMMDD;
+				}
+				/* 开始发数据了再开始采集*/
+				if((Wifi_Send_EN == 1) && (ADC_Get_EN == 1)){
+					/*! @note 
+						//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
+						//       AD7606-4,64 Sample ratio,T = 193
+						//       CONV  :  H(25ns,转换中)  ->  L(25ns)   ->   H(25ns,转换中)
+					*/
+					ADC_CONV_L();//最短时间25ns
+					/**采集数据，顺便当做延时用*/
+					adcTamp = ADC_Read(ADC_MAX_BYTES);
+					/* 读八个字节数据*/
+					for(int i=0;i<ADC_MAX_BYTES;i++){
+						queue_put((Queue *)&adc_queue, *(adcTamp+i));
+							
+					}
+					/* 拉高开始下一次转换*/
+					ADC_CONV_H();//最短时间25ns
+				}				
+			}
 				
 			/* LED闪烁*/
 			#if WORKING_LED_SHINE_IN_TIMER					

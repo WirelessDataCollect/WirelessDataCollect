@@ -96,6 +96,7 @@ typedef enum
 #define CMD_SET_PSK            "SET_RSI_PSK"         /*!< 设置PSK>*/
 #define CMD_SET_NODE_ID        "SET_NODE_ID"         /*!< 设置节点id>*/
 #define CMD_SET_SERVER_IP      "SET_SERVER_IP"       /*!< 设置私有云服务器IP>*/
+#define CMD_SET_MASTER_CLK     "SET_MASTER_CLK"      /*!< 设置是否是主时钟>*/
 /** !纯命令*/
 #define CMD_HELP               "HELP"                /*!< 输出帮助>*/
 #define CMD_GET_PARA           "GET_PARA"            /*!< 输出参数情况>*/
@@ -246,6 +247,8 @@ extern u8 RSI_BAND;
 extern u8 BOARD_STA;
 //!节点的当前IP
 extern u8 localhost[IPV4_LENGTH];
+//!我是不是主时钟
+extern u8 IAM_MASTER_CLOCK;
 
 void writeSectorPara(void);
 u8 splitCmd(volatile CMD_QUEUE * pQueue,u8 * pCmd,u8 * pValue);

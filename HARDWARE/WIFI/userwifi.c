@@ -443,7 +443,6 @@ u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocke
 	return 0;
 }
 
-#if IAM_MASTER_CLOCK
 #define SYNC_TIME_BYTES   9   //同步时钟命令长度
 /**
   * @brief  同步时钟模块发送同步时钟信号
@@ -468,4 +467,3 @@ void Send_Sync_Time(void)
 	receive_udp_package();
 	DATA_AUTO_CHECK_EN = temp;
 }
-#endif

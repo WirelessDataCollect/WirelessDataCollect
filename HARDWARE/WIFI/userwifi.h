@@ -14,10 +14,7 @@
 //-------------include---------------//
 #include "sys.h"
 #include "queue.h"
-#include "config.h"
-
-//!是不是主时钟设备
-#define  IAM_MASTER_CLOCK       0  
+#include "config.h" 
 
 
 /** 
