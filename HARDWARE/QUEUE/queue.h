@@ -20,7 +20,7 @@
 #define MAX_TEST_NAME_LENGTH         64       /*!< 测试名称最长长度>*/
 #define PACKAGE_TIME_IO_LENGTH       16       /*!< 时间、IO、ADC数量等长度>*/
 #define PACKAGE_HEAD_FRAME_LENGTH    (MAX_TEST_NAME_LENGTH+PACKAGE_TIME_IO_LENGTH)   /*!< 帧头总长度>*/
-#define DEFAULT_TEST_NAME            "DefaultName/2019-03-09\0"       /*!< 默认测试名称>*/
+#define DEFAULT_TEST_NAME            "DefaultName/2019-03-09T00:00:00\0"       /*!< 默认测试名称>*/
 /**
   * @}
   */
