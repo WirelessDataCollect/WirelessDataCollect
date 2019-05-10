@@ -132,7 +132,7 @@ int main(void)
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			if(IAM_MASTER_CLOCK == 'Y'){
 				if(sync_interval_time >= SYNC_INTERVAL_TIME&&Wifi_Send_EN){
-					TEST_LED_CONV();//翻转
+					INFO_LED_CONV();//翻转
 					sync_interval_time = 0;
 					Send_Sync_Time();//时钟同步一下
 				}

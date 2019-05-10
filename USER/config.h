@@ -235,6 +235,19 @@ typedef enum
   * @}
   */
 
+
+/** 
+  * @brief  硬件版本
+  * @{
+  */ 
+
+#define HARDWARE_VERSION_V3
+/**
+  * @}
+  */
+
+
+
 //!缓存需要保存到Flash中的数据，包括数据长度、参数、分隔符、结束符、CRC等
 extern u8 catPara[PARA_CAT_CH_MAX_LENGTH];
 //!节点ID

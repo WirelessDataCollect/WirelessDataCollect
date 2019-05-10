@@ -23,7 +23,7 @@ u8     DATA_AUTO_CHECK_EN = 1;	    									 //是否在中断中自动check数据
 u32    SYSTEMTIME = 0;                                                   //系统时间
 u32    YYMMDD =0;                                                        //年月日
 u8     Time_Sync_Flag = 0;                                               //最近时钟是否同步
-volatile u8 Wifi_Send_EN = 0;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
+volatile u8 Wifi_Send_EN = 1;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
 u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CAN数据发送使能（第0位使能can1，第1位使能can2），默认开启（必须满足Wifi_Send_EN=1，才能采集）
 u8     ADC_Get_EN = 1;                                                   //ADC数据采集使能，默认开启（必须满足Wifi_Send_EN=1，才能采集）
 Queue  adc_queue;                                                        //ADC数据存储
@@ -309,14 +309,14 @@ u8 order_anay(u8 arr[])
 				memcpy(&YYMMDD,&arr[1],4);
 				memcpy(&SYSTEMTIME,&arr[5],4);
 				Time_Sync_Flag = 1;
-				TEST_LED_CONV();
+				INFO_LED_CONV();
 			}
 			break;
 		case 	GET_TIME_SYNC_MAIN_CLOCK:
 			memcpy(&YYMMDD,&arr[1],4);
 			memcpy(&SYSTEMTIME,&arr[5],4);
 			Time_Sync_Flag = 1;
-			TEST_LED_CONV();
+			INFO_LED_CONV();
 			return NOT_NEED_RETURN_INFO;				
 		case RETURN_INFO://返回了回复信号
 			return NOT_NEED_RETURN_INFO;//表示不需要返回信息
