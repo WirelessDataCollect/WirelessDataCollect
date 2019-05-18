@@ -23,7 +23,7 @@ u8     DATA_AUTO_CHECK_EN = 1;	    									 //是否在中断中自动check数据
 u32    SYSTEMTIME = 0;                                                   //系统时间
 u32    YYMMDD =0;                                                        //年月日
 u8     Time_Sync_Flag = 0;                                               //最近时钟是否同步
-volatile u8 Wifi_Send_EN = 0;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
+volatile u8 Wifi_Send_EN = 1;                                            //数据采集和发送使能，是CAN和ADC采集的总开关
 u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CAN数据发送使能（第0位使能can1，第1位使能can2），默认开启（必须满足Wifi_Send_EN=1，才能采集）
 u8     ADC_Get_EN = 1;                                                   //ADC数据采集使能，默认开启（必须满足Wifi_Send_EN=1，才能采集）
 Queue  adc_queue;                                                        //ADC数据存储
@@ -188,9 +188,34 @@ u8 wifi_send_package()
 		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
+//	/* ADC队列已满，无包头，用于测试ADC数据精度*/
+//	if(queue_length(&adc_queue) >= (ADC_SEND_SIZE)){
+//		
+//		Adc_Length = queue_length(&adc_queue);
+//		Adc_Head = adc_queue.head;
+//		adc_queue.head = adc_queue.tail;
+//		if(Adc_Head + Adc_Length > QUEUE_SIZE ){
+//			queue_oversize(&adc_queue,Adc_Head + Adc_Length - QUEUE_SIZE);
+//		}
+// 
+//		//发送到远程服务器
+//		temp = DATA_AUTO_CHECK_EN;
+//		DATA_AUTO_CHECK_EN = 0;
+//		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+
+//		DATA_AUTO_CHECK_EN = temp;
+//		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
+//		//发送到局域网
+//		temp = DATA_AUTO_CHECK_EN;
+//		DATA_AUTO_CHECK_EN = 0;
+//		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+//		DATA_AUTO_CHECK_EN = temp;
+//		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
+
+//	}
 	/* ADC队列已满*/
 	if(queue_length(&adc_queue) >= (ADC_SEND_SIZE - PACKAGE_HEAD_FRAME_LENGTH )){
-		
+
 		Adc_Length = queue_length(&adc_queue);
 		queue_addtime_addIO(&adc_queue,Adc_Length,nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);   //  head <- head-10;
 		Adc_Head = adc_queue.head;
