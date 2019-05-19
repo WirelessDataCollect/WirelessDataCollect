@@ -48,7 +48,7 @@ u8     AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回状态信息
   * @param  None
   * @retval None
   */
-void receive_udp_package()
+void receive_udp_package(void)
 {
 	rsi_recvFrameUdp *data_recv=NULL;
 
@@ -120,7 +120,7 @@ s32 TcpCount = 0;
   * @param  None
   * @retval 数据发送状态（发送完成：1；未开启发送：0）
   */
-u8 wifi_send_package()
+u8 wifi_send_package(void)
 {
 	u16 Adc_Head,Can_Head;
 	u32 Adc_Length;u32 Can_Length;
