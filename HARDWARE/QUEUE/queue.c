@@ -81,7 +81,7 @@ void queue_clear(volatile Queue * pQueue)
 /**
   * @brief  队列添加帧头，包括年月日、计时器、ADC字节数据、节点数据长度、开关信号、测试名称
   * @param  pQueue：队列
-  * @param  count：ADC字节格式
+  * @param  count：数据字节个数
   * @param  id：节点ID号
   * @param  IO_input1：开关信号1
   * @param  IO_input2：开关信号2
