@@ -241,7 +241,7 @@ typedef enum
   * @{
   */ 
 
-#define HARDWARE_VERSION_V1
+#define HARDWARE_VERSION_V3
 /**
   * @}
   */
