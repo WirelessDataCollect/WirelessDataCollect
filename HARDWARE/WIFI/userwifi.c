@@ -25,7 +25,7 @@ u32    YYMMDD =0;                                                        //ÄêÔÂÈ
 u8     Time_Sync_Flag = 0;                                               //×î½üÊ±ÖÓÊÇ·ñÍ¬²½
 volatile u8 Wifi_Send_EN = 0;                                            //Êý¾Ý²É¼¯ºÍ·¢ËÍÊ¹ÄÜ£¬ÊÇCANºÍADC²É¼¯µÄ×Ü¿ª¹Ø
 u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CANÊý¾Ý·¢ËÍÊ¹ÄÜ£¨µÚ0Î»Ê¹ÄÜcan1£¬µÚ1Î»Ê¹ÄÜcan2£©£¬Ä¬ÈÏ¿ªÆô£¨±ØÐëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
-u8     ADC_Get_EN = 1;                                                   //ADCÊý¾Ý²É¼¯Ê¹ÄÜ£¬Ä¬ÈÏ¿ªÆô£¨±ØÐëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
+u8     ADC_Get_EN = 0;                                                   //ADCÊý¾Ý²É¼¯Ê¹ÄÜ£¬Ä¬ÈÏ¿ªÆô£¨±ØÐëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
 Queue  adc_queue;                                                        //ADCÊý¾Ý´æ´¢
 Queue  can_queue;                                                        //canÊý¾Ý´æ´¢
 u8     localDestIp_txrx[4] = {255,255,255,255};
