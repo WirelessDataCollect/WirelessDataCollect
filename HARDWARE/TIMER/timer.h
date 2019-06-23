@@ -17,7 +17,7 @@
 
 
 //! 基本是10s(10000ms)更新一下
-#define SYNC_INTERVAL_TIME    10000
+#define SYNC_INTERVAL_TIME    2000
 //! 是否让工作灯在定时器中闪烁
 #define WORKING_LED_SHINE_IN_TIMER  1
 //! 是否让展示nodeId灯在定时器中闪烁

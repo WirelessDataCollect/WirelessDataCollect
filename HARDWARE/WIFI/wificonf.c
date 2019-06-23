@@ -148,6 +148,7 @@ void EXTI4_IRQHandler(void)
 {
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
+	printf("[%d]  pkt_pending : %d\r\n",SYSTEMTIME,rsi_app_cb.pkt_pending);
 	/* 初始化时不能进行自动check*/
 	if( BOARD_STA == BOARD_RUNNING){
 		if((DATA_AUTO_CHECK_EN)&&(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL)){//处于Clien模式，而且要使能自动check

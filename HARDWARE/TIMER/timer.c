@@ -214,7 +214,7 @@ void TIM3_IRQHandler(void)
 		/* 输出50ms脉冲，用于测量同步时钟精度*/
 		/*! @note 测试时，需要关闭串口打印功能 @ref PRINT_UART_LOG*/
 		#if IO_SHINE_IN_TIMER
-			if(MS_TIME%20==0){//50ms输出一个脉冲
+			if(MS_TIME%50==0){//50ms输出一个脉冲
 				PAout(9) = ~PAout(9);
 				PAout(10) = ~PAout(10);
 			}

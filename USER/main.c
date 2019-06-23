@@ -126,9 +126,8 @@ void testAdc(void){
   * @param  None
   * @retval None
   */
-u8 data[1500];
 void testMaxWifiSpeed(){
-	
+	u8 data[1500];
 	rsi_send_ludp_data(localSocketDescriptor_txrx, data,1500, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
 }
 int main(void)
@@ -136,13 +135,13 @@ int main(void)
 	setBoardSta(BOARD_INITING);Initialization();setBoardSta(BOARD_INITED);//初始化系统
 	setBoardSta(BOARD_RUNNING);//运行中
 	u8 RspCode;u16 tcpRecvBuffLen;u8 * pRecvData;
-	memset(data,32,1500);
 	while(1)
 	{
+
 //		testMaxWifiSpeed();
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			if(IAM_MASTER_CLOCK == 'Y'){
-				if(sync_interval_time >= SYNC_INTERVAL_TIME&&Wifi_Send_EN){
+				if(sync_interval_time >= SYNC_INTERVAL_TIME){
 					INFO_LED_CONV();//翻转
 					sync_interval_time = 0;
 					Send_Sync_Time();//时钟同步一下

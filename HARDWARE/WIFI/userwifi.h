@@ -158,7 +158,7 @@ extern unsigned short localModuleSocket_txrx;
 extern unsigned short localSocketDescriptor_txrx;
 
 //!是否在中断中自动check数据
-extern u8 DATA_AUTO_CHECK_EN;
+extern volatile u8 DATA_AUTO_CHECK_EN;
 
 //!字节数据发送个数
 extern u32 bytes_sent;

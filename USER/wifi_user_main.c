@@ -22,7 +22,6 @@
  #include "wificonf.h"
  #include "userwifi.h"
  #include "typetrans.h"
- extern u8 DATA_AUTO_CHECK_EN;
 #include "rsi_global.h"
 #include "rsi_config.h"
 #include "rsi_app_util.h"
