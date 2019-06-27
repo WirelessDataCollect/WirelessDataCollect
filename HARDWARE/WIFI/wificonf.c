@@ -148,7 +148,6 @@ void EXTI4_IRQHandler(void)
 {
 	EXTI->PR		|=1<<4;
 	rsi_app_cb.pkt_pending ++;//= RSI_TRUE;	
-	printf("[%d]  pkt_pending : %d\r\n",SYSTEMTIME,rsi_app_cb.pkt_pending);
 	/* 初始化时不能进行自动check*/
 	if( BOARD_STA == BOARD_RUNNING){
 		if((DATA_AUTO_CHECK_EN)&&(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL)){//处于Clien模式，而且要使能自动check
@@ -320,9 +319,13 @@ void openAllSocket(void){
 	DATA_AUTO_CHECK_EN= 0;
 	status = OpenLudpSocket(destIp_txrx,destSocket_txrx,moduleSocket_txrx,&socketDescriptor_txrx);//服务器的数据
 	if(status != 0){//有问题
+		#if PRINT_UART_LOG
 		printf("WiFi Data-UDP Connect Unsuccessfully!\r\n");
+		#endif
 	}else if(status == 0){
+		#if PRINT_UART_LOG
 		printf("WiFi Data-UDP Connect Successfully!\r\n");
+		#endif
 	}
 	OpenLudpSocket(localDestIp_txrx,localDestSocket_txrx,localModuleSocket_txrx,&localSocketDescriptor_txrx);//局域网内数据传输
 	OpenLudpSocket(destIp_sync,destSocket_sync,moduleSocket_sync,&socketDescriptor_sync);//时钟同步socket	

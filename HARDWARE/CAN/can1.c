@@ -101,7 +101,9 @@ void CAN1_Mode_Init(u8 tsjw,u8 tbs2,u8 tbs1,u16 brp,u8 mode,u32 * filter_list,u8
 		}else{                          //还有大于等于2个ID没有过滤
 			ext_id2 = filter_list[filter_num+1];
 		}
+		#if PRINT_UART_LOG
 		printf("  0x%X , 0x%X \r\n",ext_id1,ext_id2);
+		#endif
 		CAN_FilterInitStructure.CAN_FilterIdHigh         = (u16)((ext_id1<<3)>>16) & 0xffff;
 		CAN_FilterInitStructure.CAN_FilterIdLow          = (u16)((ext_id1<<3) & 0xffff) | CAN_ID_EXT;
 		CAN_FilterInitStructure.CAN_FilterMaskIdHigh     = (u16)((ext_id2<<3)>>16) & 0xffff;

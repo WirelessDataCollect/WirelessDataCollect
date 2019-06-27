@@ -67,7 +67,9 @@ void Initialization (void)
 	}else if(RSI_WIFI_OPER_MODE == RSI_WIFI_AP_MODE_VAL){
 		OpenSocket((u8*)AP_MODE_SOCKET_DEST_IP,AP_MODE_SOCKET_DEST_PORT,AP_MODE_SOCKET_MODULE_PORT,RSI_SOCKET_TCP_SERVER);
 		Read_PKT();
+		#if PRINT_UART_LOG
 		printf("Open TCP Socket!\r\n");
+		#endif
 	}
 	
 	/*∂”¡–≈‰÷√*/

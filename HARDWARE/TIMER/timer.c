@@ -146,7 +146,7 @@ void TIM3_IRQHandler(void)
 					adc_queue.YYYY_MM_DD = YYMMDD;
 				}
 				/* 开始发数据了再开始采集*/
-				if((Wifi_Send_EN == 1) && (ADC_Get_EN == 1)){
+				if((Wifi_Send_EN) && (ADC_Get_EN)){
 					/*! @note 
 						//       转换时间 = N * Tconv + (N-1) * 1us,Tconv = 2us for AD7606-4,Tconv = 3us for AD7606-6
 						//       AD7606-4,64 Sample ratio,T = 193

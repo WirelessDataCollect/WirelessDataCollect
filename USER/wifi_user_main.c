@@ -453,7 +453,9 @@ u8 WIFI_BOOT(void)
 	RspCode = rsi_sys_init();
 	if(RspCode != 0)
 	{
+		#if PRINT_UART_LOG
 		printf("Module Sys Inited Unsuccessfully!\r\n");
+		#endif
 		return 1;
 	}
 	/*加载BOOT*/
@@ -465,7 +467,9 @@ u8 WIFI_BOOT(void)
 	/*选择固件*/
 	RspCode = rsi_select_option(RSI_HOST_BOOTUP_OPTION);
 	if(RspCode < 0){
+		#if PRINT_UART_LOG
 		printf("Module Selected FW Unsuccessfully!\r\n");
+		#endif
 		return 1;
 	}
 	/*等待card read  Rsp=0x89*/
