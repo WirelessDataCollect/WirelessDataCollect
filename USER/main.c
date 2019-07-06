@@ -139,7 +139,11 @@ int main(void)
 	u8 RspCode;u16 tcpRecvBuffLen;u8 * pRecvData;
 	while(1)
 	{
-
+		if( BOARD_STA == BOARD_RUNNING){
+			if((DATA_AUTO_CHECK_EN)&&(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL)){//处于Clien模式，而且要使能自动check
+				receive_udp_package(BEEN_CALL_BY_MAIN);
+			}		
+		}
 //		testMaxWifiSpeed();
 		if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 			if(IAM_MASTER_CLOCK == 'Y'){

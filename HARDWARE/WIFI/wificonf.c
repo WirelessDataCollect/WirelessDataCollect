@@ -48,7 +48,18 @@ void WIFI_NVIC_Config(void)
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
-
+/**
+  * @brief  设置WIFI的中断NVIC
+  * @param  None
+  * @retval None
+  */
+void WIFI_NVIC_Disable(void)
+{
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel=WIFI_INTR_EXTI_CH;
+	NVIC_InitStructure.NVIC_IRQChannelCmd=DISABLE;
+	NVIC_Init(&NVIC_InitStructure);
+}
 /**
   * @brief  WIFI模组的引脚配置
   * @param  None
@@ -128,6 +139,18 @@ void WIFI_EXTI_Conf(void)
 	EXTI_Init(&EXTI_Type);
 }
 /**
+  * @brief  设置MCU接收WiFi信号的外部中断配置
+  * @param  None
+  * @retval None
+  */
+void WIFI_EXTI_Disable(void)
+{
+	EXTI_InitTypeDef   EXTI_Type;
+	EXTI_Type.EXTI_Line=WIFI_INTR_EXTI_LINE;
+	EXTI_Type.EXTI_LineCmd=DISABLE;
+	EXTI_Init(&EXTI_Type);
+}
+/**
   * @brief  SPI的收发
   * @param  None
   * @retval None
@@ -151,7 +174,7 @@ void EXTI4_IRQHandler(void)
 	/* 初始化时不能进行自动check*/
 	if( BOARD_STA == BOARD_RUNNING){
 		if((DATA_AUTO_CHECK_EN)&&(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL)){//处于Clien模式，而且要使能自动check
-			receive_udp_package();
+			receive_udp_package(BEEN_CALL_BY_OTHERS);
 		}		
 	}
 

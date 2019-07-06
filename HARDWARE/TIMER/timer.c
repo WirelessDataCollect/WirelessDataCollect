@@ -130,9 +130,17 @@ void TIM3_IRQHandler(void)
 	//!adc数值缓存
 	u8 * adcTamp;
 	MS_TIME ++ ;
+//	PagingTime++;
 	//!溢出中断
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) 
 	{
+//		if(PagingTime > 11000){
+//			Wifi_Send_EN = 0;
+//			CAN_Get_EN = 0;
+//			ADC_Get_EN = 0;
+//			queue_clear((Queue *)&adc_queue);
+//			queue_clear((Queue *)&can_queue);
+//		}
 		/**
 		* 在系统初始化后才能运行的程序
 		*/

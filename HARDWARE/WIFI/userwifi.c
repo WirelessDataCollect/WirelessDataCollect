@@ -48,22 +48,21 @@ u8     AnalRsp[ANAL_RSP_LENGTH];//anal处理完后，需要返回状态信息
   * @param  None
   * @retval None
   */
-void receive_udp_package(void)
+void receive_udp_package(u8 beenCallByMain)
 {
 	rsi_recvFrameUdp *data_recv=NULL;
 
-	u8 RspCode;
-	unsigned short  recvSocket;
-	RspCode = Check_PKT();
+	s8 RspCode = Check_PKT();
 	
+	unsigned short  recvSocket;
 	switch (RspCode)
 	{
 		case RSI_RSP_DATA_RECEIVE:  //接收到数据
 			data_recv = (rsi_recvFrameUdp *)&(rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad);
-		    recvSocket = rsi_bytes2R_to_uint16(data_recv->recvSocket);
-		    if(recvSocket ==socketDescriptor_sync)//命令或者时钟同步信息
+			recvSocket = rsi_bytes2R_to_uint16(data_recv->recvSocket);
+			if(recvSocket ==socketDescriptor_sync || recvSocket ==localSocketDescriptor_txrx)//命令或者时钟同步信息
 			{ 
-				if(order_anay(data_recv->recvDataBuf) == NEED_RETURN_INFO)//如果返回了1说明，需要回复信息
+				if(order_anay(data_recv->recvDataBuf, beenCallByMain) == NEED_RETURN_INFO)//如果返回了1说明，需要回复信息
 				{
 					AnalRsp[0] = RETURN_INFO;//表示这是返回信息
 					AnalRsp[1] = data_recv->recvDataBuf[0];//返回传过来的命令
@@ -79,6 +78,7 @@ void receive_udp_package(void)
 			break;
 	
 	}
+
 }
 
 /**
@@ -105,7 +105,7 @@ void wifi_send_package_test()
 	DATA_AUTO_CHECK_EN = 0;
 	//局域网
 	rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-	receive_udp_package();
+	receive_udp_package(BEEN_CALL_BY_OTHERS);
 	delay_ms(1000);
 	//远程服务器
 	rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Head],Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
@@ -324,24 +324,19 @@ u8 wifi_send_package(void)
   * @param  接收到的命令首地址
   * @retval 是否需要返回信息给上位机（NOT_NEED_RETURN_INFO 或 NEED_RETURN_INFO）
   */
-u8 order_anay(u8 arr[])
+u32 PagingTime = 0;
+u8 order_anay(u8 arr[],u8 beenCallByMain)
 {
 	switch(arr[0])
 	{
 		case GET_TIME_SYNC_PC://时钟同步信号
-			if(DATA_AUTO_CHECK_EN)
-			{
+		case GET_TIME_SYNC_MAIN_CLOCK:
+			if(beenCallByMain == BEEN_CALL_BY_OTHERS){
 				memcpy(&YYMMDD,&arr[1],4);
 				memcpy(&SYSTEMTIME,&arr[5],4);
 				Time_Sync_Flag = 1;
 				INFO_LED_CONV();
 			}
-			break;
-		case 	GET_TIME_SYNC_MAIN_CLOCK:
-			memcpy(&YYMMDD,&arr[1],4);
-			memcpy(&SYSTEMTIME,&arr[5],4);
-			Time_Sync_Flag = 1;
-			INFO_LED_CONV();
 			return NOT_NEED_RETURN_INFO;				
 		case RETURN_INFO://返回了回复信号
 			return NOT_NEED_RETURN_INFO;//表示不需要返回信息
@@ -412,6 +407,7 @@ u8 order_anay(u8 arr[])
 			}
 			break;	
 		case PAGING://寻呼信号
+			PagingTime=0;
 			break;		
 		default:
 			return NOT_NEED_RETURN_INFO;
@@ -495,6 +491,6 @@ void Send_Sync_Time(void)
 	u8 temp= DATA_AUTO_CHECK_EN ;
 	DATA_AUTO_CHECK_EN= 0;
 	rsi_send_ludp_data(socketDescriptor_sync,time ,SYNC_TIME_BYTES, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_sync, destSocket_sync ,&bytes_sent);
-	receive_udp_package();
+	receive_udp_package(BEEN_CALL_BY_OTHERS);
 	DATA_AUTO_CHECK_EN = temp;
 }

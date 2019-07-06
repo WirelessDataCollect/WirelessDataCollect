@@ -71,7 +71,7 @@ typedef enum{
 /** @defgroup WIFI模组等待的时间
   * @{
   */
-#define WIFI_MODUEL_WAIT_MSTIME       2   /*!< 用于防止缓存区被重写>*/
+#define WIFI_MODUEL_WAIT_MSTIME       5   /*!< 用于防止缓存区被重写>*/
 /**
   * @}
   */
@@ -109,9 +109,20 @@ typedef enum{
 /**
   * @}
   */
+/** @defgroup 是否main调用
+  * @{
+  */
+#define BEEN_CALL_BY_MAIN           0x01  /*!< 被main函数调用>*/
+#define BEEN_CALL_BY_OTHERS         0x00  /*!< 被其他函数调用>*/
+/**
+  * @}
+  */  
+  
 
 //!系统时钟
 extern u32   SYSTEMTIME;
+//!距离上次寻呼的时间
+extern u32   PagingTime;
 //!年月日
 extern u32   YYMMDD;
 
@@ -163,12 +174,12 @@ extern volatile u8 DATA_AUTO_CHECK_EN;
 //!字节数据发送个数
 extern u32 bytes_sent;
 
-void receive_udp_package(void);
+void receive_udp_package(u8 beenCallByMain);
 void wifi_send_package_test(void);
 u8 OpenLudpSocket(u8* destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
 u8 OpenTcpSocket(u8 *destIp,unsigned short destSocket,unsigned short moduleSocket,unsigned short * socketDescriptor);
 u8 wifi_send_package(void);
-u8 order_anay(u8 arr[]);
+u8 order_anay(u8 arr[],u8 beenCallByMain);
 void Send_Sync_Time(void);
 #endif
 
