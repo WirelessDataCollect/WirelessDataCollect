@@ -24,8 +24,8 @@ u32    SYSTEMTIME = 0;                                                   //ÏµÍ³Ê
 u32    YYMMDD =0;                                                        //ÄêÔÂÈÕ
 u8     Time_Sync_Flag = 0;                                               //×î½üÊ±ÖÓÊÇ·ñÍ¬²½
 volatile u8 Wifi_Send_EN = 0;                                            //Êı¾İ²É¼¯ºÍ·¢ËÍÊ¹ÄÜ£¬ÊÇCANºÍADC²É¼¯µÄ×Ü¿ª¹Ø
-u8     CAN_Get_EN = CAN1_ENABLE_BIT_SLC|CAN2_ENABLE_BIT_SLC;             //CANÊı¾İ·¢ËÍÊ¹ÄÜ£¨µÚ0Î»Ê¹ÄÜcan1£¬µÚ1Î»Ê¹ÄÜcan2£©£¬Ä¬ÈÏ¿ªÆô£¨±ØĞëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
-u8     ADC_Get_EN = 1;                                                   //ADCÊı¾İ²É¼¯Ê¹ÄÜ£¬Ä¬ÈÏ¿ªÆô£¨±ØĞëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
+u8     CAN_Get_EN = 0;            									     //CANÊı¾İ·¢ËÍÊ¹ÄÜ£¨µÚ0Î»Ê¹ÄÜcan1£¬µÚ1Î»Ê¹ÄÜcan2£©£¬Ä¬ÈÏ¿ªÆô£¨±ØĞëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
+u8     ADC_Get_EN = 0;                                                   //ADCÊı¾İ²É¼¯Ê¹ÄÜ£¬Ä¬ÈÏ¿ªÆô£¨±ØĞëÂú×ãWifi_Send_EN=1£¬²ÅÄÜ²É¼¯£©
 Queue  adc_queue;                                                        //ADCÊı¾İ´æ´¢
 Queue  can_queue;                                                        //canÊı¾İ´æ´¢
 u8     localDestIp_txrx[4] = {255,255,255,255};
@@ -324,7 +324,6 @@ u8 wifi_send_package(void)
   * @param  ½ÓÊÕµ½µÄÃüÁîÊ×µØÖ·
   * @retval ÊÇ·ñĞèÒª·µ»ØĞÅÏ¢¸øÉÏÎ»»ú£¨NOT_NEED_RETURN_INFO »ò NEED_RETURN_INFO£©
   */
-u32 PagingTime = 0;
 u8 order_anay(u8 arr[],u8 beenCallByMain)
 {
 	switch(arr[0])
@@ -407,7 +406,6 @@ u8 order_anay(u8 arr[],u8 beenCallByMain)
 			}
 			break;	
 		case PAGING://Ñ°ºôĞÅºÅ
-			PagingTime=0;
 			break;		
 		default:
 			return NOT_NEED_RETURN_INFO;

@@ -71,6 +71,14 @@ void TIM4_IRQHandler(void)
 	{
 		/* 系统时钟，计时单位由TIM4设置的中断周期值*/
 		SYSTEMTIME++;
+		/* 输出50ms脉冲，用于测量同步时钟精度*/
+		/*! @note 测试时，需要关闭串口打印功能 @ref PRINT_UART_LOG*/
+		#if IO_SHINE_IN_TIMER
+			if(MS_TIME%50==0){//50ms输出一个脉冲
+				PAout(9) = ~PAout(9);
+				PAout(10) = ~PAout(10);
+			}
+		#endif
 	}
 	TIM_ClearITPendingBit(TIM4,TIM_IT_Update);	//清除中断标志位
 }
@@ -130,17 +138,10 @@ void TIM3_IRQHandler(void)
 	//!adc数值缓存
 	u8 * adcTamp;
 	MS_TIME ++ ;
-//	PagingTime++;
 	//!溢出中断
 	if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) 
 	{
-//		if(PagingTime > 11000){
-//			Wifi_Send_EN = 0;
-//			CAN_Get_EN = 0;
-//			ADC_Get_EN = 0;
-//			queue_clear((Queue *)&adc_queue);
-//			queue_clear((Queue *)&can_queue);
-//		}
+
 		/**
 		* 在系统初始化后才能运行的程序
 		*/
@@ -219,14 +220,6 @@ void TIM3_IRQHandler(void)
 			dealCmdMsg(&CMD_RX_BUF);
 		}
 		
-		/* 输出50ms脉冲，用于测量同步时钟精度*/
-		/*! @note 测试时，需要关闭串口打印功能 @ref PRINT_UART_LOG*/
-		#if IO_SHINE_IN_TIMER
-			if(MS_TIME%50==0){//50ms输出一个脉冲
-				PAout(9) = ~PAout(9);
-				PAout(10) = ~PAout(10);
-			}
-		#endif
 	 }
 
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);

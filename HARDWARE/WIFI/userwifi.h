@@ -121,8 +121,6 @@ typedef enum{
 
 //!系统时钟
 extern u32   SYSTEMTIME;
-//!距离上次寻呼的时间
-extern u32   PagingTime;
 //!年月日
 extern u32   YYMMDD;
 

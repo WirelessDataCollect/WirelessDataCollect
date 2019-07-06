@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-u8   RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "418_Lab_5G";             /*!< WIFI名称>*/
-u8   RSI_PSK[RSI_PSK_MAX_LENGTH]             = "518518518";              /*!< WIFI密码>*/
+u8   RSI_JOIN_SSID[RSI_JOIN_SSID_MAX_LENGTH] = "mywifi5G";             /*!< WIFI名称>*/
+u8   RSI_PSK[RSI_PSK_MAX_LENGTH]             = "1234567890";              /*!< WIFI密码>*/
 u8   nodeId                                  = 4;                        /*!< 节点ID，0-255>*/
 u32  RSI_WIFI_OPER_MODE                      = RSI_WIFI_CLIENT_MODE_VAL; /*!< CLIENT或者AP模式>*/
 u8   RSI_IP_CFG_MODE                         = RSI_DHCP_IP_MODE;         /*!< @ RSI_DHCP_IP_MODE or RSI_STATIC_IP_MODE >*/
