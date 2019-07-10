@@ -136,56 +136,53 @@ u8 wifi_send_package(void)
 	{
 		Adc_Length = queue_length(&adc_queue);
 		Can_Length = queue_length(&can_queue);
-		
-		/* ADC Queue加入帧头*/
-		//1.加入帧头
-		queue_addtime_addIO(&adc_queue,Adc_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);
-		//2.获取队列头
-		Adc_Head = adc_queue.head;
-		//3.更新队列
-		adc_queue.head = adc_queue.tail;  //队列清空，则会启动下一个包的ADC采集，包括1、在tail后加ADC数据；2、更新时间；3、更新tail		
-		/* CAN Queue加入帧头*/
-		queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
-		Can_Head = can_queue.head; 
-		can_queue.head = can_queue.tail;
-		
-		/* ADC如果分成两段，将前面一段复制到后面*/
-		if(Adc_Head + Adc_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
-			queue_oversize(&adc_queue,Adc_Head + PACKAGE_HEAD_FRAME_LENGTH + Adc_Length - QUEUE_SIZE);
+		if(Adc_Length > 0){
+			/* ADC Queue加入帧头*/
+			//1.加入帧头
+			queue_addtime_addIO(&adc_queue,Adc_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,ADC_DATA_PACKAGE);
+			//2.获取队列头
+			Adc_Head = adc_queue.head;
+			//3.更新队列
+			adc_queue.head = adc_queue.tail;  //队列清空，则会启动下一个包的ADC采集，包括1、在tail后加ADC数据；2、更新时间；3、更新tail	
+			/* ADC如果分成两段，将前面一段复制到后面*/
+			if(Adc_Head + Adc_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+				queue_oversize(&adc_queue,Adc_Head + PACKAGE_HEAD_FRAME_LENGTH + Adc_Length - QUEUE_SIZE);
+			}
+			temp = DATA_AUTO_CHECK_EN;
+			DATA_AUTO_CHECK_EN = 0;
+			/* ADC数据发送到远程服务器*/
+			rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+			DATA_AUTO_CHECK_EN = temp;
+			delay_ms(WIFI_MODUEL_WAIT_MSTIME);
+			temp = DATA_AUTO_CHECK_EN;
+			DATA_AUTO_CHECK_EN = 0;
+			/* ADC数据发送到局域网*/
+			rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);	
+			DATA_AUTO_CHECK_EN = temp;	
+			delay_ms(WIFI_MODUEL_WAIT_MSTIME);			
 		}
-		/* CAN如果分成两段，将前面一段复制到后面*/
-		if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
-			queue_oversize(&can_queue,Can_Head + PACKAGE_HEAD_FRAME_LENGTH + Can_Length - QUEUE_SIZE);
+		if(Can_Length > 0){
+			/* CAN Queue加入帧头*/
+			queue_addtime_addIO(&can_queue,Can_Length, nodeId, DIGITAL_INPUT1,DIGITAL_INPUT2,CAN_DATA_PACKAGE);
+			Can_Head = can_queue.head; 
+			can_queue.head = can_queue.tail;
+			/* CAN如果分成两段，将前面一段复制到后面*/
+			if(Can_Head + Can_Length + PACKAGE_HEAD_FRAME_LENGTH > QUEUE_SIZE ) {
+				queue_oversize(&can_queue,Can_Head + PACKAGE_HEAD_FRAME_LENGTH + Can_Length - QUEUE_SIZE);
+			}	
+			temp = DATA_AUTO_CHECK_EN;
+			DATA_AUTO_CHECK_EN = 0;
+			/* 发送到远程服务器*/
+			rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
+			DATA_AUTO_CHECK_EN = temp;
+			delay_ms(WIFI_MODUEL_WAIT_MSTIME);
+			temp = DATA_AUTO_CHECK_EN;
+			DATA_AUTO_CHECK_EN = 0;			
+			/* CAN数据发送到局域网*/
+			rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
+			DATA_AUTO_CHECK_EN = temp;		
+			delay_ms(WIFI_MODUEL_WAIT_MSTIME);			
 		}
-		
-		temp = DATA_AUTO_CHECK_EN;
-		DATA_AUTO_CHECK_EN = 0;
-		/* ADC数据发送到远程服务器*/
-		rsi_send_ludp_data(socketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-		
-		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
-		temp = DATA_AUTO_CHECK_EN;
-		DATA_AUTO_CHECK_EN = 0;
-		/* 发送到远程服务器*/
-		rsi_send_ludp_data(socketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)destIp_txrx, destSocket_txrx, &bytes_sent);
-		
-		DATA_AUTO_CHECK_EN = temp;
-		/* 延时防止阻塞崩溃*/
-		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
-		temp = DATA_AUTO_CHECK_EN;
-		DATA_AUTO_CHECK_EN = 0;
-		/* ADC数据发送到局域网*/
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &adc_queue.arr[Adc_Head],Adc_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-		
-		DATA_AUTO_CHECK_EN = temp;
-		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
-		temp = DATA_AUTO_CHECK_EN;
-		DATA_AUTO_CHECK_EN = 0;
-		/* CAN数据发送到局域网*/
-		rsi_send_ludp_data(localSocketDescriptor_txrx, &can_queue.arr[Can_Head],Can_Length+PACKAGE_HEAD_FRAME_LENGTH, RSI_PROTOCOL_UDP_V4, (uint8 *)localDestIp_txrx, localDestSocket_txrx, &bytes_sent);
-		DATA_AUTO_CHECK_EN = temp;		
-		delay_ms(WIFI_MODUEL_WAIT_MSTIME);
 		Time_Sync_Flag = 0;//时钟同步位清零
 	}
 //	/* ADC队列已满，无包头，用于测试ADC数据精度*/
