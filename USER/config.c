@@ -665,9 +665,7 @@ void handleCmd(c8 * cmd){
 	if(strcmp(cmd,CMD_HELP) == 0){//帮助文件
 		getHelp();
 	}else if(strcmp(cmd,CMD_GET_PARA) == 0){
-#if PRINT_UART_LOG
-		getPara();
-#endif		
+		getPara();		
 	}else if(strcmp(cmd,CMD_SAVE_ALL_PARA) == 0){//保存所有数据到flash
 #if PRINT_UART_LOG
 		printf("Saving All Paras\r\n");

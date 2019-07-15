@@ -209,6 +209,7 @@ void checkModuleSta(void){
 					memcpy(localhost,rsi_app_cb.uCmdRspFrame->uCmdRspPayLoad.qryNetParmsFrameRcv.ipaddr,IPV4_LENGTH);
 					#if PRINT_UART_LOG
 					printf("Module Ip : %d:%d:%d:%d\r\n",localhost[0],localhost[1],localhost[2],localhost[3]);//0:Î´Á¬½Ó	
+					
 					#endif
 				}
 				
