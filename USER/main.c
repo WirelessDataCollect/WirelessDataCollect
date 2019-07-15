@@ -57,6 +57,7 @@ void Initialization (void)
 	
 	/*下载参数*/
 	loadParafromMainOrBackupFlash();//getPara();
+	
 	/*设置wifi为客户端模式*/
 	setClientModePara();InitWiFi();
 	/*检查模组连接情况，如果连接失败，则设置为AP模式*/

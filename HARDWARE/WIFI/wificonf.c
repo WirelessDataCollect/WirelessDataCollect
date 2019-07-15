@@ -188,7 +188,7 @@ void setClientModePara(void){
   */
 void checkModuleSta(void){
 	u8 RspCode;
-	u8 resetNum=6;//最多重启的次数
+	u8 resetNum=3;//最多重启的次数
 	/*STA模式才使用的指令.才有效*/	
 	if(RSI_WIFI_OPER_MODE == RSI_WIFI_CLIENT_MODE_VAL){
 		delay_ms(1000);delay_ms(1000);//等待一段时间
